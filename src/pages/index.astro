@@ -129,18 +129,14 @@ const faqSchema = {
       <defs>
         <!-- objectBoundingBox scales mask coordinates (0 to 1) with each painted word's size -->
         <mask id="aac-bristle-swath-mask" maskContentUnits="objectBoundingBox">
-          <!-- Main opaque brush body -->
+          <!-- Rounded logo-style brushstroke body with tapered bristle tail -->
           <path
-            d="M0.02,0.18 C0.18,0.06 0.52,0.08 0.94,0.14 C0.99,0.24 1.0,0.45 0.96,0.68 C0.99,0.78 0.95,0.88 0.89,0.92 C0.54,0.98 0.19,0.95 0.03,0.86 C0.0,0.72 0.01,0.42 0.02,0.18 Z"
+            d="M0.04,0.22 C0.01,0.38 0.01,0.68 0.05,0.82 C0.22,0.94 0.62,0.92 0.91,0.84 L0.99,0.76 L0.92,0.68 L1.0,0.56 L0.93,0.46 L0.98,0.32 L0.89,0.26 C0.60,0.12 0.20,0.10 0.04,0.22 Z"
             fill="white"
           />
           <!-- Semi-transparent dry-brush bristle streaks at edges (luminance masking: gray = semi-transparent) -->
-          <path d="M0.0,0.12 L0.98,0.08 L0.96,0.18 L0.01,0.22 Z" fill="gray" />
-          <path d="M0.01,0.82 L0.99,0.78 L0.95,0.96 L0.02,0.94 Z" fill="gray" />
-          <path d="M0.88,0.22 L1.0,0.26 L0.99,0.34 L0.87,0.32 Z" fill="white" />
-          <path d="M0.90,0.46 L1.0,0.50 L0.98,0.60 L0.88,0.58 Z" fill="gray" />
-          <circle cx="0.97" cy="0.16" r="0.025" fill="white" />
-          <circle cx="0.02" cy="0.52" r="0.02" fill="gray" />
+          <path d="M0.08,0.12 C0.36,0.04 0.72,0.08 0.96,0.20 L0.90,0.28 C0.64,0.16 0.32,0.14 0.06,0.24 Z" fill="gray" />
+          <path d="M0.06,0.80 C0.34,0.90 0.68,0.88 0.96,0.80 L0.92,0.92 C0.62,0.98 0.28,0.96 0.04,0.86 Z" fill="gray" />
         </mask>
 
         <!-- Reusable Pro Angled Sash Contractor Paintbrush Symbol (currentColor = Wet Logo Paint) -->
@@ -200,56 +196,38 @@ const faqSchema = {
           <span class="kicker-text kicker-text-light kicker-text-brush-reveal">RESIDENTIAL, COMMERCIAL &amp; EPOXY FLOORING</span>
         </div>
 
-        <h1 id="hero-heading" class="hero-title hero-title-painted" aria-label="Quality Paint. Lasting Results.">
+        <h1 id="hero-heading" class="hero-title hero-title-painted">
           <span class="hero-title-line">
-            <!-- STROKE 1: "Quality" in AAC Logo Red (#E53924) -->
-            <span class="paint-word paint-word--red" style="--stroke-idx: 0;">
+            <!-- STROKE 1: "Coloring" in AAC Logo Crimson Red (#EC193A) + Green (#9DBE39) Under-Stroke -->
+            <span class="paint-word paint-word--coloring" style="--stroke-idx: 0;">
               <span class="paint-stroke-underlay" aria-hidden="true"></span>
               <span class="paint-splatters" aria-hidden="true"><i></i><i></i><i></i></span>
               <span class="paint-word-reveal">
-                <span class="paint-word-ink">Quality</span>
-                <span class="paint-word-wet-flash" aria-hidden="true">Quality</span>
+                <span class="paint-word-ink" data-word="Coloring">Coloring</span>
+              </span>
+              <span class="word-brush-actor" aria-hidden="true">
+                <svg viewBox="0 0 120 120" class="word-brush-svg"><use href="#aac-contractor-brush" /></svg>
+              </span>
+            </span>{' '}
+            <!-- STROKE 2: "Your" in AAC Logo Cerulean Blue (#0493BC) -->
+            <span class="paint-word paint-word--your" style="--stroke-idx: 1;">
+              <span class="paint-stroke-underlay" aria-hidden="true"></span>
+              <span class="paint-splatters" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="paint-word-reveal">
+                <span class="paint-word-ink" data-word="Your">Your</span>
               </span>
               <span class="word-brush-actor" aria-hidden="true">
                 <svg viewBox="0 0 120 120" class="word-brush-svg"><use href="#aac-contractor-brush" /></svg>
               </span>
             </span>
-
-            <!-- STROKE 2: "Paint." in AAC Logo Golden Yellow (#F5B800) -->
-            <span class="paint-word paint-word--yellow" style="--stroke-idx: 1;">
-              <span class="paint-stroke-underlay" aria-hidden="true"></span>
-              <span class="paint-splatters" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="paint-word-reveal">
-                <span class="paint-word-ink">Paint.</span>
-                <span class="paint-word-wet-flash" aria-hidden="true">Paint.</span>
-              </span>
-              <span class="word-brush-actor" aria-hidden="true">
-                <svg viewBox="0 0 120 120" class="word-brush-svg"><use href="#aac-contractor-brush" /></svg>
-              </span>
-            </span>
-          </span>
-
+          </span>{' '}
           <span class="hero-title-line">
-            <!-- STROKE 3: "Lasting" in AAC Logo Emerald Green (#48B649) -->
-            <span class="paint-word paint-word--green" style="--stroke-idx: 2;">
+            <!-- STROKE 3: "Dreams." in AAC Logo Marigold Gold (#FCBB1F) -->
+            <span class="paint-word paint-word--dreams" style="--stroke-idx: 2;" data-last-paint-word>
               <span class="paint-stroke-underlay" aria-hidden="true"></span>
               <span class="paint-splatters" aria-hidden="true"><i></i><i></i><i></i></span>
               <span class="paint-word-reveal">
-                <span class="paint-word-ink">Lasting</span>
-                <span class="paint-word-wet-flash" aria-hidden="true">Lasting</span>
-              </span>
-              <span class="word-brush-actor" aria-hidden="true">
-                <svg viewBox="0 0 120 120" class="word-brush-svg"><use href="#aac-contractor-brush" /></svg>
-              </span>
-            </span>
-
-            <!-- STROKE 4: "Results." in AAC Logo Cerulean Blue (#14A8E8) -->
-            <span class="paint-word paint-word--blue" style="--stroke-idx: 3;" data-last-paint-word>
-              <span class="paint-stroke-underlay" aria-hidden="true"></span>
-              <span class="paint-splatters" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="paint-word-reveal">
-                <span class="paint-word-ink">Results.</span>
-                <span class="paint-word-wet-flash" aria-hidden="true">Results.</span>
+                <span class="paint-word-ink" data-word="Dreams.">Dreams.</span>
               </span>
               <span class="word-brush-actor" aria-hidden="true">
                 <svg viewBox="0 0 120 120" class="word-brush-svg"><use href="#aac-contractor-brush" /></svg>
@@ -694,8 +672,8 @@ const faqSchema = {
      HERO 4-COLOR PAINTBRUSH ENTRANCE ANIMATION (Logo Colors & Bristle Masks)
      ========================================================================== */
   .hero-copy-block {
-    /* Ragged 14-bristle SVG wipe mask (opaque left -> bristle teeth -> transparent right) */
-    --bristle-wipe-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 100' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0,0 H108 L138,4 L114,9 L146,15 L112,21 L142,28 L116,35 L149,42 L111,49 L144,56 L115,63 L147,70 L112,77 L141,84 L114,91 L136,96 L108,100 H0 Z'/%3E%3Cpath fill='rgba(255,255,255,0.55)' d='M106,0 H126 L154,6 L122,13 L156,20 L120,28 L151,36 L124,44 L158,52 L119,60 L153,68 L122,76 L154,84 L121,92 L146,98 L116,100 H106 Z'/%3E%3C/svg%3E");
+    /* Ragged 14-bristle SVG wipe mask — solid white [0..136] guarantees 0% clipping at rest */
+    --bristle-wipe-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 100' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0,0 H136 L162,4 L140,9 L168,15 L139,21 L164,28 L142,35 L170,42 L138,49 L166,56 L141,63 L169,70 L139,77 L163,84 L140,91 L160,96 L136,100 H0 Z'/%3E%3Cpath fill='rgba(255,255,255,0.55)' d='M134,0 H150 L176,6 L146,13 L178,20 L145,28 L173,36 L148,44 L180,52 L144,60 L175,68 L147,76 L176,84 L146,92 L168,98 L142,100 H134 Z'/%3E%3C/svg%3E");
 
     /* Physics-based spring & brush-stroke easings (Modern Web Guidance: physics-based-easing) */
     --brush-glide-easing: linear(
@@ -730,27 +708,32 @@ const faqSchema = {
 
   .kicker-text-brush-reveal {
     display: inline-block;
+    padding: 0.12em 0.2em;
+    margin: -0.12em -0.2em;
     -webkit-mask-image: var(--bristle-wipe-mask);
-    -webkit-mask-size: 260% 100%;
+    -webkit-mask-size: 300% 100%;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: 0% 0%;
     mask-image: var(--bristle-wipe-mask);
-    mask-size: 260% 100%;
+    mask-size: 300% 100%;
     mask-repeat: no-repeat;
     mask-position: 0% 0%;
     animation: bristle-mask-sweep 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
     --animation-reduced: none;
   }
 
-  /* Headline Painted Stage */
+  /* Headline Painted Stage — Clean First-Pass Design with Exact AAC Logo Colors */
   .hero-title-painted {
     font-size: clamp(2.85rem, 6vw, 4.75rem);
-    line-height: 1.08;
+    font-weight: 800;
+    font-style: normal;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
     color: var(--text-light);
     margin-bottom: 1.45rem;
     display: flex;
     flex-direction: column;
-    gap: 0.18em;
+    gap: 0.14em;
   }
 
   .hero-title-line {
@@ -763,66 +746,56 @@ const faqSchema = {
 
   /* Individual Word Stage Painted in AAC Logo Colors */
   .paint-word {
-    --stroke-duration: 0.58s;
-    --stroke-delay: calc(0.14s + (var(--stroke-idx, 0) * 0.52s));
+    --stroke-duration: 0.6s;
+    --stroke-delay: calc(0.14s + (var(--stroke-idx, 0) * 0.54s));
     position: relative;
     display: inline-block;
     isolation: isolate;
-    padding: 0.04em 0.16em 0.08em 0.12em;
+    padding: 0.04em 0.14em 0.08em 0.1em;
     margin-inline: -0.06em;
-    /* MANDATORY identity transforms on base element */
+    /* MANDATORY identity transforms on base element (individual-transform-properties) */
     translate: 0px;
     rotate: 0deg;
     scale: 1;
   }
 
-  /* Exact 4 Colors from the AAC Painters Inc. Logo */
-  .paint-word--red {
-    --word-paint: var(--aac-red);        /* #E53924 Logo Crimson Red */
-    --word-ink: #ff5b47;
-    --word-deep: #9e1b0c;
-    --word-swath-alpha: rgba(229, 57, 36, 0.88);
+  /* STROKE 1: "Coloring" — Exact Logo Crimson Red (#EC193A) + Logo Lime-Green (#9DBE39) Swath */
+  .paint-word--coloring {
+    --word-paint: var(--aac-red);        /* #EC193A */
+    --word-ink: #f41e42;
+    --word-deep: #9c0d24;
+    --word-swath-end: var(--aac-green);  /* #9DBE39 Logo Green */
   }
 
-  .paint-word--yellow {
-    --word-paint: var(--aac-yellow);     /* #F5B800 Logo Golden Yellow */
-    --word-ink: #ffd026;
+  /* STROKE 2: "Your" — Exact Logo Cerulean Blue (#0493BC) */
+  .paint-word--your {
+    --word-paint: var(--aac-blue);       /* #0493BC */
+    --word-ink: #17b2df;
+    --word-deep: #036582;
+    --word-swath-end: #0493bc;
+  }
+
+  /* STROKE 3: "Dreams." — Exact Logo Marigold Amber (#FCBB1F) + Logo Green (#9DBE39) */
+  .paint-word--dreams {
+    --word-paint: var(--aac-yellow);     /* #FCBB1F */
+    --word-ink: #fcbb1f;
     --word-deep: #b87e00;
-    --word-swath-alpha: rgba(245, 184, 0, 0.88);
+    --word-swath-end: var(--aac-green);
   }
 
-  .paint-word--green {
-    --word-paint: var(--aac-green);      /* #48B649 Logo Emerald Green */
-    --word-ink: #64df65;
-    --word-deep: #247825;
-    --word-swath-alpha: rgba(72, 182, 73, 0.88);
-  }
-
-  .paint-word--blue {
-    --word-paint: var(--aac-blue);       /* #14A8E8 Logo Cerulean Blue */
-    --word-ink: #38c6ff;
-    --word-deep: #086894;
-    --word-swath-alpha: rgba(20, 168, 232, 0.9);
-  }
-
-  /* Layer 1: Organic Bristle-Masked Paint Swath Behind/Under Each Word (complex-shapes) */
+  /* Layer 1: Organic Bristle-Masked Paint Swath Under Each Word (complex-shapes) */
   .paint-stroke-underlay {
     position: absolute;
-    inset: 52% -0.04em 0.02em -0.04em;
+    inset: 56% -0.02em 0.02em -0.02em;
     z-index: -1;
     pointer-events: none;
-    background:
-      repeating-linear-gradient(
-        -2deg,
-        rgba(255, 255, 255, 0.16) 0 2px,
-        transparent 2px 5px
-      ),
-      linear-gradient(
-        96deg var(--in-oklab),
-        var(--word-paint) 0%,
-        var(--word-swath-alpha) 68%,
-        var(--word-deep) 100%
-      );
+    background: linear-gradient(
+      96deg var(--in-oklab),
+      var(--word-paint) 0%,
+      var(--word-paint) 62%,
+      var(--word-swath-end) 100%
+    );
+    opacity: 0.9;
     /* Reference inline SVG mask with objectBoundingBox (complex-shapes) */
     -webkit-mask-image: url(#aac-bristle-swath-mask);
     -webkit-mask-size: 100% 100%;
@@ -869,42 +842,45 @@ const faqSchema = {
   }
 
   .paint-splatters > i:nth-child(1) {
-    width: 9px;
-    height: 9px;
-    top: 8%;
-    left: -4px;
+    width: 8px;
+    height: 8px;
+    top: 10%;
+    left: -3px;
     animation-delay: calc(var(--stroke-delay) + 0.08s);
   }
 
   .paint-splatters > i:nth-child(2) {
     width: 7px;
     height: 7px;
-    top: 14%;
-    right: -6px;
+    top: 16%;
+    right: -5px;
+    background-color: var(--word-swath-end);
     animation-delay: calc(var(--stroke-delay) + 0.38s);
   }
 
   .paint-splatters > i:nth-child(3) {
-    width: 11px;
-    height: 7px;
-    bottom: -2px;
-    right: 8%;
-    rotate: -18deg;
+    width: 10px;
+    height: 6px;
+    bottom: 0px;
+    right: 6%;
+    rotate: -16deg;
     animation-delay: calc(var(--stroke-delay) + 0.44s);
   }
 
-  /* Layer 3: Bristle-Masked Word Reveal (Letterforms Materialize Under the Brush) */
+  /* Layer 3: Bristle-Masked Word Reveal — Padded so Descenders ("g", "y") & Outlines Never Clip */
   .paint-word-reveal {
     position: relative;
     display: inline-block;
     z-index: 1;
+    padding: 0.14em 0.24em 0.24em 0.14em;
+    margin: -0.14em -0.24em -0.24em -0.14em;
     /* MANDATORY vendor prefix + standard mask properties (complex-shapes) */
     -webkit-mask-image: var(--bristle-wipe-mask);
-    -webkit-mask-size: 260% 100%;
+    -webkit-mask-size: 300% 100%;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: 0% 0%;
     mask-image: var(--bristle-wipe-mask);
-    mask-size: 260% 100%;
+    mask-size: 300% 100%;
     mask-repeat: no-repeat;
     mask-position: 0% 0%;
     animation: bristle-mask-sweep var(--stroke-duration) cubic-bezier(0.22, 1, 0.36, 1) var(--stroke-delay) both;
@@ -912,9 +888,12 @@ const faqSchema = {
     --animation-reduced: none;
   }
 
-  /* Painted Letterforms in Logo Color with Architectural Outline & Drop Shadow */
+  /* Painted Letterforms in Logo Color with Architectural Outline & Drop Shadow (First-Pass Style) */
   .paint-word-ink {
+    position: relative;
     display: inline-block;
+    padding: 0.06em 0.12em 0.14em 0.06em;
+    margin: -0.06em -0.12em -0.14em -0.06em;
     color: var(--word-ink);
     -webkit-text-stroke: 2px #090d12;
     paint-order: stroke fill;
@@ -925,9 +904,11 @@ const faqSchema = {
   }
 
   /* Wet Paint Gloss Coat that Flashes as Bristles Touch the Letters */
-  .paint-word-wet-flash {
+  .paint-word-ink::after {
+    content: attr(data-word);
     position: absolute;
     inset: 0;
+    padding: inherit;
     pointer-events: none;
     user-select: none;
     background: linear-gradient(
@@ -941,7 +922,7 @@ const faqSchema = {
     background-clip: text;
     color: transparent;
     -webkit-text-stroke: 0px transparent;
-    opacity: 0.38;
+    opacity: 0.36;
     animation: wet-paint-sheen calc(var(--stroke-duration) + 0.35s) ease-out var(--stroke-delay) both;
     --animation-reduced: none;
   }

@@ -37,17 +37,17 @@
   --text-light-secondary: #c5d0dc;
   --text-light-muted: #94a3b8;
 
-  /* AAC Painters Inc. 4-Color Logo Spectrum */
-  --aac-red: #e53924;
-  --aac-green: #48b649;
-  --aac-yellow: #f5b800;
-  --aac-blue: #14a8e8;
+  /* AAC Painters Inc. 4-Color Logo Spectrum (Sampled from aac-painters-logo.png) */
+  --aac-red: #ec193a;
+  --aac-green: #9dbe39;
+  --aac-blue: #0493bc;
+  --aac-yellow: #fcbb1f;
   --aac-blue-deep: #08709e; /* High-contrast cyan-blue for white backgrounds */
 
   /* Semantic Aliases */
   --accent-primary: #08709e;
   --accent-primary-hover: #065a80;
-  --accent-secondary: #e53924;
+  --accent-secondary: #ec193a;
   --state-success: #1f7a3f;
   --state-error: #c92a1d;
 
@@ -198,10 +198,10 @@ textarea {
   background-color: var(--aac-green);
 }
 .spectrum-bar > span:nth-child(3) {
-  background-color: var(--aac-yellow);
+  background-color: var(--aac-blue);
 }
 .spectrum-bar > span:nth-child(4) {
-  background-color: var(--aac-blue);
+  background-color: var(--aac-yellow);
 }
 
 /* Compact 4-color bar + uppercase section kicker (Unbordered, no pill!) */
@@ -225,13 +225,13 @@ textarea {
   background-color: var(--aac-red);
 }
 .kicker-bars > i:nth-child(2) {
-  background-color: var(--aac-yellow);
-}
-.kicker-bars > i:nth-child(3) {
   background-color: var(--aac-green);
 }
-.kicker-bars > i:nth-child(4) {
+.kicker-bars > i:nth-child(3) {
   background-color: var(--aac-blue);
+}
+.kicker-bars > i:nth-child(4) {
+  background-color: var(--aac-yellow);
 }
 
 .kicker-text {
