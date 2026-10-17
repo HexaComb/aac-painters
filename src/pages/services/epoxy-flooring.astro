@@ -1,0 +1,292 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BeforeAfterCard from '../../components/BeforeAfterCard.astro';
+import QuoteBuilderForm from '../../components/QuoteBuilderForm.astro';
+import { brand, beforeAfterGallery, dustBagsProof } from '../../data/siteData';
+
+const epoxyPairs = beforeAfterGallery.filter(
+  (item) => item.category === 'Epoxy Flooring' || item.id === 'autoshop-transformation'
+);
+---
+
+<BaseLayout
+  title="Epoxy & Metallic Concrete Flooring | AAC Painters Inc. (CSLB #1039849)"
+  description="Transform your garage, patio, living space, or commercial auto shop with diamond-ground 100% solids full-broadcast flake and 3D metallic epoxy floors by AAC Painters Inc. Call (209) 485-5103."
+  ogImage="/images/projects/residential-garage-flake-epoxy-after.png"
+>
+  <!-- Dark Hero Banner with 4-Color Spectrum Bar -->
+  <section class="subpage-hero">
+    <div class="subpage-hero-bg">
+      <img
+        src="/images/projects/residential-garage-flake-epoxy-after.png"
+        alt="Completed full-broadcast granite flake epoxy garage floor by AAC Painters Inc."
+        width="1600"
+        height="900"
+        loading="eager"
+        fetchpriority="high"
+        decoding="sync"
+      />
+      <div class="subpage-scrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="container subpage-hero-inner">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>Epoxy &amp; Metallic Flooring</span>
+      </nav>
+
+      <h1 class="subpage-title">
+        Concrete Transformed.<br />
+        <span class="accent-blue">Built to Last.</span>
+      </h1>
+
+      <p class="subpage-lead">
+        Every AAC epoxy floor begins with heavy HEPA-shrouded diamond grinding, structural crack reconstruction, and 100% solids industrial resins — never watered-down hardware store kits.
+      </p>
+
+      <div class="subpage-actions">
+        <a href="#quote-builder" class="btn btn-white">
+          <span>Get a Free Floor Estimate</span>
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a href={brand.phoneHref} class="btn btn-outline-light">
+          <span>Call {brand.phoneDisplay}</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="spectrum-bar" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </section>
+
+  <!-- 6-Bag Dust Proof & Technical Spec Section -->
+  <section class="prep-spec-section">
+    <div class="container prep-spec-grid">
+      <div>
+        <div class="section-kicker">
+          <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="kicker-text">Mechanical Surface Preparation</span>
+        </div>
+        <h2 class="section-heading">Why Our Epoxy Floors Never Peel Under Hot Tires.</h2>
+        <p class="section-copy">
+          Acid washing leaves concrete pores sealed and contaminated with oil. Before a single drop of primer touches your slab, our crew mechanically profiles the concrete to CSP-2/3 using industrial planetary diamond grinders.
+        </p>
+
+        <dl class="spec-list">
+          <div class="spec-row">
+            <dt>01. Diamond Profiling</dt>
+            <dd>Opens laitance and removes oil, curing compounds, and old paint.</dd>
+          </div>
+          <div class="spec-row">
+            <dt>02. Structural Crack Rebuild</dt>
+            <dd>Spalled joints and deep pits are chased and rebuilt flush with polyurea filler.</dd>
+          </div>
+          <div class="spec-row">
+            <dt>03. 100% Solids Broadcast</dt>
+            <dd>Deep-wicking epoxy vapor barrier with full-refusal vinyl flake or 3D metallic pigments.</dd>
+          </div>
+          <div class="spec-row">
+            <dt>04. UV Polyaspartic Topcoat</dt>
+            <dd>Crystal-clear chemical, abrasion, and UV-stable seal coat.</dd>
+          </div>
+        </dl>
+      </div>
+
+      <figure class="prep-proof-card">
+        <img
+          src={dustBagsProof.image}
+          alt={dustBagsProof.alt}
+          width="800"
+          height="600"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption>
+          <strong>{dustBagsProof.headline}</strong>
+          <p>{dustBagsProof.caption}</p>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Interactive Before & After Epoxy Transformations -->
+  <section class="epoxy-ba-section">
+    <div class="container">
+      <div class="section-kicker">
+        <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="kicker-text">Epoxy &amp; Concrete Before &amp; Afters</span>
+      </div>
+      <h2 class="section-heading">6 Verified Concrete &amp; Epoxy Transformations</h2>
+
+      <div class="split-list">
+        {epoxyPairs.map((pair) => (
+          <BeforeAfterCard item={pair} layout="split-row" />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <QuoteBuilderForm />
+</BaseLayout>
+
+<style>
+  .subpage-hero {
+    position: relative;
+    background: var(--bg-dark-deep);
+    color: var(--text-light);
+    overflow: hidden;
+  }
+
+  .subpage-hero-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .subpage-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .subpage-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(9, 13, 18, 0.92) 0%, rgba(11, 16, 23, 0.78) 55%, rgba(11, 16, 23, 0.4) 100%);
+  }
+
+  .subpage-hero-inner {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 1.5rem;
+    max-width: 720px;
+    margin-left: max(var(--gutter), calc((100% - var(--container-max)) / 2));
+  }
+
+  .breadcrumb-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-light-secondary);
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumb-nav a:hover {
+    color: var(--aac-blue);
+  }
+
+  .subpage-title {
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    margin-bottom: 1.15rem;
+  }
+
+  .subpage-lead {
+    font-size: 1.05rem;
+    color: var(--text-light-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .subpage-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .prep-spec-section {
+    padding: 5.5rem 1.5rem;
+    background: var(--bg-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .prep-spec-grid {
+    display: grid;
+    grid-template-columns: 6fr 6fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .section-heading {
+    font-size: clamp(2rem, 3.5vw, 2.9rem);
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+  }
+
+  .section-copy {
+    font-size: 1rem;
+    color: var(--text-dark-secondary);
+    margin-bottom: 1.75rem;
+  }
+
+  .spec-list {
+    border-top: 2px solid var(--text-dark);
+    padding: 1rem;
+  }
+
+  .spec-row {
+    padding: 0.9rem 0.5rem;
+    border-bottom: 1px solid var(--border-light-strong);
+  }
+
+  .spec-row dt {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.98rem;
+    color: var(--text-dark);
+  }
+
+  .spec-row dd {
+    font-size: 0.92rem;
+    color: var(--text-dark-secondary);
+  }
+
+  .prep-proof-card {
+    background: var(--bg-dark);
+    color: var(--text-light);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .prep-proof-card img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .prep-proof-card figcaption {
+    padding: 1.35rem;
+  }
+
+  .prep-proof-card strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    margin-bottom: 0.35rem;
+    color: var(--aac-yellow);
+  }
+
+  .prep-proof-card p {
+    font-size: 0.92rem;
+    color: var(--text-light-secondary);
+  }
+
+  .epoxy-ba-section {
+    padding: 5.5rem 1.5rem;
+    background: var(--bg-white);
+  }
+
+  .split-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    margin-top: 2.5rem;
+  }
+
+  @media (max-width: 960px) {
+    .prep-spec-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

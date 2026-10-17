@@ -1,0 +1,236 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BeforeAfterCard from '../../components/BeforeAfterCard.astro';
+import QuoteBuilderForm from '../../components/QuoteBuilderForm.astro';
+import { brand, beforeAfterGallery, interiorCraftGallery } from '../../data/siteData';
+
+const residentialPairs = beforeAfterGallery.slice(0, 4);
+---
+
+<BaseLayout
+  title="Residential Interior & Exterior Painting | AAC Painters Inc. (CSLB #1039849)"
+  description="Quality Paint. Lasting Results. Residential interior, exterior, trim, and garage epoxy painting in California's Central Valley. Call Alex Delgadillo at (209) 485-5103."
+  ogImage="/images/projects/residential-garage-flake-epoxy-after.png"
+>
+  <section class="subpage-hero">
+    <div class="subpage-hero-bg">
+      <img
+        src="/images/projects/residential-garage-flake-epoxy-after.png"
+        alt="Completed residential garage and home exterior transformation by AAC Painters Inc."
+        width="1600"
+        height="900"
+        loading="eager"
+        fetchpriority="high"
+        decoding="sync"
+      />
+      <div class="subpage-scrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="container subpage-hero-inner">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>Residential Painting</span>
+      </nav>
+
+      <h1 class="subpage-title">
+        Interior &amp; Exterior<br />
+        <span class="accent-blue">Painting for Your Home.</span>
+      </h1>
+
+      <p class="subpage-lead">
+        From single rooms and custom wainscoting to full exterior stucco transformations and showroom garage floors, we treat your home like our own.
+      </p>
+
+      <div class="subpage-actions">
+        <a href="#quote-builder" class="btn btn-white">
+          <span>Get a Free Home Estimate</span>
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a href={brand.phoneHref} class="btn btn-outline-light">
+          <span>Call {brand.phoneDisplay}</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="spectrum-bar" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </section>
+
+  <!-- Featured Residential Before & After Split Rows -->
+  <section class="res-ba-section">
+    <div class="container">
+      <div class="section-kicker">
+        <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="kicker-text">Residential Before &amp; After Proof</span>
+      </div>
+      <h2 class="section-heading">Curb Appeal &amp; Home Transformations</h2>
+
+      <div class="split-list">
+        {residentialPairs.map((pair) => (
+          <BeforeAfterCard item={pair} layout="split-row" />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Interior Craftsmanship Photo Gallery -->
+  <section class="interior-gallery-section">
+    <div class="container">
+      <div class="section-kicker">
+        <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="kicker-text">Interior Craftsmanship</span>
+      </div>
+      <h2 class="section-heading">Crisp Cut-Ins, Wainscoting &amp; Designer Finishes</h2>
+
+      <div class="interior-grid">
+        {interiorCraftGallery.map((item) => (
+          <figure class="interior-figure">
+            <img src={item.image} alt={item.alt} width="700" height="520" loading="lazy" decoding="async" />
+            <figcaption>
+              <span class="interior-tag">{item.tag}</span>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <QuoteBuilderForm />
+</BaseLayout>
+
+<style>
+  .subpage-hero {
+    position: relative;
+    background: var(--bg-dark-deep);
+    color: var(--text-light);
+    overflow: hidden;
+  }
+
+  .subpage-hero-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .subpage-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .subpage-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(9, 13, 18, 0.92) 0%, rgba(11, 16, 23, 0.78) 55%, rgba(11, 16, 23, 0.4) 100%);
+  }
+
+  .subpage-hero-inner {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 1.5rem;
+    max-width: 720px;
+    margin-left: max(var(--gutter), calc((100% - var(--container-max)) / 2));
+  }
+
+  .breadcrumb-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-light-secondary);
+    margin-bottom: 1rem;
+  }
+
+  .subpage-title {
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    margin-bottom: 1.15rem;
+  }
+
+  .subpage-lead {
+    font-size: 1.05rem;
+    color: var(--text-light-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .subpage-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .res-ba-section {
+    padding: 5.5rem 1.5rem;
+    background: var(--bg-white);
+  }
+
+  .section-heading {
+    font-size: clamp(2rem, 3.5vw, 2.9rem);
+    color: var(--text-dark);
+    margin-bottom: 2.5rem;
+  }
+
+  .split-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  .interior-gallery-section {
+    padding: 5.5rem 1.5rem;
+    background: var(--bg-light);
+    border-top: 1px solid var(--border-light);
+  }
+
+  .interior-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+  }
+
+  .interior-figure {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .interior-figure img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .interior-figure figcaption {
+    padding: 1.35rem;
+  }
+
+  .interior-tag {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--aac-blue-deep);
+    margin-bottom: 0.35rem;
+  }
+
+  .interior-figure h3 {
+    font-size: 1.25rem;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .interior-figure p {
+    font-size: 0.92rem;
+    color: var(--text-dark-secondary);
+  }
+
+  @media (max-width: 960px) {
+    .interior-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

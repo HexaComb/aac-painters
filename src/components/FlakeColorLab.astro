@@ -1,0 +1,440 @@
+---
+import { flakePalettes } from '../data/siteData';
+---
+
+<section class="lab-section" id="color-lab" aria-labelledby="lab-heading">
+  <div class="container">
+    <div class="lab-header">
+      <div>
+        <div class="section-kicker">
+          <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="kicker-text">Interactive Floor &amp; Coating Visualizer</span>
+        </div>
+        <h2 id="lab-heading" class="lab-main-title">
+          Test Our Real Epoxy &amp; Metallic Systems.
+        </h2>
+      </div>
+      <p class="lab-intro">
+        Select any of our 5 field-installed floor systems below to compare actual cured jobsite photography, flake composition, and recommended rooms — then send your choice directly into the estimate form below.
+      </p>
+    </div>
+
+    <div class="lab-workspace" data-flake-lab>
+      <!-- Left: Swatch Matrix -->
+      <div class="swatch-column">
+        <h3 class="swatch-list-heading">Select a Coating System (01 &ndash; 05)</h3>
+
+        <div class="swatch-list" role="listbox" aria-label="Floor coating systems">
+          {flakePalettes.map((palette, index) => (
+            <button
+              type="button"
+              role="option"
+              aria-selected={index === 0 ? 'true' : 'false'}
+              class:list={['swatch-row', { 'is-active': index === 0 }]}
+              data-palette-id={palette.id}
+              data-palette-name={palette.name}
+              data-palette-category={palette.category}
+              data-palette-tagline={palette.tagline}
+              data-palette-desc={palette.description}
+              data-palette-best={palette.bestFor}
+              data-palette-image={palette.previewImage}
+              data-palette-gradient={palette.cssGradient}
+            >
+              <span class="swatch-chip" style={`background: ${palette.cssGradient};`} aria-hidden="true"></span>
+              <span class="swatch-meta">
+                <strong class="swatch-name">{palette.name}</strong>
+                <span class="swatch-cat">{palette.category} &bull; {palette.bestFor}</span>
+              </span>
+              <span class="swatch-num" aria-hidden="true">0{index + 1}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Right: Live Room Floor Simulator + Real Installed Photo -->
+      <div class="preview-column" aria-live="polite">
+        <div class="preview-visual-grid">
+          <div class="room-simulator" data-lab-gradient style={`background: ${flakePalettes[0].cssGradient};`}>
+            <div class="room-wall" aria-hidden="true">
+              <span class="wall-tag">Fresh Architectural Wall &amp; Baseboard</span>
+            </div>
+            <div class="room-floor-label">
+              <span class="floor-tag">Simulated Floor Plane</span>
+              <strong data-lab-title>{flakePalettes[0].name}</strong>
+            </div>
+          </div>
+
+          <figure class="installed-photo-frame">
+            <img
+              src={flakePalettes[0].previewImage}
+              alt={`Installed example of ${flakePalettes[0].name}`}
+              width="700"
+              height="520"
+              loading="lazy"
+              decoding="async"
+              data-lab-img
+            />
+            <figcaption class="installed-caption">Actual Installed AAC Jobsite Photo</figcaption>
+          </figure>
+        </div>
+
+        <div class="spec-readout">
+          <div class="spec-readout-top">
+            <div>
+              <span class="spec-category" data-lab-category>{flakePalettes[0].category}</span>
+              <h3 class="spec-title" data-lab-heading>{flakePalettes[0].tagline}</h3>
+            </div>
+            <a
+              href="#quote-builder"
+              class="btn btn-dark"
+              data-select-finish-btn
+              data-selected-finish={flakePalettes[0].name}
+            >
+              <span>Use This Finish in My Estimate</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+
+          <p class="spec-desc" data-lab-desc>{flakePalettes[0].description}</p>
+
+          <dl class="spec-metrics">
+            <div class="metric-cell">
+              <dt>Recommended Application</dt>
+              <dd data-lab-best>{flakePalettes[0].bestFor}</dd>
+            </div>
+            <div class="metric-cell">
+              <dt>Mechanical Surface Prep</dt>
+              <dd>CSP-2/3 HEPA Diamond Grind + Crack Fill</dd>
+            </div>
+            <div class="metric-cell">
+              <dt>UV &amp; Tire Protection</dt>
+              <dd>Polyaspartic / High-Wear Clear Topcoat</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .lab-section {
+    padding: 5.5rem 1.5rem;
+    background: var(--bg-white);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .lab-header {
+    display: grid;
+    grid-template-columns: 6fr 6fr;
+    gap: 2.5rem;
+    align-items: end;
+    margin-bottom: 2.75rem;
+  }
+
+  .lab-main-title {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    color: var(--text-dark);
+  }
+
+  .lab-intro {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--text-dark-secondary);
+  }
+
+  .lab-workspace {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 2.25rem;
+    align-items: start;
+  }
+
+  .swatch-list-heading {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-dark-muted);
+    margin-bottom: 0.85rem;
+  }
+
+  .swatch-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 2px solid var(--text-dark);
+    padding: 0.5rem 0;
+  }
+
+  .swatch-row {
+    display: grid;
+    grid-template-columns: 3.25rem 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 1rem 0.85rem;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--border-light);
+    cursor: pointer;
+    transition: background-color 150ms ease;
+  }
+
+  .swatch-row:hover {
+    background: var(--bg-light);
+  }
+
+  .swatch-row.is-active {
+    background: var(--bg-light);
+    box-shadow: inset 4px 0 0 var(--aac-blue-deep);
+  }
+
+  .swatch-chip {
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 3px;
+    border: 1px solid var(--border-light-strong);
+  }
+
+  .swatch-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .swatch-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+
+  .swatch-cat {
+    font-size: 0.85rem;
+    color: var(--text-dark-secondary);
+  }
+
+  .swatch-num {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-dark-muted);
+  }
+
+  .preview-column {
+    background: var(--bg-light);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 2rem;
+  }
+
+  .preview-visual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .room-simulator {
+    position: relative;
+    min-height: 250px;
+    border-radius: 3px;
+    border: 1px solid var(--border-light-strong);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .room-wall {
+    height: 44%;
+    background: linear-gradient(180deg, #ffffff 0%, #edf1f5 100%);
+    border-bottom: 2px solid #cbd5e1;
+    padding: 0.75rem 1rem;
+  }
+
+  .wall-tag {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-dark-muted);
+  }
+
+  .room-floor-label {
+    padding: 0.85rem 1rem;
+    background: rgba(14, 20, 27, 0.88);
+    color: var(--text-light);
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .floor-tag {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--aac-blue);
+  }
+
+  .room-floor-label strong {
+    font-family: var(--font-display);
+    font-size: 1rem;
+  }
+
+  .installed-photo-frame {
+    position: relative;
+    min-height: 250px;
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--bg-dark);
+  }
+
+  .installed-photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .installed-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.55rem 0.85rem;
+    background: rgba(14, 20, 27, 0.88);
+    color: var(--text-light);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+
+  .spec-readout-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .spec-category {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--aac-blue-deep);
+    margin-bottom: 0.2rem;
+  }
+
+  .spec-title {
+    font-size: 1.4rem;
+    color: var(--text-dark);
+  }
+
+  .spec-desc {
+    font-size: 0.96rem;
+    line-height: 1.65;
+    color: var(--text-dark-secondary);
+    margin-bottom: 1.25rem;
+  }
+
+  .spec-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding-top: 1.15rem;
+    border-top: 1px solid var(--border-light-strong);
+  }
+
+  .metric-cell dt {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--text-dark-muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .metric-cell dd {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+
+  @media (max-width: 980px) {
+    .lab-header,
+    .lab-workspace {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .preview-visual-grid,
+    .spec-metrics {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  function initFlakeLab() {
+    const lab = document.querySelector<HTMLElement>('[data-flake-lab]');
+    if (!lab) return;
+
+    const buttons = lab.querySelectorAll<HTMLButtonElement>('.swatch-row');
+    const gradientBox = lab.querySelector<HTMLElement>('[data-lab-gradient]');
+    const titleEl = lab.querySelector<HTMLElement>('[data-lab-title]');
+    const imgEl = lab.querySelector<HTMLImageElement>('[data-lab-img]');
+    const catEl = lab.querySelector<HTMLElement>('[data-lab-category]');
+    const headingEl = lab.querySelector<HTMLElement>('[data-lab-heading]');
+    const descEl = lab.querySelector<HTMLElement>('[data-lab-desc]');
+    const bestEl = lab.querySelector<HTMLElement>('[data-lab-best]');
+    const selectBtn = lab.querySelector<HTMLAnchorElement>('[data-select-finish-btn]');
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        buttons.forEach((b) => {
+          b.classList.remove('is-active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-selected', 'true');
+
+        const name = btn.dataset.paletteName || '';
+        const cat = btn.dataset.paletteCategory || '';
+        const tagline = btn.dataset.paletteTagline || '';
+        const desc = btn.dataset.paletteDesc || '';
+        const best = btn.dataset.paletteBest || '';
+        const img = btn.dataset.paletteImage || '';
+        const grad = btn.dataset.paletteGradient || '';
+
+        if (gradientBox) gradientBox.style.background = grad;
+        if (titleEl) titleEl.textContent = name;
+        if (imgEl) {
+          imgEl.src = img;
+          imgEl.alt = `Installed example of ${name}`;
+        }
+        if (catEl) catEl.textContent = cat;
+        if (headingEl) headingEl.textContent = tagline;
+        if (descEl) descEl.textContent = desc;
+        if (bestEl) bestEl.textContent = best;
+        if (selectBtn) selectBtn.dataset.selectedFinish = name;
+      });
+    });
+
+    if (selectBtn) {
+      selectBtn.addEventListener('click', () => {
+        const chosen = selectBtn.dataset.selectedFinish || '';
+        const finishSelect = document.querySelector<HTMLSelectElement>('#preferredFinish');
+        if (finishSelect && chosen) {
+          for (const opt of Array.from(finishSelect.options)) {
+            if (opt.value.includes(chosen) || chosen.includes(opt.value)) {
+              finishSelect.value = opt.value;
+              break;
+            }
+          }
+        }
+      });
+    }
+  }
+
+  initFlakeLab();
+  document.addEventListener('astro:page-load', initFlakeLab);
+</script>

@@ -1,0 +1,29 @@
+{
+  "name": "aac-painters-inc",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AAC Painters Inc. — Coloring Your Dream. Residential & Commercial Painting, Industrial Epoxy Flooring, Polyaspartic Flake Systems, and Concrete Polishing in California's 209 Central Valley.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "deploy": "astro build && wrangler deploy",
+    "cf-typegen": "wrangler types"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.5.0",
+    "@astrojs/sitemap": "^3.7.0",
+    "astro": "^5.7.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.14.0"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "sharp": true,
+    "workerd": true,
+    "fsevents": true
+  }
+}

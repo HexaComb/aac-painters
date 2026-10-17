@@ -1,0 +1,149 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BeforeAfterCard from '../../components/BeforeAfterCard.astro';
+import StoryChapters from '../../components/StoryChapters.astro';
+import QuoteBuilderForm from '../../components/QuoteBuilderForm.astro';
+import { brand, beforeAfterGallery } from '../../data/siteData';
+
+const commercialPair = beforeAfterGallery.find((p) => p.id === 'autoshop-transformation') || beforeAfterGallery[6];
+---
+
+<BaseLayout
+  title="Commercial Painting & Industrial Coatings | AAC Painters Inc. (CSLB #1039849)"
+  description="Licensed California commercial painting and industrial floor coating contractor (CSLB #1039849). Multi-story exteriors, auto repair shops, retail storefronts, and HOA facilities. Call (209) 485-5103."
+  ogImage="/images/projects/mcauley-building-after.png"
+>
+  <section class="subpage-hero">
+    <div class="subpage-hero-bg">
+      <img
+        src="/images/projects/mcauley-building-after.png"
+        alt="Completed 2-story commercial landmark exterior repaint by AAC Painters Inc."
+        width="1600"
+        height="900"
+        loading="eager"
+        fetchpriority="high"
+        decoding="sync"
+      />
+      <div class="subpage-scrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="container subpage-hero-inner">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>Commercial Painting &amp; Coatings</span>
+      </nav>
+
+      <h1 class="subpage-title">
+        Commercial Scale.<br />
+        <span class="accent-blue">Zero Downtime.</span>
+      </h1>
+
+      <p class="subpage-lead">
+        From 2-story historical commercial facades to high-traffic multi-bay automotive shops, AAC Painters Inc. delivers weekend turnarounds, full insurance compliance, and industrial-grade durability.
+      </p>
+
+      <div class="subpage-actions">
+        <a href="#quote-builder" class="btn btn-white">
+          <span>Request Commercial Bid</span>
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a href={brand.phoneHref} class="btn btn-outline-light">
+          <span>Call {brand.phoneDisplay}</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="spectrum-bar" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </section>
+
+  <section class="comm-showcase-section">
+    <div class="container">
+      <div class="section-kicker">
+        <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="kicker-text">Featured Commercial Transformation</span>
+      </div>
+      <h2 class="section-heading">Multi-Bay Automotive Service Center Overhaul</h2>
+      <div class="split-wrap">
+        <BeforeAfterCard item={commercialPair} layout="split-row" />
+      </div>
+    </div>
+  </section>
+
+  <StoryChapters />
+  <QuoteBuilderForm />
+</BaseLayout>
+
+<style>
+  .subpage-hero {
+    position: relative;
+    background: var(--bg-dark-deep);
+    color: var(--text-light);
+    overflow: hidden;
+  }
+
+  .subpage-hero-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .subpage-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .subpage-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(9, 13, 18, 0.92) 0%, rgba(11, 16, 23, 0.78) 55%, rgba(11, 16, 23, 0.4) 100%);
+  }
+
+  .subpage-hero-inner {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 1.5rem;
+    max-width: 720px;
+    margin-left: max(var(--gutter), calc((100% - var(--container-max)) / 2));
+  }
+
+  .breadcrumb-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-light-secondary);
+    margin-bottom: 1rem;
+  }
+
+  .subpage-title {
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    margin-bottom: 1.15rem;
+  }
+
+  .subpage-lead {
+    font-size: 1.05rem;
+    color: var(--text-light-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .subpage-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .comm-showcase-section {
+    padding: 5.5rem 1.5rem;
+    background: var(--bg-white);
+  }
+
+  .section-heading {
+    font-size: clamp(2rem, 3.5vw, 2.9rem);
+    color: var(--text-dark);
+    margin-bottom: 2.5rem;
+  }
+</style>

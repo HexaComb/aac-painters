@@ -1,0 +1,310 @@
+---
+import type { BeforeAfterPair } from '../data/siteData';
+
+export interface Props {
+  item: BeforeAfterPair;
+  priority?: boolean;
+  layout?: 'split-row' | 'card';
+}
+
+const { item, priority = false, layout = 'card' } = Astro.props;
+---
+
+<article
+  class:list={['ba-item', `ba-layout-${layout}`, 'reveal-on-scroll']}
+  data-category={item.category}
+  id={`ba-${item.id}`}
+>
+  <!-- Interactive Before/After Viewport (Matching Reference Mockup) -->
+  <div class="ba-viewport" data-ba-slider>
+    <!-- Base Layer: AFTER Image -->
+    <img
+      src={item.afterImage}
+      alt={item.afterAlt}
+      width="1200"
+      height="900"
+      loading={priority ? 'eager' : 'lazy'}
+      fetchpriority={priority ? 'high' : 'auto'}
+      decoding={priority ? 'sync' : 'async'}
+      class="ba-img ba-img-after"
+    />
+
+    <!-- Clipped Layer: BEFORE Image -->
+    <div class="ba-before-clip" style="--pos: 50%;">
+      <img
+        src={item.beforeImage}
+        alt={item.beforeAlt}
+        width="1200"
+        height="900"
+        loading={priority ? 'eager' : 'lazy'}
+        fetchpriority={priority ? 'low' : 'auto'}
+        decoding="async"
+        class="ba-img ba-img-before"
+      />
+    </div>
+
+    <!-- Bottom Corner Badges (Exact Reference Mockup Placement) -->
+    <span class="ba-corner-badge ba-badge-before" aria-hidden="true">BEFORE</span>
+    <span class="ba-corner-badge ba-badge-after" aria-hidden="true">AFTER</span>
+
+    <!-- Center White Divider Line & Circular < > Handle -->
+    <div class="ba-divider" style="--pos: 50%;" aria-hidden="true">
+      <div class="ba-handle">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 18l-6-6 6-6" transform="translate(-4, 0) scale(0.85)" />
+          <path d="M9 18l6-6-6-6" transform="translate(6, 0) scale(0.85)" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Accessible Range Input -->
+    <label for={`slider-${item.id}`} class="sr-only">
+      Compare before and after for {item.title}
+    </label>
+    <input
+      id={`slider-${item.id}`}
+      type="range"
+      min="0"
+      max="100"
+      value="50"
+      class="ba-range-input"
+      aria-label={`Before and after comparison slider for ${item.title}`}
+    />
+  </div>
+
+  <!-- Editorial Story Column / Caption -->
+  <div class="ba-content">
+    <div class="section-kicker">
+      <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="kicker-text">{item.category} &bull; {item.duration}</span>
+    </div>
+
+    <h3 class="ba-title">{item.title}</h3>
+    <p class="ba-subtitle">{item.subtitle}</p>
+    <p class="ba-story">{item.story}</p>
+
+    <div class="ba-footer-row">
+      <span class="ba-finish-spec">
+        <strong>System:</strong> {item.finishSystem}
+      </span>
+      <a href="#quote-builder" class="arrow-link">
+        <span>Request Similar Spec</span>
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .ba-item {
+    background: var(--bg-white);
+  }
+
+  /* Split-Row Layout: Exact 2-column horizontal showcase from reference mockup */
+  .ba-layout-split-row {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: clamp(2rem, 4.5vw, 4rem);
+    align-items: center;
+  }
+
+  /* Card Layout: Used in the secondary proof grid below the featured rows */
+  .ba-layout-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--bg-white);
+  }
+
+  .ba-layout-card .ba-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .ba-viewport {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #141b24;
+    border-radius: 4px;
+    user-select: none;
+  }
+
+  .ba-layout-card .ba-viewport {
+    border-radius: 0;
+    aspect-ratio: 4 / 3;
+  }
+
+  .ba-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .ba-before-clip {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 calc(100% - var(--pos, 50%)) 0 0);
+    will-change: clip-path;
+  }
+
+  /* Exact bottom-left BEFORE & bottom-right AFTER dark badges from mockup */
+  .ba-corner-badge {
+    position: absolute;
+    bottom: 1rem;
+    z-index: 3;
+    padding: 0.4rem 0.85rem;
+    background-color: rgba(14, 20, 27, 0.88);
+    color: var(--text-light);
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    pointer-events: none;
+  }
+
+  .ba-badge-before {
+    left: 1rem;
+  }
+
+  .ba-badge-after {
+    right: 1rem;
+  }
+
+  /* Crisp white vertical divider & circular white handle */
+  .ba-divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--pos, 50%);
+    width: 2px;
+    background-color: #ffffff;
+    transform: translateX(-50%);
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  .ba-handle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    background-color: #ffffff;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    transition: transform 150ms var(--ease-out-quart), background-color 150ms ease, color 150ms ease;
+  }
+
+  .ba-viewport:hover .ba-handle,
+  .ba-viewport:focus-within .ba-handle {
+    transform: translate(-50%, -50%) scale(1.08);
+    background-color: var(--aac-blue);
+    color: var(--bg-dark-deep);
+  }
+
+  .ba-range-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: ew-resize;
+    z-index: 5;
+    margin: 0;
+  }
+
+  .ba-title {
+    font-size: clamp(1.5rem, 2.4vw, 2.15rem);
+    line-height: 1.12;
+    color: var(--text-dark);
+    margin-bottom: 0.4rem;
+  }
+
+  .ba-layout-card .ba-title {
+    font-size: 1.35rem;
+  }
+
+  .ba-subtitle {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--aac-blue-deep);
+    margin-bottom: 0.75rem;
+  }
+
+  .ba-story {
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: var(--text-dark-secondary);
+    margin-bottom: 1.25rem;
+  }
+
+  .ba-footer-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1rem;
+    margin-top: auto;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .ba-finish-spec {
+    font-size: 0.875rem;
+    color: var(--text-dark-muted);
+  }
+
+  .ba-finish-spec strong {
+    color: var(--text-dark);
+  }
+
+  @media (max-width: 960px) {
+    .ba-layout-split-row {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  function initBeforeAfterSliders() {
+    const sliders = document.querySelectorAll<HTMLElement>('[data-ba-slider]');
+    sliders.forEach((slider) => {
+      if (slider.dataset.bound === 'true') return;
+      slider.dataset.bound = 'true';
+
+      const input = slider.querySelector<HTMLInputElement>('.ba-range-input');
+      const clip = slider.querySelector<HTMLElement>('.ba-before-clip');
+      const divider = slider.querySelector<HTMLElement>('.ba-divider');
+
+      if (!input || !clip || !divider) return;
+
+      const updatePosition = (val: string) => {
+        const pct = `${val}%`;
+        clip.style.setProperty('--pos', pct);
+        divider.style.setProperty('--pos', pct);
+      };
+
+      input.addEventListener('input', () => updatePosition(input.value), { passive: true });
+    });
+  }
+
+  initBeforeAfterSliders();
+  document.addEventListener('astro:page-load', initBeforeAfterSliders);
+</script>

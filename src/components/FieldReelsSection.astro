@@ -1,0 +1,422 @@
+---
+import { videoShowcase } from '../data/siteData';
+
+const clientReviews = [
+  {
+    quote:
+      'Professional, on time, and the quality of work was outstanding. They ground our stained garage slab, repaired every crack, and our full-flake epoxy floor looks brand new.',
+    author: 'Sarah',
+    initial: 'M.',
+    scope: 'Residential Garage Epoxy & Interior Repaint'
+  },
+  {
+    quote:
+      'They made the whole process simple and stress-free. Alex and his crew prepped and coated our multi-bay shop on schedule without disrupting our mechanics. I highly recommend them!',
+    author: 'James',
+    initial: 'T.',
+    scope: 'Commercial Auto Shop Floor & Bay Walls'
+  },
+  {
+    quote:
+      'Great communication, clean crew, and amazing results on our exterior stucco and trim. Zero overspray on our windows or walkways. We will definitely use AAC Painters again!',
+    author: 'Melissa',
+    initial: 'R.',
+    scope: 'Full Exterior Stucco & Trim Transformation'
+  }
+];
+---
+
+<section class="reviews-reels-section" id="reviews" aria-labelledby="reviews-heading">
+  <div class="container">
+    <!-- Top Header Row Matching Reference Mockup -->
+    <div class="reviews-header-row">
+      <div>
+        <div class="section-kicker">
+          <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="kicker-text kicker-text-light">What Our Clients Say &amp; Live Jobsite Proof</span>
+        </div>
+        <h2 id="reviews-heading" class="reviews-main-title">
+          Real People. <span class="accent-blue">Real Results.</span>
+        </h2>
+      </div>
+
+      <a href="#quote-builder" class="arrow-link arrow-link-light">
+        <span>Request Your Free Estimate</span>
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+
+    <!-- 3 Client Testimonial Cards (Exact Reference Mockup Design) -->
+    <div class="reviews-grid">
+      {clientReviews.map((review) => (
+        <article class="review-card">
+          <div class="review-stars" aria-label="5 out of 5 stars">
+            <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          </div>
+          <blockquote class="review-quote">
+            &ldquo;{review.quote}&rdquo;
+          </blockquote>
+          <footer class="review-footer">
+            <strong class="review-author">
+              &mdash; {review.author} <span class="accent-blue">{review.initial}</span>
+            </strong>
+            <span class="review-scope">{review.scope}</span>
+          </footer>
+        </article>
+      ))}
+    </div>
+
+    <!-- Live Unfiltered Jobsite Video Reels: High-Contrast DURING (Dark/Amber) vs. AFTER (Light/Green) -->
+    <div class="reels-subband">
+      <div class="reels-subheader">
+        <h3 class="reels-subtitle">Unfiltered Jobsite Video: In Progress vs. Completed Result</h3>
+        <p class="reels-subcopy">
+          Same historic downtown building — watch our crew masking and coating from the 40-foot ladder on the left, then compare the finished street-level reveal on the right.
+        </p>
+      </div>
+
+      <div class="reels-grid">
+        {videoShowcase.map((reel, idx) => {
+          const isAfter = idx === 1;
+          return (
+            <article
+              class:list={['reel-item', isAfter ? 'reel-item-after' : 'reel-item-during']}
+              data-reel-card
+            >
+              <div class="reel-video-wrap">
+                <video
+                  id={reel.id}
+                  src={reel.src}
+                  poster={reel.poster}
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                  class="reel-video"
+                ></video>
+                <button
+                  type="button"
+                  class="reel-toggle-btn"
+                  data-video-toggle={reel.id}
+                  aria-label={`Play or pause video: ${reel.title}`}
+                  aria-pressed="false"
+                >
+                  <span data-toggle-label>Play Clip</span>
+                </button>
+              </div>
+
+              <div class="reel-caption">
+                <span class:list={['reel-state-tag', isAfter ? 'state-tag-after' : 'state-tag-during']}>
+                  {isAfter ? 'AFTER • COMPLETED REVEAL' : 'DURING • WORK IN PROGRESS'}
+                </span>
+                <span class="reel-badge">{reel.badge}</span>
+                <strong class="reel-title">{reel.title}</strong>
+                <p class="reel-desc">{reel.description}</p>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .reviews-reels-section {
+    padding: 5.5rem 1.5rem;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+  }
+
+  .reviews-header-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .reviews-main-title {
+    font-size: clamp(2.1rem, 3.6vw, 3rem);
+    color: var(--text-light);
+  }
+
+  /* 3-Column Dark Slate Review Cards from Reference Mockup */
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .review-card {
+    background-color: var(--bg-dark-elevated);
+    padding: 2rem;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .review-stars {
+    color: var(--aac-yellow);
+    font-size: 1.15rem;
+    letter-spacing: 0.12em;
+  }
+
+  .review-quote {
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: var(--text-light-secondary);
+    font-style: italic;
+    flex: 1;
+  }
+
+  .review-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.75rem 0 0 0;
+    border-top: 1px solid var(--border-dark);
+  }
+
+  .review-author {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--text-light);
+  }
+
+  .review-scope {
+    font-size: 0.85rem;
+    color: var(--text-light-muted);
+  }
+
+  /* Live Jobsite Video Reels Subband */
+  .reels-subband {
+    padding: 2.75rem 0 0 0;
+    border-top: 1px solid var(--border-dark);
+  }
+
+  .reels-subheader {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .reels-subtitle {
+    font-size: 1.45rem;
+    color: var(--text-light);
+  }
+
+  .reels-subcopy {
+    font-size: 0.94rem;
+    color: var(--text-light-secondary);
+  }
+
+  .reels-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+  }
+
+  .reel-item {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.5rem;
+    border-radius: 4px;
+  }
+
+  /* Card 1: Dark Work-Zone Surface (DURING WORK) */
+  .reel-item-during {
+    background-color: #181f29;
+    border: 1px solid rgba(245, 184, 0, 0.45);
+    color: var(--text-light);
+  }
+
+  /* Card 2: Crisp Daylight Reveal Surface (AFTER COMPLETED) */
+  .reel-item-after {
+    background-color: var(--bg-white);
+    border: 1px solid var(--border-light-strong);
+    color: var(--text-dark);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+  }
+
+  .reel-video-wrap {
+    position: relative;
+    aspect-ratio: 9 / 14;
+    background: #000;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .reel-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .reel-toggle-btn {
+    position: absolute;
+    bottom: 0.65rem;
+    left: 0.65rem;
+    right: 0.65rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(14, 20, 27, 0.9);
+    color: var(--text-light);
+    border: 1px solid var(--border-dark-strong);
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+
+  .reel-toggle-btn:hover {
+    background: var(--aac-blue);
+    color: var(--bg-dark-deep);
+    border-color: var(--aac-blue);
+  }
+
+  .reel-caption {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.55rem;
+  }
+
+  .reel-state-tag {
+    display: inline-block;
+    padding: 0.3rem 0.7rem;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    border-radius: 2px;
+  }
+
+  .state-tag-during {
+    background-color: var(--aac-yellow);
+    color: var(--bg-dark-deep);
+  }
+
+  .state-tag-after {
+    background-color: #1f7a3f;
+    color: var(--bg-white);
+  }
+
+  .reel-badge {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .reel-item-during .reel-badge {
+    color: var(--aac-yellow);
+  }
+
+  .reel-item-after .reel-badge {
+    color: var(--aac-blue-deep);
+  }
+
+  .reel-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+
+  .reel-item-during .reel-title {
+    color: var(--text-light);
+  }
+
+  .reel-item-after .reel-title {
+    color: var(--text-dark);
+  }
+
+  .reel-desc {
+    font-size: 0.94rem;
+    line-height: 1.6;
+  }
+
+  .reel-item-during .reel-desc {
+    color: var(--text-light-secondary);
+  }
+
+  .reel-item-after .reel-desc {
+    color: var(--text-dark-secondary);
+  }
+
+  @media (max-width: 980px) {
+    .reviews-grid,
+    .reels-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .reel-item {
+      grid-template-columns: 1fr;
+    }
+
+    .reel-video-wrap {
+      aspect-ratio: 16 / 10;
+    }
+  }
+</style>
+
+<script>
+  function initVideoReels() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cards = document.querySelectorAll<HTMLElement>('[data-reel-card]');
+
+    cards.forEach((card) => {
+      const video = card.querySelector<HTMLVideoElement>('video');
+      const btn = card.querySelector<HTMLButtonElement>('[data-video-toggle]');
+      const label = card.querySelector<HTMLElement>('[data-toggle-label]');
+      if (!video || !btn || !label) return;
+
+      let manualOverride = false;
+
+      const updateUI = (playing: boolean) => {
+        btn.setAttribute('aria-pressed', String(playing));
+        label.textContent = playing ? 'Pause Clip' : 'Play Clip';
+      };
+
+      btn.addEventListener('click', () => {
+        manualOverride = true;
+        if (video.paused) {
+          video.play().then(() => updateUI(true)).catch(() => updateUI(false));
+        } else {
+          video.pause();
+          updateUI(false);
+        }
+      });
+
+      if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (manualOverride) return;
+              if (entry.isIntersecting) {
+                video.play().then(() => updateUI(true)).catch(() => updateUI(false));
+              } else {
+                video.pause();
+                updateUI(false);
+              }
+            });
+          },
+          { threshold: 0.45 }
+        );
+        observer.observe(video);
+      }
+    });
+  }
+
+  initVideoReels();
+  document.addEventListener('astro:page-load', initVideoReels);
+</script>

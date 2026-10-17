@@ -1,0 +1,555 @@
+---
+import { brand, flakePalettes } from '../data/siteData';
+---
+
+<section class="estimate-cta-section" id="quote-builder" aria-labelledby="quote-heading">
+  <!-- Atmospheric Jobsite & Coating Backdrop with Dark Reading Scrim -->
+  <div class="estimate-backdrop" aria-hidden="true">
+    <img
+      src="/images/projects/warehouse-flake-epoxy-after.png"
+      alt=""
+      width="1600"
+      height="1000"
+      loading="lazy"
+      decoding="async"
+      class="estimate-bg-img"
+    />
+    <div class="estimate-scrim"></div>
+  </div>
+
+  <div class="container estimate-container">
+    <div class="estimate-grid">
+      <!-- Left Column: Dark Headline & Direct Contractor Info (Exact Reference Mockup Layout) -->
+      <div class="estimate-copy-col">
+        <div class="section-kicker">
+          <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="kicker-text kicker-text-light">Get a Free Estimate</span>
+        </div>
+
+        <h2 id="quote-heading" class="estimate-title">
+          Ready to Transform<br />
+          <span class="accent-blue">Your Property?</span>
+        </h2>
+
+        <p class="estimate-lead">
+          Fill out the form and company president <strong>{brand.president}</strong> will get back to you within 24 hours with on-site sample boards and a written specification quote.
+        </p>
+
+        <dl class="estimate-credentials">
+          <div class="cred-item">
+            <dt>Direct Field Line</dt>
+            <dd><a href={brand.phoneHref}>{brand.phoneDisplay}</a></dd>
+          </div>
+          <div class="cred-item">
+            <dt>California License</dt>
+            <dd>{brand.license} &bull; {brand.insurance}</dd>
+          </div>
+          <div class="cred-item">
+            <dt>Project Scopes</dt>
+            <dd>Residential, Commercial &amp; Industrial Epoxy</dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Right Column: Crisp Floating White Estimate Form Card (Exact Reference Mockup Layout) -->
+      <div class="estimate-white-card">
+        <form id="aac-quote-form" class="estimate-form" action="/api/quote" method="POST" novalidate>
+          <h3 class="sr-only">Request Your Free Estimate</h3>
+
+          <!-- Row 1: Name * & Phone * -->
+          <div class="form-row-2">
+            <div class="field-group">
+              <label for="fullName" class="field-label">
+                Name <span class="req-star" aria-hidden="true">*</span>
+              </label>
+              <p class="field-hint" id="name-hint">Full name or business contact</p>
+              <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                class="field-input"
+                autocomplete="name"
+                required
+                minlength="2"
+                aria-describedby="name-hint name-error"
+              />
+              <p class="field-error" id="name-error" role="alert">Please enter your name.</p>
+            </div>
+
+            <div class="field-group">
+              <label for="phone" class="field-label">
+                Phone <span class="req-star" aria-hidden="true">*</span>
+              </label>
+              <p class="field-hint" id="phone-hint">10-digit number for call or text</p>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                class="field-input"
+                autocomplete="tel"
+                inputmode="tel"
+                required
+                pattern="[\d\s\-\+\(\)\.]{10,20}"
+                aria-describedby="phone-hint phone-error"
+              />
+              <p class="field-error" id="phone-error" role="alert">Please enter a valid 10-digit phone number.</p>
+            </div>
+          </div>
+
+          <!-- Row 2: Email & City * -->
+          <div class="form-row-2">
+            <div class="field-group">
+              <label for="email" class="field-label">Email</label>
+              <p class="field-hint" id="email-hint">Optional — for your written PDF estimate</p>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="field-input"
+                autocomplete="email"
+                inputmode="email"
+                aria-describedby="email-hint email-error"
+              />
+              <p class="field-error" id="email-error" role="alert">Please enter a valid email address.</p>
+            </div>
+
+            <div class="field-group">
+              <label for="city" class="field-label">
+                City / Location <span class="req-star" aria-hidden="true">*</span>
+              </label>
+              <p class="field-hint" id="city-hint">e.g., Modesto, Turlock, Stockton, Tracy</p>
+              <input
+                type="text"
+                id="city"
+                name="city"
+                class="field-input"
+                autocomplete="address-level2"
+                required
+                minlength="2"
+                aria-describedby="city-hint city-error"
+              />
+              <p class="field-error" id="city-error" role="alert">Please enter the project city.</p>
+            </div>
+          </div>
+
+          <!-- Row 3: Service Scope * & Property Type -->
+          <div class="form-row-2">
+            <div class="field-group">
+              <label for="serviceType" class="field-label">
+                What are you interested in? <span class="req-star" aria-hidden="true">*</span>
+              </label>
+              <p class="field-hint" id="service-hint">Primary painting or epoxy service</p>
+              <select id="serviceType" name="serviceType" class="field-input" required aria-describedby="service-hint">
+                <option value="Full-Broadcast Flake Epoxy Floor">Full-Broadcast Flake Epoxy Floor</option>
+                <option value="Interior & Exterior Residential Painting">Interior &amp; Exterior Home Painting</option>
+                <option value="Commercial Painting & Stucco Restoration">Commercial Building / Facade Painting</option>
+                <option value="Metallic 3D Designer Epoxy Floor">3D Metallic Designer Epoxy Floor</option>
+                <option value="Cabinets, Trim & Drywall Finishing">Cabinets, Trim &amp; Interior Repaint</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="propertyScope" class="field-label">Property Type &amp; Approx. Size</label>
+              <p class="field-hint" id="scope-hint">Helps us plan crew &amp; sample boards</p>
+              <select id="propertyScope" name="propertyScope" class="field-input" aria-describedby="scope-hint">
+                <option value="Residential — 2-3 Car Garage / Patio">Residential — Garage or Patio Slab</option>
+                <option value="Residential — Full Home Interior / Exterior">Residential — Home Interior or Exterior</option>
+                <option value="Commercial — Auto Shop / Warehouse">Commercial — Auto Shop or Warehouse</option>
+                <option value="Commercial — Storefront / Multi-Story">Commercial — Storefront or Multi-Story</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Hidden or Optional Preferred Finish synced from Coating Lab -->
+          <div class="field-group">
+            <label for="preferredFinish" class="field-label">Selected Coating System or Color Direction</label>
+            <select id="preferredFinish" name="preferredFinish" class="field-input">
+              <option value="Bring Sample Boards to Walkthrough">Undecided — Bring Sample Boards to My Walkthrough</option>
+              {flakePalettes.map((p) => (
+                <option value={p.name}>{p.name} ({p.category})</option>
+              ))}
+              <option value="Custom Architectural Paint Color Match">Custom Architectural Paint Color Match</option>
+            </select>
+          </div>
+
+          <!-- Row 4: Project Details -->
+          <div class="field-group">
+            <label for="projectDetails" class="field-label">Tell us about your project</label>
+            <p class="field-hint" id="details-hint">Approximate square footage, current surface condition, or target timeline</p>
+            <textarea
+              id="projectDetails"
+              name="projectDetails"
+              rows="3"
+              class="field-input field-textarea"
+              aria-describedby="details-hint"
+            ></textarea>
+          </div>
+
+          <!-- Honeypot -->
+          <div class="sr-only" aria-hidden="true">
+            <label for="companyWebsite">Leave empty</label>
+            <input type="text" id="companyWebsite" name="companyWebsite" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <button type="submit" class="btn btn-dark submit-estimate-btn" id="quote-submit-btn">
+            <span>Request My Free Estimate</span>
+            <span aria-hidden="true">&rarr;</span>
+          </button>
+
+          <div class="form-feedback" id="quote-feedback" role="status" aria-live="polite" hidden></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .estimate-cta-section {
+    position: relative;
+    padding: 5.5rem 1.5rem;
+    background-color: var(--bg-dark-deep);
+    color: var(--text-light);
+    overflow: hidden;
+  }
+
+  .estimate-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .estimate-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: right center;
+    opacity: 0.32;
+  }
+
+  .estimate-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(9, 13, 18, 0.96) 0%,
+      rgba(14, 20, 27, 0.88) 48%,
+      rgba(14, 20, 27, 0.68) 100%
+    );
+  }
+
+  .estimate-container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .estimate-grid {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .estimate-title {
+    font-size: clamp(2.25rem, 4vw, 3.35rem);
+    line-height: 1.06;
+    color: var(--text-light);
+    margin-bottom: 1.15rem;
+  }
+
+  .estimate-lead {
+    font-size: 1.02rem;
+    line-height: 1.65;
+    color: var(--text-light-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .estimate-lead strong {
+    color: var(--text-light);
+  }
+
+  .estimate-credentials {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: 1.5rem 0 0 0;
+    border-top: 1px solid var(--border-dark);
+  }
+
+  .cred-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.92rem;
+  }
+
+  .cred-item dt {
+    color: var(--text-light-muted);
+  }
+
+  .cred-item dd {
+    font-weight: 700;
+    color: var(--text-light);
+    text-align: right;
+  }
+
+  .cred-item a {
+    color: var(--aac-blue);
+    font-family: var(--font-mono);
+  }
+
+  /* Crisp Floating White Card from Reference Mockup */
+  .estimate-white-card {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    padding: 2.5rem;
+    border-radius: 6px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  }
+
+  .estimate-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+
+  .form-row-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .field-label {
+    font-family: var(--font-display);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.15rem;
+  }
+
+  .req-star {
+    color: var(--aac-red);
+  }
+
+  .field-hint {
+    font-size: 0.85rem;
+    color: var(--text-dark-muted);
+    margin-bottom: 0.35rem;
+    line-height: 1.35;
+  }
+
+  .field-input {
+    width: 100%;
+    padding: 0.72rem 0.9rem;
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-light-strong);
+    border-radius: 3px;
+    color: var(--text-dark);
+    font-size: 0.94rem;
+    transition: border-color 150ms ease, background-color 150ms ease;
+  }
+
+  .field-input:focus {
+    outline: 2px solid var(--aac-blue-deep);
+    outline-offset: 0;
+    background-color: var(--bg-white);
+  }
+
+  .field-textarea {
+    resize: vertical;
+    min-height: 5rem;
+  }
+
+  .field-error {
+    display: none;
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--state-error);
+  }
+
+  @supports selector(:user-invalid) {
+    .field-input:user-invalid {
+      border-color: var(--state-error);
+      background-color: #fdf4f3;
+    }
+
+    .field-input:user-valid {
+      border-color: var(--state-success);
+    }
+
+    .field-input:user-invalid ~ .field-error {
+      display: block;
+    }
+  }
+
+  .field-input.touched:invalid {
+    border-color: var(--state-error);
+    background-color: #fdf4f3;
+  }
+
+  .field-input.touched:valid {
+    border-color: var(--state-success);
+  }
+
+  .field-input.touched:invalid ~ .field-error {
+    display: block;
+  }
+
+  .submit-estimate-btn {
+    width: 100%;
+    padding-block: 1.05rem;
+    margin-top: 0.35rem;
+    font-size: 0.92rem;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+  }
+
+  .submit-estimate-btn:hover {
+    background-color: var(--aac-blue-deep);
+    border-color: var(--aac-blue-deep);
+  }
+
+  .form-feedback {
+    padding: 0.9rem 1.1rem;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    border-radius: 3px;
+  }
+
+  .form-feedback.is-success {
+    background: #eef6f0;
+    border: 1px solid var(--state-success);
+    color: #164424;
+  }
+
+  .form-feedback.is-error {
+    background: #fdf3f2;
+    border: 1px solid var(--state-error);
+    color: #7d1d14;
+  }
+
+  @media (max-width: 980px) {
+    .estimate-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .form-row-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#aac-quote-form');
+  const feedback = document.querySelector<HTMLElement>('#quote-feedback');
+  const submitBtn = document.querySelector<HTMLButtonElement>('#quote-submit-btn');
+
+  if (form) {
+    const inputs = form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>('.field-input');
+    const prevValues = new WeakMap<Element, string>();
+
+    inputs.forEach((input) => {
+      input.addEventListener('focus', () => {
+        if (!prevValues.has(input)) {
+          prevValues.set(input, input.value);
+        }
+      });
+
+      input.addEventListener('blur', () => {
+        if (prevValues.get(input) !== input.value) {
+          input.classList.add('touched');
+        }
+        if (input.classList.contains('touched')) {
+          input.setAttribute('aria-invalid', String(!input.validity.valid));
+        }
+      });
+
+      input.addEventListener('input', () => {
+        if (input.classList.contains('touched')) {
+          input.setAttribute('aria-invalid', String(!input.validity.valid));
+        }
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      let firstInvalid: HTMLElement | null = null;
+      inputs.forEach((input) => {
+        input.classList.add('touched');
+        const isValid = input.validity.valid;
+        input.setAttribute('aria-invalid', String(!isValid));
+        if (!isValid && !firstInvalid) {
+          firstInvalid = input;
+        }
+      });
+
+      if (firstInvalid) {
+        (firstInvalid as HTMLElement).focus();
+        return;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending Estimate Request...';
+      }
+
+      if (feedback) {
+        feedback.hidden = true;
+        feedback.className = 'form-feedback';
+      }
+
+      try {
+        const formData = new FormData(form);
+        const payload = Object.fromEntries(formData.entries());
+
+        const response = await fetch('/api/quote', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.ok) {
+          if (feedback) {
+            feedback.hidden = false;
+            feedback.classList.add('is-success');
+            feedback.innerHTML = `<strong>Estimate Request Received (Ref #${result.referenceId}):</strong> ${result.message}`;
+          }
+          form.reset();
+          inputs.forEach((input) => {
+            input.classList.remove('touched');
+            input.removeAttribute('aria-invalid');
+          });
+        } else {
+          throw new Error(result.error || 'Could not submit your estimate request. Please call (209) 485-5103.');
+        }
+      } catch (err) {
+        if (feedback) {
+          feedback.hidden = false;
+          feedback.classList.add('is-error');
+          feedback.textContent =
+            err instanceof Error
+              ? err.message
+              : 'Network error while submitting. Please call Alex directly at (209) 485-5103.';
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>Request My Free Estimate</span> <span aria-hidden="true">&rarr;</span>';
+        }
+      }
+    });
+  }
+</script>

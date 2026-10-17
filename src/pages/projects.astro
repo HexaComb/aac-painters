@@ -1,0 +1,158 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BeforeAfterCard from '../components/BeforeAfterCard.astro';
+import StoryChapters from '../components/StoryChapters.astro';
+import FieldReelsSection from '../components/FieldReelsSection.astro';
+import QuoteBuilderForm from '../components/QuoteBuilderForm.astro';
+import { brand, beforeAfterGallery } from '../data/siteData';
+---
+
+<BaseLayout
+  title="Our Work: 7 Interactive Before & After Projects | AAC Painters Inc."
+  description="Inspect all 26 real jobsite photos and videos from AAC Painters Inc. Drag 7 interactive before-and-after sliders across epoxy garage floors, commercial auto shops, and exterior repaints."
+  ogImage="/images/projects/auto-shop-epoxy-floor-after.png"
+>
+  <section class="subpage-hero">
+    <div class="subpage-hero-bg">
+      <img
+        src="/images/projects/auto-shop-epoxy-floor-after.png"
+        alt="Completed commercial automotive shop floor by AAC Painters Inc."
+        width="1600"
+        height="900"
+        loading="eager"
+        fetchpriority="high"
+        decoding="sync"
+      />
+      <div class="subpage-scrim" aria-hidden="true"></div>
+    </div>
+
+    <div class="container subpage-hero-inner">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>Our Work &amp; Before/After Archive</span>
+      </nav>
+
+      <h1 class="subpage-title">
+        Real Jobsites.<br />
+        <span class="accent-blue">Unfiltered Proof.</span>
+      </h1>
+
+      <p class="subpage-lead">
+        Zero stock photography. Drag through all 7 interactive before-and-after transformations, step through our 4-stage commercial &amp; auto shop documentaries, and watch our crew on site.
+      </p>
+
+      <div class="subpage-actions">
+        <a href="#quote-builder" class="btn btn-white">
+          <span>Get a Free Estimate</span>
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a href={brand.phoneHref} class="btn btn-outline-light">
+          <span>Call {brand.phoneDisplay}</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="spectrum-bar" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </section>
+
+  <section class="archive-ba-section">
+    <div class="container">
+      <div class="section-kicker">
+        <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="kicker-text">Complete Before &amp; After Portfolio</span>
+      </div>
+      <h2 class="section-heading">All 7 Interactive Before &amp; After Transformations</h2>
+
+      <div class="split-list">
+        {beforeAfterGallery.map((pair, idx) => (
+          <BeforeAfterCard item={pair} priority={idx === 0} layout="split-row" />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <StoryChapters />
+  <FieldReelsSection />
+  <QuoteBuilderForm />
+</BaseLayout>
+
+<style>
+  .subpage-hero {
+    position: relative;
+    background: var(--bg-dark-deep);
+    color: var(--text-light);
+    overflow: hidden;
+  }
+
+  .subpage-hero-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .subpage-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .subpage-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(9, 13, 18, 0.92) 0%, rgba(11, 16, 23, 0.78) 55%, rgba(11, 16, 23, 0.4) 100%);
+  }
+
+  .subpage-hero-inner {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 1.5rem;
+    max-width: 720px;
+    margin-left: max(var(--gutter), calc((100% - var(--container-max)) / 2));
+  }
+
+  .breadcrumb-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-light-secondary);
+    margin-bottom: 1rem;
+  }
+
+  .subpage-title {
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    margin-bottom: 1.15rem;
+  }
+
+  .subpage-lead {
+    font-size: 1.05rem;
+    color: var(--text-light-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .subpage-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .archive-ba-section {
+    padding: 5.5rem 1.5rem;
+    background: var(--bg-white);
+  }
+
+  .section-heading {
+    font-size: clamp(2rem, 3.5vw, 2.9rem);
+    color: var(--text-dark);
+    margin-bottom: 3rem;
+  }
+
+  .split-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4.5rem;
+  }
+</style>

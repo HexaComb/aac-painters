@@ -1,0 +1,692 @@
+---
+import { autoShopStory, commercialExteriorStory, dustBagsProof, brand } from '../data/siteData';
+
+const stageColors = ['accent-red', 'accent-green', 'accent-blue-deep', 'accent-yellow'];
+---
+
+<!-- PART 1: DARK SLATE "WHY CHOOSE US" BAND (Exact Mockup Layout + Real 6-Bag Dust Proof) -->
+<section class="why-choose-section" id="why-choose-us" aria-labelledby="why-choose-heading">
+  <div class="container">
+    <div class="why-grid">
+      <!-- Left Column: Headline + Story + Real 6-Bag Concrete Dust Proof Photo -->
+      <div class="why-copy-col">
+        <div class="section-kicker">
+          <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="kicker-text kicker-text-light">Why Choose Us</span>
+        </div>
+
+        <h2 id="why-choose-heading" class="why-title">
+          Professional. Reliable.<br />
+          <span class="accent-blue">Detail Oriented.</span>
+        </h2>
+
+        <p class="why-lead">
+          We're not just painters — we're craftsmen. Our team shows up on time, communicates clearly, and takes pride in every detail, from heavy diamond-grinding prep to the final UV-clear topcoat.
+        </p>
+
+        <!-- Real Jobsite Photo Proof Embedded in the Story -->
+        <figure class="dust-proof-figure">
+          <img
+            src={dustBagsProof.image}
+            alt={dustBagsProof.alt}
+            width="640"
+            height="480"
+            loading="lazy"
+            decoding="async"
+            class="dust-proof-img"
+          />
+          <figcaption class="dust-proof-caption">
+            <span class="dust-proof-tag">Real Jobsite Proof &bull; 6 Bags of Concrete Dust</span>
+            <strong>{dustBagsProof.headline}</strong>
+            <p>{dustBagsProof.caption}</p>
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Right Column: 2x2 Hairline Craftsmanship Matrix (From Reference Mockup) -->
+      <div class="why-features-matrix">
+        <div class="why-feature-cell">
+          <div class="why-icon" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <path d="M9 12l2 2 4-4" />
+            </svg>
+          </div>
+          <h3 class="why-feature-title">
+            <span class="accent-red">Licensed</span> &amp; Insured
+          </h3>
+          <p class="why-feature-desc">
+            Your home or commercial facility is in qualified hands ({brand.license}). Full residential and commercial liability coverage.
+          </p>
+        </div>
+
+        <div class="why-feature-cell">
+          <div class="why-icon" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6" />
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+            </svg>
+          </div>
+          <h3 class="why-feature-title">
+            <span class="accent-yellow">High-Quality</span> Materials
+          </h3>
+          <p class="why-feature-desc">
+            Industrial 100% solids epoxy primers, UV-stable polyaspartic topcoats, and elastomeric architectural coatings that resist peeling.
+          </p>
+        </div>
+
+        <div class="why-feature-cell">
+          <div class="why-icon" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87" />
+              <path d="M16 3.13a4 4 0 010 7.75" />
+            </svg>
+          </div>
+          <h3 class="why-feature-title">
+            <span class="accent-blue">Clean</span> &amp; Respectful Crews
+          </h3>
+          <p class="why-feature-desc">
+            We treat your property like ours — full window/fixture masking, HEPA dust containment, and spotless daily jobsite cleanup.
+          </p>
+        </div>
+
+        <div class="why-feature-cell">
+          <div class="why-icon" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
+            </svg>
+          </div>
+          <h3 class="why-feature-title">
+            <span class="accent-green">Clear</span> Communication
+          </h3>
+          <p class="why-feature-desc">
+            No surprises, just great work. You deal directly with President {brand.president} from estimate through final walkthrough.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 2: LIGHT "OUR PROCESS" SECTION WITH REAL JOBSITE PHOTO PROGRESSION -->
+<section class="process-section" id="our-process" aria-labelledby="process-heading">
+  <div class="container">
+    <!-- Top Editorial Split Header (Matching Reference Mockup) -->
+    <div class="process-top-header">
+      <div class="process-title-col">
+        <div class="section-kicker">
+          <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="kicker-text">Our Process &amp; Jobsite Documentaries</span>
+        </div>
+        <h2 id="process-heading" class="process-main-title">
+          Simple, Stress-Free,<br />
+          From Start to Finish.
+        </h2>
+      </div>
+
+      <div class="process-intro-col">
+        <p class="process-intro-text">
+          We make residential and commercial painting and epoxy flooring easy with clear communication, documented surface prep, and a focus on your complete satisfaction. Click through our real jobsite photography below to see how our crew executes every phase.
+        </p>
+        <!-- Toggle between the Real Project Documentaries -->
+        <div class="case-study-tabs" role="tablist" aria-label="Select a project documentary">
+          <button
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="doc-panel-autoshop"
+            id="doc-tab-autoshop"
+            class="case-tab is-active"
+            data-doc-tab="autoshop"
+          >
+            Auto Shop Epoxy Floor
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="doc-panel-exterior"
+            id="doc-tab-exterior"
+            class="case-tab"
+            data-doc-tab="exterior"
+          >
+            Landmark Building Exterior
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auto Shop Epoxy Process + Photo Viewer -->
+    <div id="doc-panel-autoshop" role="tabpanel" aria-labelledby="doc-tab-autoshop" class="doc-panel" data-doc-panel="autoshop">
+      <div class="process-steps-row" data-stage-switcher>
+        {autoShopStory.stages.map((stage, idx) => (
+          <button
+            type="button"
+            class:list={['process-step-col', { 'is-active': idx === 3 }]}
+            data-stage-btn={idx}
+            aria-pressed={idx === 3 ? 'true' : 'false'}
+          >
+            <div class="step-num-row">
+              <span class:list={['step-phase-label', stageColors[idx]]}>{stage.stepLabel}</span>
+              {idx < 3 && <span class="step-arrow" aria-hidden="true">&rarr;</span>}
+            </div>
+            <h3 class="step-col-title">{stage.title}</h3>
+            <p class="step-col-caption">{stage.caption}</p>
+            <div class="step-thumb-strip">
+              <img src={stage.image} alt={stage.alt} width="320" height="200" loading="lazy" decoding="async" />
+            </div>
+          </button>
+        ))}
+      </div>
+
+      <!-- Large Active Documentary Stage Frame -->
+      <div class="active-stage-showcase">
+        <div class="active-stage-media">
+          <img
+            src={autoShopStory.stages[3].image}
+            alt={autoShopStory.stages[3].alt}
+            width="1200"
+            height="800"
+            loading="lazy"
+            decoding="async"
+            data-stage-main-img
+          />
+          <span class="active-stage-pill" data-stage-main-pill>
+            {autoShopStory.stages[3].stepLabel} &bull; {autoShopStory.stages[3].title}
+          </span>
+        </div>
+        <div class="active-stage-info">
+          <span class="active-case-label">DOCUMENTED CASE STUDY &bull; {autoShopStory.Tagline}</span>
+          <h3 class="active-case-title" data-stage-main-title>{autoShopStory.stages[3].title}</h3>
+          <p class="active-case-desc" data-stage-main-desc>{autoShopStory.stages[3].caption}</p>
+          <p class="active-case-summary">{autoShopStory.summary}</p>
+          <a href="#quote-builder" class="arrow-link">
+            <span>Get a Free Estimate for Your Garage or Shop</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Commercial Exterior Landmark Process + Photo Viewer -->
+    <div id="doc-panel-exterior" role="tabpanel" aria-labelledby="doc-tab-exterior" class="doc-panel" data-doc-panel="exterior" hidden>
+      <div class="process-steps-row" data-stage-switcher>
+        {commercialExteriorStory.stages.map((stage, idx) => (
+          <button
+            type="button"
+            class:list={['process-step-col', { 'is-active': idx === 3 }]}
+            data-stage-btn={idx}
+            aria-pressed={idx === 3 ? 'true' : 'false'}
+          >
+            <div class="step-num-row">
+              <span class:list={['step-phase-label', stageColors[idx]]}>{stage.stepLabel}</span>
+              {idx < 3 && <span class="step-arrow" aria-hidden="true">&rarr;</span>}
+            </div>
+            <h3 class="step-col-title">{stage.title}</h3>
+            <p class="step-col-caption">{stage.caption}</p>
+            <div class="step-thumb-strip">
+              <img src={stage.image} alt={stage.alt} width="320" height="200" loading="lazy" decoding="async" />
+            </div>
+          </button>
+        ))}
+      </div>
+
+      <div class="active-stage-showcase">
+        <div class="active-stage-media">
+          <img
+            src={commercialExteriorStory.stages[3].image}
+            alt={commercialExteriorStory.stages[3].alt}
+            width="1200"
+            height="800"
+            loading="lazy"
+            decoding="async"
+            data-stage-main-img
+          />
+          <span class="active-stage-pill" data-stage-main-pill>
+            {commercialExteriorStory.stages[3].stepLabel} &bull; {commercialExteriorStory.stages[3].title}
+          </span>
+        </div>
+        <div class="active-stage-info">
+          <span class="active-case-label">DOCUMENTED CASE STUDY &bull; {commercialExteriorStory.Tagline}</span>
+          <h3 class="active-case-title" data-stage-main-title>{commercialExteriorStory.stages[3].title}</h3>
+          <p class="active-case-desc" data-stage-main-desc>{commercialExteriorStory.stages[3].caption}</p>
+          <p class="active-case-summary">{commercialExteriorStory.summary}</p>
+          <a href="#quote-builder" class="arrow-link">
+            <span>Request an Exterior Painting Estimate</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ==========================================================================
+     PART 1: DARK SLATE "WHY CHOOSE US" BAND
+     ========================================================================== */
+  .why-choose-section {
+    position: relative;
+    padding: 5.5rem 1.5rem;
+    background-color: var(--bg-dark);
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%),
+      linear-gradient(225deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%);
+    background-size: 120px 120px;
+    color: var(--text-light);
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .why-title {
+    font-size: clamp(2.15rem, 3.8vw, 3.2rem);
+    line-height: 1.08;
+    color: var(--text-light);
+    margin-bottom: 1.2rem;
+  }
+
+  .why-lead {
+    font-size: 1.02rem;
+    line-height: 1.65;
+    color: var(--text-light-secondary);
+    margin-bottom: 2rem;
+  }
+
+  /* Embedded 6-Bag Dust Proof Photo */
+  .dust-proof-figure {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 1.15rem;
+    align-items: center;
+    padding: 1.25rem;
+    background-color: var(--bg-dark-elevated);
+    border: 1px solid var(--border-dark-strong);
+  }
+
+  .dust-proof-img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .dust-proof-caption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .dust-proof-tag {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--aac-yellow);
+  }
+
+  .dust-proof-caption strong {
+    font-family: var(--font-display);
+    font-size: 0.98rem;
+    color: var(--text-light);
+  }
+
+  .dust-proof-caption p {
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--text-light-secondary);
+  }
+
+  /* 2x2 Hairline Craftsmanship Matrix from Mockup */
+  .why-features-matrix {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .why-feature-cell {
+    padding: 2rem;
+    background-color: var(--bg-dark-elevated);
+    border: 1px solid var(--border-dark);
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .why-icon {
+    color: var(--text-light);
+    margin-bottom: 0.35rem;
+  }
+
+  .why-feature-title {
+    font-size: 1.25rem;
+    color: var(--text-light);
+  }
+
+  .why-feature-desc {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--text-light-secondary);
+  }
+
+  /* ==========================================================================
+     PART 2: LIGHT "OUR PROCESS" SECTION (01 -> 02 -> 03 -> 04 + REAL PHOTOS)
+     ========================================================================== */
+  .process-section {
+    padding: 5.5rem 1.5rem;
+    background-color: var(--bg-light);
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .process-top-header {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 3rem;
+    align-items: end;
+    margin-bottom: 3rem;
+  }
+
+  .process-main-title {
+    font-size: clamp(2.1rem, 3.6vw, 3.1rem);
+    line-height: 1.08;
+    color: var(--text-dark);
+  }
+
+  .process-intro-text {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--text-dark-secondary);
+    margin-bottom: 1.25rem;
+  }
+
+  .case-study-tabs {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .case-tab {
+    padding: 0.65rem 1.15rem;
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 700;
+    background-color: var(--bg-white);
+    color: var(--text-dark-secondary);
+    border: 1px solid var(--border-light-strong);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+  }
+
+  .case-tab.is-active {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    border-color: var(--bg-dark);
+  }
+
+  /* 01 -> 02 -> 03 -> 04 Row matching Reference Mockup */
+  .process-steps-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .process-step-col {
+    text-align: left;
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    padding: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+  }
+
+  .process-step-col:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-light-strong);
+  }
+
+  .process-step-col.is-active {
+    border-color: var(--aac-blue-deep);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+  }
+
+  .step-num-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.65rem;
+  }
+
+  .step-phase-label {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* High-contrast accessible spectrum shades on white process cards */
+  .step-phase-label.accent-green {
+    color: #217a23;
+  }
+  .step-phase-label.accent-yellow {
+    color: #966200;
+  }
+
+  .step-arrow {
+    font-size: 1.35rem;
+    color: var(--text-dark-muted);
+  }
+
+  .step-col-title {
+    font-size: 1.05rem;
+    color: var(--text-dark);
+    margin-bottom: 0.45rem;
+  }
+
+  .step-col-caption {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--text-dark-secondary);
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .step-thumb-strip {
+    position: relative;
+    margin-top: auto;
+    border-radius: 2px;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+  }
+
+  .step-thumb-strip img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .step-thumb-badge {
+    position: absolute;
+    bottom: 0.45rem;
+    left: 0.45rem;
+    padding: 0.25rem 0.65rem;
+    background: rgba(14, 20, 27, 0.86);
+    color: var(--text-light);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  /* Active Stage Large Photo Showcase */
+  .active-stage-showcase {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 2.25rem;
+    align-items: center;
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    padding: 2rem;
+    border-radius: 4px;
+  }
+
+  .active-stage-media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--bg-dark);
+  }
+
+  .active-stage-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .active-stage-pill {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    padding: 0.45rem 0.9rem;
+    background: rgba(14, 20, 27, 0.9);
+    color: var(--text-light);
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 2px;
+  }
+
+  .active-case-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--aac-blue-deep);
+    margin-bottom: 0.5rem;
+  }
+
+  .active-case-title {
+    font-size: clamp(1.45rem, 2.2vw, 1.9rem);
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
+  }
+
+  .active-case-desc {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--text-dark);
+    font-weight: 500;
+    margin-bottom: 0.85rem;
+  }
+
+  .active-case-summary {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--text-dark-secondary);
+    margin-bottom: 1.35rem;
+  }
+
+  @media (max-width: 1024px) {
+    .why-grid,
+    .process-top-header,
+    .active-stage-showcase {
+      grid-template-columns: 1fr;
+    }
+
+    .process-steps-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .why-features-matrix,
+    .process-steps-row,
+    .dust-proof-figure {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  import { autoShopStory, commercialExteriorStory } from '../data/siteData';
+
+  const stories: Record<string, typeof autoShopStory> = {
+    autoshop: autoShopStory,
+    exterior: commercialExteriorStory
+  };
+
+  function initProcessDocumentaries() {
+    // Tab switching between Auto Shop and Commercial Exterior
+    const tabs = document.querySelectorAll<HTMLButtonElement>('[data-doc-tab]');
+    const panels = document.querySelectorAll<HTMLElement>('[data-doc-panel]');
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.docTab;
+        tabs.forEach((t) => {
+          const active = t === tab;
+          t.classList.toggle('is-active', active);
+          t.setAttribute('aria-selected', String(active));
+        });
+        panels.forEach((panel) => {
+          panel.hidden = panel.dataset.docPanel !== target;
+        });
+      });
+    });
+
+    // Stage clicking inside each documentary panel
+    panels.forEach((panel) => {
+      const key = panel.dataset.docPanel || 'autoshop';
+      const storyData = stories[key];
+      if (!storyData) return;
+
+      const stageBtns = panel.querySelectorAll<HTMLButtonElement>('[data-stage-btn]');
+      const mainImg = panel.querySelector<HTMLImageElement>('[data-stage-main-img]');
+      const mainPill = panel.querySelector<HTMLElement>('[data-stage-main-pill]');
+      const mainTitle = panel.querySelector<HTMLElement>('[data-stage-main-title]');
+      const mainDesc = panel.querySelector<HTMLElement>('[data-stage-main-desc]');
+
+      stageBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const idx = Number(btn.dataset.stageBtn || 0);
+          const stage = storyData.stages[idx];
+          if (!stage) return;
+
+          stageBtns.forEach((b) => {
+            const active = b === btn;
+            b.classList.toggle('is-active', active);
+            b.setAttribute('aria-pressed', String(active));
+          });
+
+          if (mainImg) {
+            mainImg.src = stage.image;
+            mainImg.alt = stage.alt;
+          }
+          if (mainPill) {
+            mainPill.textContent = `${stage.stepLabel}: ${stage.title}`;
+          }
+          if (mainTitle) {
+            mainTitle.textContent = stage.title;
+          }
+          if (mainDesc) {
+            mainDesc.textContent = stage.caption;
+          }
+        });
+      });
+    });
+  }
+
+  initProcessDocumentaries();
+  document.addEventListener('astro:page-load', initProcessDocumentaries);
+</script>

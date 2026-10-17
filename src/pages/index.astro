@@ -1,0 +1,1826 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StoryChapters from '../components/StoryChapters.astro';
+import FieldReelsSection from '../components/FieldReelsSection.astro';
+import QuoteBuilderForm from '../components/QuoteBuilderForm.astro';
+import {
+  brand,
+  faqItems
+} from '../data/siteData';
+
+const floorShowcases = [
+  {
+    label: '2-Car Garage Flake',
+    kicker: 'GARAGE & FLOOR COATINGS',
+    headline: 'From Dated Concrete to Modern Showroom',
+    story:
+      'A diamond-ground polyaspartic flake system completely changes the feel of your garage or shop—sealing out oil stains, concrete dust, and hot-tire pickup for good.',
+    beforeImage: '/images/projects/residential-garage-before.png',
+    beforeAlt: 'Before: Stained raw concrete residential garage floor during prep',
+    afterImage: '/images/projects/residential-garage-flake-epoxy-after.png',
+    afterAlt: 'After: Glossy granite-blend decorative flake epoxy floor in residential garage',
+    spec: 'CSP-3 Diamond Grind + Full-Broadcast Flake + UV Polyaspartic'
+  },
+  {
+    label: 'Auto Bay Mirror Epoxy',
+    kicker: 'COMMERCIAL & AUTO SHOP FLOORS',
+    headline: 'Built for Heavy Lifts & Daily Traffic',
+    story:
+      'We stripped decades of peeling red paint and hydraulic oil down to raw concrete, rebuilt every joint, and poured a self-leveling champagne epoxy floor that reflects the skylights like glass.',
+    beforeImage: '/images/projects/auto-shop-floor-before.png',
+    beforeAlt: 'Before: Worn oil-stained auto shop floor with peeling red paint',
+    afterImage: '/images/projects/auto-shop-epoxy-floor-after.png',
+    afterAlt: 'After: Seamless mirror-gloss champagne epoxy floor in auto service bay',
+    spec: 'Planetary Grind + 100% Solids Self-Leveling Mirror Epoxy'
+  },
+  {
+    label: 'Warehouse Flake Slab',
+    kicker: 'INDUSTRIAL FLOOR SYSTEMS',
+    headline: 'Forklift-Ready Durability That Brightens the Bay',
+    story:
+      'Six full bags of diamond-ground concrete dust came off this slab before primer touched it—locking in a high-traction cobalt and slate flake finish around active racking.',
+    beforeImage: '/images/projects/warehouse-floor-before.jpeg',
+    beforeAlt: 'Before: Cracked and patched commercial warehouse concrete floor',
+    afterImage: '/images/projects/warehouse-flake-epoxy-after.png',
+    afterAlt: 'After: Full-broadcast blue and grey flake epoxy warehouse floor',
+    spec: 'HEPA Scarifying + Joint Fill + Industrial Vinyl Flake Broadcast'
+  }
+];
+
+const exteriorShowcases = [
+  {
+    label: 'Landmark Building',
+    kicker: 'EXTERIOR & COMMERCIAL PAINTING',
+    headline: 'Curb Appeal That Lasts',
+    story:
+      'Protect your property and boost its value with a weatherproof finish. We removed the failing metal awning, sealed forty-year-old ghost signage, and wrapped this corner landmark in architectural bronze.',
+    video: '/videos/before-after-video.mp4',
+    beforeImage: '/images/projects/mcauley-building-before.png',
+    beforeAlt: 'Before: Weathered gray commercial building with faded ghost lettering',
+    afterImage: '/images/projects/mcauley-building-after.png',
+    afterAlt: 'After: Restored commercial building in smooth architectural bronze with white trim',
+    spec: 'Stucco Resurfacing + 2-Coat Breathable Elastomeric Masonry System'
+  },
+  {
+    label: 'McDonald’s #696',
+    kicker: 'NATIONAL FRANCHISE EXTERIOR',
+    headline: 'Zero-Downtime Storefront & Canopy Refresh',
+    story:
+      'Central Valley sun turns commercial metal canopies chalky pale. Working around active drive-thru hours, we prepped and restored the high-gloss franchise gold and deep espresso fascia.',
+    beforeImage: '/images/projects/mcdonalds-696-awning-before.png',
+    beforeAlt: 'Before: Sun-bleached metal storefront awning on McDonald’s #696',
+    afterImage: '/images/projects/mcdonalds-696-awning-after.png',
+    afterAlt: 'After: Vibrant golden yellow metal awning and dark bronze trim on McDonald’s #696',
+    spec: 'DTM Bonding Primer + 2-Component Aliphatic Urethane'
+  },
+  {
+    label: 'Cedar Fence Revival',
+    kicker: 'RESIDENTIAL EXTERIOR & WOOD STAINING',
+    headline: 'Bring Sun-Bleached Wood Back to Life',
+    story:
+      'Don’t replace a structurally sound fence just because the sun turned it silver. We stripped the oxidized fibers, opened the grain, and saturated every picket in warm cedar oil stain.',
+    beforeImage: '/images/projects/wood-fence-before.png',
+    beforeAlt: 'Before: Weathered gray sun-bleached wooden privacy fence',
+    afterImage: '/images/projects/wood-fence-stained-after.png',
+    afterAlt: 'After: Deep warm cedar-stained wooden privacy fence over green turf',
+    spec: 'Wood Brightener Wash + Deep-Penetrating UV Cedar Oil Stain'
+  }
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer
+    }
+  }))
+};
+---
+
+<BaseLayout
+  title="AAC Painters Inc. | Quality Paint, Epoxy Flooring & Commercial Finishes (CSLB #1039849)"
+  description="Quality Paint. Lasting Results. Licensed California painting and epoxy flooring contractor (CSLB #1039849). Explore interactive before & after transformations, real jobsite documentaries, and request a free estimate with Alex Delgadillo at (209) 485-5103."
+  structuredData={faqSchema}
+>
+  <!-- 1. FULL-BLEED CINEMATIC HERO SECTION -->
+  <section class="hero-banner" aria-labelledby="hero-heading" data-hero-banner>
+    <div class="hero-bg-stage">
+      <video
+        src="/videos/before-after-video.mp4"
+        poster="/images/projects/mcauley-building-after.png"
+        width="1660"
+        height="1244"
+        autoplay
+        loop
+        muted
+        playsinline
+        preload="metadata"
+        class="hero-bg-video"
+      ></video>
+      <div class="hero-scrim" aria-hidden="true"></div>
+    </div>
+
+    <!-- Inline SVG Mask & Contractor Paintbrush Definitions (Modern Web Guidance: complex-shapes) -->
+    <svg class="hero-svg-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        <!-- objectBoundingBox scales mask coordinates (0 to 1) with each painted word's size -->
+        <mask id="aac-bristle-swath-mask" maskContentUnits="objectBoundingBox">
+          <!-- Main opaque brush body -->
+          <path
+            d="M0.02,0.18 C0.18,0.06 0.52,0.08 0.94,0.14 C0.99,0.24 1.0,0.45 0.96,0.68 C0.99,0.78 0.95,0.88 0.89,0.92 C0.54,0.98 0.19,0.95 0.03,0.86 C0.0,0.72 0.01,0.42 0.02,0.18 Z"
+            fill="white"
+          />
+          <!-- Semi-transparent dry-brush bristle streaks at edges (luminance masking: gray = semi-transparent) -->
+          <path d="M0.0,0.12 L0.98,0.08 L0.96,0.18 L0.01,0.22 Z" fill="gray" />
+          <path d="M0.01,0.82 L0.99,0.78 L0.95,0.96 L0.02,0.94 Z" fill="gray" />
+          <path d="M0.88,0.22 L1.0,0.26 L0.99,0.34 L0.87,0.32 Z" fill="white" />
+          <path d="M0.90,0.46 L1.0,0.50 L0.98,0.60 L0.88,0.58 Z" fill="gray" />
+          <circle cx="0.97" cy="0.16" r="0.025" fill="white" />
+          <circle cx="0.02" cy="0.52" r="0.02" fill="gray" />
+        </mask>
+
+        <!-- Reusable Pro Angled Sash Contractor Paintbrush Symbol (currentColor = Wet Logo Paint) -->
+        <symbol id="aac-contractor-brush" viewBox="0 0 120 120">
+          <!-- Wooden Handle (Angled Upper-Right) -->
+          <path
+            d="M68 6 L108 26 C112 28 113 33 110 37 L76 66 L52 46 L63 10 C64 6 66 5 68 6 Z"
+            fill="#d99b52"
+            stroke="#090d12"
+            stroke-width="2.5"
+          />
+          <!-- Wood Grain Highlight -->
+          <path d="M71 12 L102 28 L74 58" stroke="#f3c68f" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.65" />
+          <!-- Handle Hang Hole -->
+          <circle cx="94" cy="26" r="3.2" fill="#090d12" />
+          <!-- Stainless Steel Ferrule -->
+          <path
+            d="M47 42 L80 63 L69 78 L36 57 Z"
+            fill="#dbe4ee"
+            stroke="#090d12"
+            stroke-width="2.5"
+          />
+          <path d="M51 45 L77 62" stroke="#94a3b8" stroke-width="2" />
+          <circle cx="53" cy="53" r="1.6" fill="#475569" />
+          <circle cx="63" cy="59" r="1.6" fill="#475569" />
+          <!-- Dark Natural Bristle Stock -->
+          <path
+            d="M36 57 L69 78 L50 104 L12 86 C18 76 28 66 36 57 Z"
+            fill="#1b2430"
+            stroke="#090d12"
+            stroke-width="2.5"
+            stroke-linejoin="round"
+          />
+          <!-- Bristle Score Lines -->
+          <path d="M42 64 L24 85 M50 69 L33 91 M58 74 L42 96" stroke="#334155" stroke-width="1.4" stroke-linecap="round" />
+          <!-- Wet Logo-Colored Paint Loaded on Bristle Tip (Uses currentColor) -->
+          <path
+            d="M23 74 C31 76 44 82 57 93 L50 105 L10 87 C14 82 18 78 23 74 Z"
+            fill="currentColor"
+            stroke="#090d12"
+            stroke-width="2"
+            stroke-linejoin="round"
+          />
+          <!-- Glossy Wet Paint Specular Highlight on Bristle Tip -->
+          <path d="M18 84 L46 97" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.78" />
+          <!-- Active Wet Paint Bead / Drip at Leading Toe of Brush -->
+          <circle cx="11" cy="94" r="4" fill="currentColor" />
+          <circle cx="22" cy="101" r="2.5" fill="currentColor" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <div class="container hero-container">
+      <div class="hero-copy-block" data-hero-paint-stage>
+        <div class="section-kicker hero-kicker-painted">
+          <span class="kicker-bars kicker-bars-animated" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="kicker-text kicker-text-light kicker-text-brush-reveal">RESIDENTIAL, COMMERCIAL &amp; EPOXY FLOORING</span>
+        </div>
+
+        <h1 id="hero-heading" class="hero-title hero-title-painted" aria-label="Quality Paint. Lasting Results.">
+          <span class="hero-title-line">
+            <!-- STROKE 1: "Quality" in AAC Logo Red (#E53924) -->
+            <span class="paint-word paint-word--red" style="--stroke-idx: 0;">
+              <span class="paint-stroke-underlay" aria-hidden="true"></span>
+              <span class="paint-splatters" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="paint-word-reveal">
+                <span class="paint-word-ink">Quality</span>
+                <span class="paint-word-wet-flash" aria-hidden="true">Quality</span>
+              </span>
+              <span class="word-brush-actor" aria-hidden="true">
+                <svg viewBox="0 0 120 120" class="word-brush-svg"><use href="#aac-contractor-brush" /></svg>
+              </span>
+            </span>
+
+            <!-- STROKE 2: "Paint." in AAC Logo Golden Yellow (#F5B800) -->
+            <span class="paint-word paint-word--yellow" style="--stroke-idx: 1;">
+              <span class="paint-stroke-underlay" aria-hidden="true"></span>
+              <span class="paint-splatters" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="paint-word-reveal">
+                <span class="paint-word-ink">Paint.</span>
+                <span class="paint-word-wet-flash" aria-hidden="true">Paint.</span>
+              </span>
+              <span class="word-brush-actor" aria-hidden="true">
+                <svg viewBox="0 0 120 120" class="word-brush-svg"><use href="#aac-contractor-brush" /></svg>
+              </span>
+            </span>
+          </span>
+
+          <span class="hero-title-line">
+            <!-- STROKE 3: "Lasting" in AAC Logo Emerald Green (#48B649) -->
+            <span class="paint-word paint-word--green" style="--stroke-idx: 2;">
+              <span class="paint-stroke-underlay" aria-hidden="true"></span>
+              <span class="paint-splatters" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="paint-word-reveal">
+                <span class="paint-word-ink">Lasting</span>
+                <span class="paint-word-wet-flash" aria-hidden="true">Lasting</span>
+              </span>
+              <span class="word-brush-actor" aria-hidden="true">
+                <svg viewBox="0 0 120 120" class="word-brush-svg"><use href="#aac-contractor-brush" /></svg>
+              </span>
+            </span>
+
+            <!-- STROKE 4: "Results." in AAC Logo Cerulean Blue (#14A8E8) -->
+            <span class="paint-word paint-word--blue" style="--stroke-idx: 3;" data-last-paint-word>
+              <span class="paint-stroke-underlay" aria-hidden="true"></span>
+              <span class="paint-splatters" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="paint-word-reveal">
+                <span class="paint-word-ink">Results.</span>
+                <span class="paint-word-wet-flash" aria-hidden="true">Results.</span>
+              </span>
+              <span class="word-brush-actor" aria-hidden="true">
+                <svg viewBox="0 0 120 120" class="word-brush-svg"><use href="#aac-contractor-brush" /></svg>
+              </span>
+            </span>
+          </span>
+        </h1>
+
+        <div class="hero-description-stage">
+          <span class="hero-roller-lead" aria-hidden="true"></span>
+          <p class="hero-description hero-description-painted">
+            We bring new life to your home, garage, or commercial building with heavy diamond-ground prep, clean architectural finishes, and a licensed team ({brand.license}) that treats your space like their own.
+          </p>
+        </div>
+
+        <div class="hero-actions hero-actions-painted">
+          <a href="#quote-builder" class="btn btn-white">
+            <span>Get a Free Estimate</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+          <a href={brand.phoneHref} class="btn btn-outline-light">
+            <span>Call {brand.phoneDisplay}</span>
+          </a>
+          <button
+            type="button"
+            class="btn-replay-paint"
+            data-replay-paint
+            aria-label="Replay paintbrush text entrance animation"
+            title="Watch the 4-color paintbrush entrance again"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l9 9 1.59-1.59a2 2 0 0 0 0-2.82L17 10l4.37-4.37a2.12 2.12 0 1 0-3-3Z" />
+              <path d="M9 8c-2 3-4 3.5-7 4l8 10c2-1 6-5 6-7" />
+              <path d="M14.5 17.5 3.5 15" />
+            </svg>
+            <span>Replay Brush Stroke</span>
+            <span class="replay-color-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Signature 4-Color AAC Spectrum Bar at Bottom of Hero -->
+    <div class="spectrum-bar" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </section>
+
+  <!-- 2. "OUR SERVICES" LIGHT SPLIT SECTION (Exact Reference Mockup Layout + Real Interior/Exterior/Epoxy Photos) -->
+  <section class="services-overview-section" id="our-services" aria-labelledby="services-heading">
+    <div class="container">
+      <div class="services-split-grid">
+        <!-- Left Column: Kicker + Heading + 3 Vertical-Divider Icon Columns -->
+        <div class="services-left-col">
+          <div class="section-kicker">
+            <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <span class="kicker-text">Our Services</span>
+          </div>
+
+          <h2 id="services-heading" class="services-main-title">
+            Interior, Exterior &amp; Epoxy Coating for Your Property
+          </h2>
+
+          <p class="services-lead">
+            From single rooms and custom wood staining to full exterior stucco restorations and diamond-ground epoxy floors, we deliver high-quality results that last.
+          </p>
+
+          <!-- 3 Icon Columns with Vertical Dividers (Matching Reference Mockup) -->
+          <div class="services-icon-columns">
+            <a
+              href="/services/residential-painting"
+              class="service-icon-col"
+              data-service-preview="/images/projects/wood-fence-stained-after.png"
+              data-service-caption="Residential Interior, Exterior, Trim & Deep-Penetrating Wood Staining"
+            >
+              <svg class="service-line-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 10.5L12 3l9 7.5V21a1 1 0 01-1 1H4a1 1 0 01-1-1V10.5z" />
+                <path d="M9 21V13h6v8" />
+              </svg>
+              <h3 class="service-col-name">Residential &amp; Trim</h3>
+              <span class="service-col-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+
+            <a
+              href="/services/commercial-painting"
+              class="service-icon-col"
+              data-service-preview="/images/projects/mcauley-building-after.png"
+              data-service-caption="Commercial Exterior Stucco, National Franchises & Multi-Bay Doors"
+            >
+              <svg class="service-line-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 21h18" />
+                <path d="M5 21V7l7-4 7 4v14" />
+                <path d="M9 10h6M9 14h6" />
+              </svg>
+              <h3 class="service-col-name">Exterior &amp; Commercial</h3>
+              <span class="service-col-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+
+            <a
+              href="/services/epoxy-flooring"
+              class="service-icon-col"
+              data-service-preview="/images/projects/residential-garage-flake-epoxy-after.png"
+              data-service-caption="Full-Broadcast Flake & Liquid-Glass Mirror Epoxy Floors"
+            >
+              <svg class="service-line-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                <polyline points="2 17 12 22 22 17" />
+                <polyline points="2 12 12 17 22 12" />
+              </svg>
+              <h3 class="service-col-name">Epoxy Flooring</h3>
+              <span class="service-col-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Column: Large Bright Architectural Showcase Photo (Hovering/Focusing Service Columns Swaps Photo) -->
+        <div class="services-right-col">
+          <figure class="services-showcase-frame">
+            <img
+              src="/images/projects/residential-garage-flake-epoxy-after.png"
+              alt="Showroom decorative flake epoxy garage floor and crisp painted walls by AAC Painters Inc."
+              width="900"
+              height="640"
+              loading="lazy"
+              decoding="async"
+              class="services-showcase-img"
+              id="services-preview-img"
+            />
+            <figcaption class="services-showcase-caption" id="services-preview-caption">
+              Full-Broadcast Flake &amp; Liquid-Glass Epoxy Floors + Architectural Painting
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. TWO HIGH-IMPACT SIDE-BY-SIDE BEFORE & AFTER ROWS (Exact Mockup Layout + Inline Project Switcher) -->
+  <section class="ba-showcase-section" id="our-work" aria-label="Before and After Project Transformations">
+    <div class="container">
+      <div class="featured-split-rows">
+        <!-- ROW 1: EPOXY & FLOOR TRANSFORMATIONS ("From Dated to Modern") -->
+        <article class="ba-split-row" data-ba-showcase="floors">
+          <div class="ba-viewport" data-ba-slider>
+            <img
+              src={floorShowcases[0].afterImage}
+              alt={floorShowcases[0].afterAlt}
+              width="1200"
+              height="900"
+              loading="lazy"
+              decoding="async"
+              class="ba-img ba-img-after"
+              data-showcase-after
+            />
+            <div class="ba-before-clip" style="--pos: 50%;">
+              <img
+                src={floorShowcases[0].beforeImage}
+                alt={floorShowcases[0].beforeAlt}
+                width="1200"
+                height="900"
+                loading="lazy"
+                decoding="async"
+                class="ba-img ba-img-before"
+                data-showcase-before
+              />
+            </div>
+            <span class="ba-corner-badge ba-badge-before" aria-hidden="true">BEFORE</span>
+            <span class="ba-corner-badge ba-badge-after" aria-hidden="true">AFTER</span>
+            <div class="ba-divider" style="--pos: 50%;" aria-hidden="true">
+              <div class="ba-handle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 18l-6-6 6-6" transform="translate(-4, 0) scale(0.85)" />
+                  <path d="M9 18l6-6-6-6" transform="translate(6, 0) scale(0.85)" />
+                </svg>
+              </div>
+            </div>
+            <label for="slider-floors-main" class="sr-only">Compare before and after floor transformation</label>
+            <input
+              id="slider-floors-main"
+              type="range"
+              min="0"
+              max="100"
+              value="50"
+              class="ba-range-input"
+              aria-label="Before and after comparison slider for floor transformations"
+            />
+          </div>
+
+          <div class="ba-story-col">
+            <div class="section-kicker">
+              <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+              <span class="kicker-text" data-showcase-kicker>{floorShowcases[0].kicker}</span>
+            </div>
+
+            <h2 class="ba-row-heading" data-showcase-headline>{floorShowcases[0].headline}</h2>
+            <p class="ba-row-copy" data-showcase-story>{floorShowcases[0].story}</p>
+            <p class="ba-row-spec" data-showcase-spec><strong>System:</strong> {floorShowcases[0].spec}</p>
+
+            <!-- Compact Inline Project Switcher (Zero Vertical Bloat!) -->
+            <div class="ba-inline-switcher" role="group" aria-label="Switch floor transformation project">
+              {floorShowcases.map((item, idx) => (
+                <button
+                  type="button"
+                  class:list={['ba-thumb-pill', { 'is-active': idx === 0 }]}
+                  data-kicker={item.kicker}
+                  data-headline={item.headline}
+                  data-story={item.story}
+                  data-spec={item.spec}
+                  data-before={item.beforeImage}
+                  data-before-alt={item.beforeAlt}
+                  data-after={item.afterImage}
+                  data-after-alt={item.afterAlt}
+                  aria-pressed={idx === 0 ? 'true' : 'false'}
+                >
+                  <img src={item.afterImage} alt="" width="44" height="32" loading="lazy" decoding="async" />
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </div>
+
+            <a href="/projects" class="arrow-link">
+              <span>View More Projects</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- ROW 2: EXTERIOR & COMMERCIAL PAINTING ("Curb Appeal That Lasts") -->
+        <article class="ba-split-row" data-ba-showcase="exteriors">
+          <div class="ba-viewport" data-ba-slider>
+            <video
+              src={exteriorShowcases[0].video}
+              poster={exteriorShowcases[0].afterImage}
+              width="1660"
+              height="1244"
+              loading="lazy"
+              autoplay
+              loop
+              muted
+              playsinline
+              preload="metadata"
+              class="ba-video"
+              data-showcase-video
+            ></video>
+            <div class="ba-slider-layers" data-showcase-slider-layers hidden>
+              <img
+                src={exteriorShowcases[0].afterImage}
+                alt={exteriorShowcases[0].afterAlt}
+                width="1200"
+                height="900"
+                loading="lazy"
+                decoding="async"
+                class="ba-img ba-img-after"
+                data-showcase-after
+              />
+              <div class="ba-before-clip" style="--pos: 50%;">
+                <img
+                  src={exteriorShowcases[0].beforeImage}
+                  alt={exteriorShowcases[0].beforeAlt}
+                  width="1200"
+                  height="900"
+                  loading="lazy"
+                  decoding="async"
+                  class="ba-img ba-img-before"
+                  data-showcase-before
+                />
+              </div>
+              <span class="ba-corner-badge ba-badge-before" aria-hidden="true">BEFORE</span>
+              <span class="ba-corner-badge ba-badge-after" aria-hidden="true">AFTER</span>
+              <div class="ba-divider" style="--pos: 50%;" aria-hidden="true">
+                <div class="ba-handle">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6" transform="translate(-4, 0) scale(0.85)" />
+                    <path d="M9 18l6-6-6-6" transform="translate(6, 0) scale(0.85)" />
+                  </svg>
+                </div>
+              </div>
+              <label for="slider-exteriors-main" class="sr-only">Compare before and after exterior transformation</label>
+              <input
+                id="slider-exteriors-main"
+                type="range"
+                min="0"
+                max="100"
+                value="50"
+                class="ba-range-input"
+                aria-label="Before and after comparison slider for exterior transformations"
+              />
+            </div>
+          </div>
+
+          <div class="ba-story-col">
+            <div class="section-kicker">
+              <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+              <span class="kicker-text" data-showcase-kicker>{exteriorShowcases[0].kicker}</span>
+            </div>
+
+            <h2 class="ba-row-heading" data-showcase-headline>{exteriorShowcases[0].headline}</h2>
+            <p class="ba-row-copy" data-showcase-story>{exteriorShowcases[0].story}</p>
+            <p class="ba-row-spec" data-showcase-spec><strong>System:</strong> {exteriorShowcases[0].spec}</p>
+
+            <!-- Compact Inline Project Switcher -->
+            <div class="ba-inline-switcher" role="group" aria-label="Switch exterior transformation project">
+              {exteriorShowcases.map((item, idx) => (
+                <button
+                  type="button"
+                  class:list={['ba-thumb-pill', { 'is-active': idx === 0 }]}
+                  data-kicker={item.kicker}
+                  data-headline={item.headline}
+                  data-story={item.story}
+                  data-spec={item.spec}
+                  data-video={item.video || ''}
+                  data-before={item.beforeImage}
+                  data-before-alt={item.beforeAlt}
+                  data-after={item.afterImage}
+                  data-after-alt={item.afterAlt}
+                  aria-pressed={idx === 0 ? 'true' : 'false'}
+                >
+                  <img src={item.afterImage} alt="" width="44" height="32" loading="lazy" decoding="async" />
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </div>
+
+            <a href="/projects" class="arrow-link">
+              <span>View More Projects</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. DARK "WHY CHOOSE US" BAND + LIGHT "OUR PROCESS" DOCUMENTARY -->
+  <StoryChapters />
+
+  <!-- 5. DARK "WHAT OUR CLIENTS SAY: REAL PEOPLE. REAL RESULTS." + LIVE JOBSITE VIDEO REELS -->
+  <FieldReelsSection />
+
+  <!-- 7. FAQ SECTION (Structured for Local SEO & Voice Search) -->
+  <section class="faq-section" id="faq" aria-labelledby="faq-heading">
+    <div class="container">
+      <div class="faq-layout">
+        <div class="faq-header-col">
+          <div class="section-kicker">
+            <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <span class="kicker-text">Technical FAQ</span>
+          </div>
+          <h2 id="faq-heading" class="faq-main-title">
+            Answers Before We Step on Your Property.
+          </h2>
+          <p class="faq-lead">
+            Have a specific question about concrete moisture, crack repair, or commercial night shifts? Call <strong>{brand.president}</strong> directly at <a href={brand.phoneHref}>{brand.phoneDisplay}</a>.
+          </p>
+        </div>
+
+        <div class="faq-accordion-col">
+          {faqItems.map((faq, index) => (
+            <details class="faq-item" open={index === 0}>
+              <summary class="faq-question">
+                <span>{faq.question}</span>
+                <span class="faq-plus" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer">
+                <p>{faq.answer}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. DARK BACKDROP + FLOATING WHITE ESTIMATE CARD ("Ready to Transform Your Property?") -->
+  <QuoteBuilderForm />
+</BaseLayout>
+
+<style>
+  /* ==========================================================================
+     1. FULL-BLEED CINEMATIC HERO SECTION (Reference Mockup Style)
+     ========================================================================== */
+  .hero-banner {
+    position: relative;
+    background-color: var(--bg-dark-deep);
+    color: var(--text-light);
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .hero-bg-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-bg-img,
+  .hero-bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
+    transition: opacity 220ms ease;
+  }
+
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(9, 13, 18, 0.92) 0%,
+      rgba(11, 16, 23, 0.78) 46%,
+      rgba(11, 16, 23, 0.35) 100%
+    );
+  }
+
+  .hero-container {
+    position: relative;
+    z-index: 1;
+    min-height: clamp(540px, 74vh, 740px);
+    padding: 5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+
+  .hero-copy-block {
+    max-width: 680px;
+  }
+
+  .hero-svg-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  /* ==========================================================================
+     HERO 4-COLOR PAINTBRUSH ENTRANCE ANIMATION (Logo Colors & Bristle Masks)
+     ========================================================================== */
+  .hero-copy-block {
+    /* Ragged 14-bristle SVG wipe mask (opaque left -> bristle teeth -> transparent right) */
+    --bristle-wipe-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 100' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0,0 H108 L138,4 L114,9 L146,15 L112,21 L142,28 L116,35 L149,42 L111,49 L144,56 L115,63 L147,70 L112,77 L141,84 L114,91 L136,96 L108,100 H0 Z'/%3E%3Cpath fill='rgba(255,255,255,0.55)' d='M106,0 H126 L154,6 L122,13 L156,20 L120,28 L151,36 L124,44 L158,52 L119,60 L153,68 L122,76 L154,84 L121,92 L146,98 L116,100 H106 Z'/%3E%3C/svg%3E");
+
+    /* Physics-based spring & brush-stroke easings (Modern Web Guidance: physics-based-easing) */
+    --brush-glide-easing: linear(
+      0, 0.018 2.1%, 0.074 4.6%, 0.168 7.5%, 0.304 11.2%, 0.562 18.2%,
+      0.784 25.8%, 0.924 33.4%, 1.012 42.5%, 1.034 50.2%, 1.018 62.4%,
+      1.003 78.5%, 1
+    );
+    --splatter-spring-easing: linear(
+      0, 0.016 0.5%, 0.06 1%, 0.226 2%, 1.116 5.4%, 1.375 6.6%, 1.527 7.7%,
+      1.585 8.8%, 1.458 10.9%, 0.937 14.3%, 0.693 16.6%, 0.657 17.7%,
+      0.729 19.8%, 1.13 24.5%, 1.201 26.7%, 1.156 28.8%, 0.925 33.4%,
+      0.882 35.6%, 1.045 42.4%, 1.069 44.5%, 0.979 50.9%, 1.013 59.9%, 1
+    );
+  }
+
+  /* Kicker 4-Color Dab & Bristle Wipe */
+  .kicker-bars-animated > i {
+    /* MANDATORY identity transforms on base element (individual-transform-properties) */
+    translate: 0px;
+    rotate: 0deg;
+    scale: 1;
+    transform-origin: left center;
+    animation: kicker-bar-dab 0.36s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-timing-function: var(--splatter-spring-easing);
+    --animation-reduced: none;
+  }
+
+  .kicker-bars-animated > i:nth-child(1) { animation-delay: 0.02s; }
+  .kicker-bars-animated > i:nth-child(2) { animation-delay: 0.07s; }
+  .kicker-bars-animated > i:nth-child(3) { animation-delay: 0.12s; }
+  .kicker-bars-animated > i:nth-child(4) { animation-delay: 0.17s; }
+
+  .kicker-text-brush-reveal {
+    display: inline-block;
+    -webkit-mask-image: var(--bristle-wipe-mask);
+    -webkit-mask-size: 260% 100%;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: 0% 0%;
+    mask-image: var(--bristle-wipe-mask);
+    mask-size: 260% 100%;
+    mask-repeat: no-repeat;
+    mask-position: 0% 0%;
+    animation: bristle-mask-sweep 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+    --animation-reduced: none;
+  }
+
+  /* Headline Painted Stage */
+  .hero-title-painted {
+    font-size: clamp(2.85rem, 6vw, 4.75rem);
+    line-height: 1.08;
+    color: var(--text-light);
+    margin-bottom: 1.45rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.18em;
+  }
+
+  .hero-title-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.28em;
+    row-gap: 0.12em;
+  }
+
+  /* Individual Word Stage Painted in AAC Logo Colors */
+  .paint-word {
+    --stroke-duration: 0.58s;
+    --stroke-delay: calc(0.14s + (var(--stroke-idx, 0) * 0.52s));
+    position: relative;
+    display: inline-block;
+    isolation: isolate;
+    padding: 0.04em 0.16em 0.08em 0.12em;
+    margin-inline: -0.06em;
+    /* MANDATORY identity transforms on base element */
+    translate: 0px;
+    rotate: 0deg;
+    scale: 1;
+  }
+
+  /* Exact 4 Colors from the AAC Painters Inc. Logo */
+  .paint-word--red {
+    --word-paint: var(--aac-red);        /* #E53924 Logo Crimson Red */
+    --word-ink: #ff5b47;
+    --word-deep: #9e1b0c;
+    --word-swath-alpha: rgba(229, 57, 36, 0.88);
+  }
+
+  .paint-word--yellow {
+    --word-paint: var(--aac-yellow);     /* #F5B800 Logo Golden Yellow */
+    --word-ink: #ffd026;
+    --word-deep: #b87e00;
+    --word-swath-alpha: rgba(245, 184, 0, 0.88);
+  }
+
+  .paint-word--green {
+    --word-paint: var(--aac-green);      /* #48B649 Logo Emerald Green */
+    --word-ink: #64df65;
+    --word-deep: #247825;
+    --word-swath-alpha: rgba(72, 182, 73, 0.88);
+  }
+
+  .paint-word--blue {
+    --word-paint: var(--aac-blue);       /* #14A8E8 Logo Cerulean Blue */
+    --word-ink: #38c6ff;
+    --word-deep: #086894;
+    --word-swath-alpha: rgba(20, 168, 232, 0.9);
+  }
+
+  /* Layer 1: Organic Bristle-Masked Paint Swath Behind/Under Each Word (complex-shapes) */
+  .paint-stroke-underlay {
+    position: absolute;
+    inset: 52% -0.04em 0.02em -0.04em;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      repeating-linear-gradient(
+        -2deg,
+        rgba(255, 255, 255, 0.16) 0 2px,
+        transparent 2px 5px
+      ),
+      linear-gradient(
+        96deg var(--in-oklab),
+        var(--word-paint) 0%,
+        var(--word-swath-alpha) 68%,
+        var(--word-deep) 100%
+      );
+    /* Reference inline SVG mask with objectBoundingBox (complex-shapes) */
+    -webkit-mask-image: url(#aac-bristle-swath-mask);
+    -webkit-mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-image: url(#aac-bristle-swath-mask);
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+    transform-origin: left center;
+    translate: 0px;
+    rotate: -1.2deg;
+    scale: 1 1;
+    animation: swath-brush-laydown var(--stroke-duration) cubic-bezier(0.22, 1, 0.36, 1) var(--stroke-delay) both;
+    animation-timing-function: var(--brush-glide-easing);
+    --animation-reduced: none;
+  }
+
+  /* Fallback for browsers that do not support masking (complex-shapes) */
+  @supports (not (mask-image: url(x))) and (not (-webkit-mask-image: url(x))) {
+    .paint-stroke-underlay {
+      clip-path: inset(5% round 15px);
+    }
+  }
+
+  /* Layer 2: Paint Splatter Droplets Matching Logo Splatter Dots */
+  .paint-splatters {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .paint-splatters > i {
+    position: absolute;
+    border-radius: 999px;
+    background-color: var(--word-paint);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+    translate: 0px;
+    rotate: 0deg;
+    scale: 1;
+    animation: splatter-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-timing-function: var(--splatter-spring-easing);
+    --animation-reduced: none;
+  }
+
+  .paint-splatters > i:nth-child(1) {
+    width: 9px;
+    height: 9px;
+    top: 8%;
+    left: -4px;
+    animation-delay: calc(var(--stroke-delay) + 0.08s);
+  }
+
+  .paint-splatters > i:nth-child(2) {
+    width: 7px;
+    height: 7px;
+    top: 14%;
+    right: -6px;
+    animation-delay: calc(var(--stroke-delay) + 0.38s);
+  }
+
+  .paint-splatters > i:nth-child(3) {
+    width: 11px;
+    height: 7px;
+    bottom: -2px;
+    right: 8%;
+    rotate: -18deg;
+    animation-delay: calc(var(--stroke-delay) + 0.44s);
+  }
+
+  /* Layer 3: Bristle-Masked Word Reveal (Letterforms Materialize Under the Brush) */
+  .paint-word-reveal {
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+    /* MANDATORY vendor prefix + standard mask properties (complex-shapes) */
+    -webkit-mask-image: var(--bristle-wipe-mask);
+    -webkit-mask-size: 260% 100%;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: 0% 0%;
+    mask-image: var(--bristle-wipe-mask);
+    mask-size: 260% 100%;
+    mask-repeat: no-repeat;
+    mask-position: 0% 0%;
+    animation: bristle-mask-sweep var(--stroke-duration) cubic-bezier(0.22, 1, 0.36, 1) var(--stroke-delay) both;
+    animation-timing-function: var(--brush-glide-easing);
+    --animation-reduced: none;
+  }
+
+  /* Painted Letterforms in Logo Color with Architectural Outline & Drop Shadow */
+  .paint-word-ink {
+    display: inline-block;
+    color: var(--word-ink);
+    -webkit-text-stroke: 2px #090d12;
+    paint-order: stroke fill;
+    /* Use filter: drop-shadow() for non-rectangular glyphs (visual-effects) */
+    filter:
+      drop-shadow(0 3px 0 #090d12)
+      drop-shadow(0 8px 18px rgba(0, 0, 0, 0.58));
+  }
+
+  /* Wet Paint Gloss Coat that Flashes as Bristles Touch the Letters */
+  .paint-word-wet-flash {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    user-select: none;
+    background: linear-gradient(
+      175deg var(--in-oklab),
+      #ffffff 0%,
+      var(--word-ink) 38%,
+      var(--word-paint) 72%,
+      var(--word-deep) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-stroke: 0px transparent;
+    opacity: 0.38;
+    animation: wet-paint-sheen calc(var(--stroke-duration) + 0.35s) ease-out var(--stroke-delay) both;
+    --animation-reduced: none;
+  }
+
+  /* Layer 4: Animated Angled Contractor Paintbrush Actor Sweeping Across Each Word */
+  .word-brush-actor {
+    position: absolute;
+    top: -0.42em;
+    left: 0;
+    width: 1.25em;
+    height: 1.25em;
+    z-index: 5;
+    pointer-events: none;
+    color: var(--word-paint);
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.55));
+    /* MANDATORY base identity transformations (individual-transform-properties) */
+    translate: 0px;
+    rotate: 0deg;
+    scale: 1;
+    opacity: 0;
+    animation: contractor-brush-stroke var(--stroke-duration) cubic-bezier(0.22, 1, 0.36, 1) var(--stroke-delay) both;
+    animation-timing-function: var(--brush-glide-easing);
+    --animation-reduced: none;
+  }
+
+  .word-brush-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+
+  /* Secondary Roller/Brush Wipe for Hero Description Paragraph */
+  .hero-description-stage {
+    position: relative;
+    margin-bottom: 2rem;
+    max-width: 54ch;
+  }
+
+  .hero-description-painted {
+    font-size: clamp(1.02rem, 1.25vw, 1.15rem);
+    line-height: 1.65;
+    color: var(--text-light-secondary);
+    margin-bottom: 0;
+    -webkit-mask-image: var(--bristle-wipe-mask);
+    -webkit-mask-size: 260% 100%;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: 0% 0%;
+    mask-image: var(--bristle-wipe-mask);
+    mask-size: 260% 100%;
+    mask-repeat: no-repeat;
+    mask-position: 0% 0%;
+    animation: bristle-mask-sweep 0.68s cubic-bezier(0.22, 1, 0.36, 1) 2.15s both;
+    --animation-reduced: none;
+  }
+
+  .hero-roller-lead {
+    position: absolute;
+    top: 4%;
+    bottom: 4%;
+    left: 0;
+    width: 6px;
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 3;
+    background: linear-gradient(
+      to bottom var(--in-oklab),
+      var(--aac-red) 0% 25%,
+      var(--aac-yellow) 25% 50%,
+      var(--aac-green) 50% 75%,
+      var(--aac-blue) 75% 100%
+    );
+    filter: drop-shadow(0 0 10px rgba(20, 168, 232, 0.65));
+    translate: 0px;
+    rotate: 0deg;
+    scale: 1;
+    opacity: 0;
+    animation: description-roller-sweep 0.68s cubic-bezier(0.22, 1, 0.36, 1) 2.15s both;
+    --animation-reduced: none;
+  }
+
+  /* Hero Actions Entrance + Replay Brush Control */
+  .hero-actions-painted {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem;
+    translate: 0px;
+    rotate: 0deg;
+    scale: 1;
+    animation: actions-paint-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) 2.42s both;
+    --animation-reduced: none;
+  }
+
+  .btn-replay-paint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 0.95rem;
+    background: rgba(14, 20, 27, 0.78);
+    color: var(--text-light-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 2px;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    /* MANDATORY base identity transformations (individual-transform-properties) */
+    translate: 0px;
+    rotate: 0deg;
+    scale: 1;
+    transition:
+      scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+      background-color 160ms ease,
+      color 160ms ease,
+      border-color 160ms ease;
+    transition-timing-function: var(--splatter-spring-easing), ease, ease, ease;
+  }
+
+  .btn-replay-paint:hover,
+  .btn-replay-paint:focus-visible {
+    background: rgba(22, 31, 42, 0.95);
+    color: var(--text-light);
+    border-color: var(--aac-blue);
+    scale: 1.04;
+  }
+
+  .btn-replay-paint:active {
+    scale: 0.97;
+  }
+
+  .replay-color-dots {
+    display: inline-grid;
+    grid-template-columns: repeat(4, 6px);
+    gap: 3px;
+    align-items: center;
+  }
+
+  .replay-color-dots > i {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+  }
+
+  .replay-color-dots > i:nth-child(1) { background-color: var(--aac-red); }
+  .replay-color-dots > i:nth-child(2) { background-color: var(--aac-yellow); }
+  .replay-color-dots > i:nth-child(3) { background-color: var(--aac-green); }
+  .replay-color-dots > i:nth-child(4) { background-color: var(--aac-blue); }
+
+  /* Fallback when linear() physics easing is not supported (physics-based-easing) */
+  @supports not (animation-timing-function: linear(0, 1)) {
+    .paint-stroke-underlay,
+    .paint-word-reveal,
+    .word-brush-actor {
+      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .paint-splatters > i,
+    .btn-replay-paint {
+      animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+  }
+
+  /* Keyframes for 4-Color Paintbrush Entrance */
+  @keyframes kicker-bar-dab {
+    0% {
+      scale: 0 1;
+      opacity: 0;
+    }
+    100% {
+      scale: 1 1;
+      opacity: 1;
+    }
+  }
+
+  @keyframes bristle-mask-sweep {
+    0% {
+      -webkit-mask-position: 100% 0%;
+      mask-position: 100% 0%;
+    }
+    100% {
+      -webkit-mask-position: 0% 0%;
+      mask-position: 0% 0%;
+    }
+  }
+
+  @keyframes swath-brush-laydown {
+    0% {
+      scale: 0 0.72;
+      opacity: 0;
+    }
+    12% {
+      opacity: 1;
+    }
+    78% {
+      scale: 1.03 1.06;
+      opacity: 1;
+    }
+    100% {
+      scale: 1 1;
+      opacity: 1;
+    }
+  }
+
+  @keyframes wet-paint-sheen {
+    0% {
+      opacity: 0;
+      filter: brightness(1.8);
+    }
+    30% {
+      opacity: 1;
+      filter: brightness(1.45);
+    }
+    100% {
+      opacity: 0.38;
+      filter: brightness(1);
+    }
+  }
+
+  @keyframes contractor-brush-stroke {
+    0% {
+      left: -8%;
+      translate: 0px 8px;
+      rotate: -24deg;
+      scale: 0.78;
+      opacity: 0;
+    }
+    12% {
+      left: 0%;
+      translate: 0px 0px;
+      rotate: -12deg;
+      scale: 1.04;
+      opacity: 1;
+    }
+    55% {
+      left: 56%;
+      translate: 0px -3px;
+      rotate: -4deg;
+      scale: 1.06;
+      opacity: 1;
+    }
+    86% {
+      left: 96%;
+      translate: 0px 2px;
+      rotate: 10deg;
+      scale: 1;
+      opacity: 1;
+    }
+    100% {
+      left: 106%;
+      translate: 10px -14px;
+      rotate: 22deg;
+      scale: 0.82;
+      opacity: 0;
+    }
+  }
+
+  @keyframes splatter-pop {
+    0% {
+      scale: 0;
+      opacity: 0;
+    }
+    65% {
+      scale: 1.25;
+      opacity: 1;
+    }
+    100% {
+      scale: 1;
+      opacity: 0.92;
+    }
+  }
+
+  @keyframes description-roller-sweep {
+    0% {
+      left: 0%;
+      scale: 1 0.3;
+      opacity: 0;
+    }
+    12% {
+      scale: 1 1;
+      opacity: 1;
+    }
+    88% {
+      left: 98%;
+      scale: 1 1;
+      opacity: 1;
+    }
+    100% {
+      left: 102%;
+      scale: 0.5 0.4;
+      opacity: 0;
+    }
+  }
+
+  @keyframes actions-paint-in {
+    0% {
+      translate: 0px 14px;
+      opacity: 0;
+    }
+    100% {
+      translate: 0px 0px;
+      opacity: 1;
+    }
+  }
+
+  /* Reduced Motion Override: Keep all painted colors and brush swaths visible with zero motion */
+  @media (prefers-reduced-motion: reduce) {
+    .kicker-text-brush-reveal,
+    .paint-word-reveal,
+    .hero-description-painted {
+      -webkit-mask-position: 0% 0% !important;
+      mask-position: 0% 0% !important;
+    }
+    .word-brush-actor,
+    .hero-roller-lead {
+      display: none !important;
+    }
+    .btn-replay-paint {
+      transition: none !important;
+    }
+  }
+
+  /* ==========================================================================
+     2. "OUR SERVICES" LIGHT SPLIT SECTION (Exact Reference Mockup Layout)
+     ========================================================================== */
+  .services-overview-section {
+    padding: 5.5rem 1.5rem;
+    background-color: var(--bg-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .services-split-grid {
+    display: grid;
+    grid-template-columns: 6fr 6fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .services-main-title {
+    font-size: clamp(2.1rem, 3.6vw, 3.1rem);
+    line-height: 1.08;
+    color: var(--text-dark);
+    margin-bottom: 1.15rem;
+  }
+
+  .services-lead {
+    font-size: 1.02rem;
+    line-height: 1.65;
+    color: var(--text-dark-secondary);
+    margin-bottom: 2.5rem;
+  }
+
+  /* 3 Icon Columns with Vertical Dividers from Mockup */
+  .services-icon-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--border-light-strong);
+    padding: 1.75rem 0 0 0;
+  }
+
+  .service-icon-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 0.5rem 1.25rem;
+    border-right: 1px solid var(--border-light-strong);
+  }
+
+  .service-icon-col:first-child {
+    padding-left: 0;
+  }
+
+  .service-icon-col:last-child {
+    border-right: 0;
+    padding-right: 0;
+  }
+
+  .service-line-icon {
+    color: var(--text-dark);
+    transition: color 150ms ease, transform 150ms ease;
+  }
+
+  .service-col-name {
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: var(--text-dark);
+  }
+
+  .service-col-arrow {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-dark-muted);
+    transition: transform 150ms ease, color 150ms ease;
+  }
+
+  .service-icon-col:hover .service-line-icon,
+  .service-icon-col:hover .service-col-name,
+  .service-icon-col:hover .service-col-arrow {
+    color: var(--aac-blue-deep);
+  }
+
+  .service-icon-col:hover .service-col-arrow {
+    transform: translateX(4px);
+  }
+
+  .services-showcase-frame {
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.1);
+    aspect-ratio: 4 / 3;
+    background: var(--bg-dark);
+  }
+
+  .services-showcase-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .services-showcase-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.75rem 1.15rem;
+    background: rgba(14, 20, 27, 0.86);
+    color: var(--text-light);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+
+  /* ==========================================================================
+     3. TWO HIGH-IMPACT SIDE-BY-SIDE BEFORE & AFTER ROWS (Reference Mockup Style)
+     ========================================================================== */
+  .ba-showcase-section {
+    padding: 5.5rem 1.5rem;
+    background-color: var(--bg-white);
+  }
+
+  .featured-split-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 4.5rem;
+  }
+
+  .ba-split-row {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 3.5rem;
+    align-items: center;
+  }
+
+  .ba-viewport {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #141b24;
+    border-radius: 4px;
+    user-select: none;
+  }
+
+  .ba-img,
+  .ba-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
+    pointer-events: none;
+  }
+
+  .ba-slider-layers {
+    position: absolute;
+    inset: 0;
+  }
+
+  .ba-before-clip {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 calc(100% - var(--pos, 50%)) 0 0);
+    will-change: clip-path;
+  }
+
+  .ba-corner-badge {
+    position: absolute;
+    bottom: 1rem;
+    z-index: 3;
+    padding: 0.4rem 0.85rem;
+    background-color: rgba(14, 20, 27, 0.88);
+    color: var(--text-light);
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    pointer-events: none;
+  }
+
+  .ba-badge-before {
+    left: 1rem;
+  }
+
+  .ba-badge-after {
+    right: 1rem;
+  }
+
+  .ba-divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--pos, 50%);
+    width: 2px;
+    background-color: #ffffff;
+    transform: translateX(-50%);
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  .ba-handle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    background-color: #ffffff;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    transition: transform 150ms var(--ease-out-quart), background-color 150ms ease, color 150ms ease;
+  }
+
+  .ba-viewport:hover .ba-handle,
+  .ba-viewport:focus-within .ba-handle {
+    transform: translate(-50%, -50%) scale(1.08);
+    background-color: var(--aac-blue);
+    color: var(--bg-dark-deep);
+  }
+
+  .ba-range-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: ew-resize;
+    z-index: 5;
+    margin: 0;
+  }
+
+  .ba-row-heading {
+    font-size: clamp(1.75rem, 2.8vw, 2.4rem);
+    line-height: 1.1;
+    color: var(--text-dark);
+    margin-bottom: 0.85rem;
+  }
+
+  .ba-row-copy {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--text-dark-secondary);
+    margin-bottom: 0.85rem;
+  }
+
+  .ba-row-spec {
+    font-size: 0.88rem;
+    color: var(--text-dark-muted);
+    margin-bottom: 1.35rem;
+  }
+
+  .ba-row-spec strong {
+    color: var(--text-dark);
+  }
+
+  /* Compact Inline Project Switcher Pills */
+  .ba-inline-switcher {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .ba-thumb-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+    background: var(--bg-light);
+    color: var(--text-dark-secondary);
+    border: 1px solid var(--border-light-strong);
+    border-radius: 3px;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+  }
+
+  .ba-thumb-pill img {
+    width: 38px;
+    height: 28px;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  .ba-thumb-pill:hover {
+    border-color: var(--text-dark);
+    color: var(--text-dark);
+  }
+
+  .ba-thumb-pill.is-active {
+    background: var(--bg-dark);
+    color: var(--text-light);
+    border-color: var(--bg-dark);
+  }
+
+  /* ==========================================================================
+     7. TECHNICAL FAQ SECTION
+     ========================================================================== */
+  .faq-section {
+    padding: 5.5rem 1.5rem;
+    background-color: var(--bg-light);
+    border-top: 1px solid var(--border-light);
+  }
+
+  .faq-layout {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .faq-main-title {
+    font-size: clamp(2rem, 3.4vw, 2.85rem);
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+  }
+
+  .faq-lead {
+    font-size: 1rem;
+    color: var(--text-dark-secondary);
+  }
+
+  .faq-lead a {
+    color: var(--aac-blue-deep);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .faq-accordion-col {
+    border-top: 2px solid var(--text-dark);
+    padding: 1rem;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border-light-strong);
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.25rem;
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-plus {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    color: var(--aac-blue-deep);
+    transition: transform 150ms ease;
+  }
+
+  .faq-item[open] .faq-plus {
+    transform: rotate(45deg);
+  }
+
+  .faq-answer {
+    padding-bottom: 1.35rem;
+    font-size: 0.96rem;
+    line-height: 1.65;
+    color: var(--text-dark-secondary);
+  }
+
+  @media (max-width: 980px) {
+    .services-split-grid,
+    .ba-split-row,
+    .faq-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .services-icon-columns {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .service-icon-col,
+    .service-icon-col:not(:first-child) {
+      padding: 0 0 1rem 0;
+      border-right: 0;
+      border-bottom: 1px solid var(--border-light-strong);
+    }
+  }
+</style>
+
+<script>
+  function initHomeInteractions() {
+    // Pause autoplaying videos when the user prefers reduced motion
+    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    function syncReducedMotion(prefersReducedMotion: boolean) {
+      for (const video of document.querySelectorAll<HTMLVideoElement>('video[autoplay]')) {
+        if (prefersReducedMotion) {
+          video.removeAttribute('autoplay');
+          video.pause();
+        }
+      }
+    }
+    syncReducedMotion(reducedMotionQuery.matches);
+    reducedMotionQuery.addEventListener('change', (event) => {
+      syncReducedMotion(event.matches);
+    });
+
+    // 1. Hero 4-Color Paintbrush Entrance Replay
+    const heroPaintStage = document.querySelector<HTMLElement>('[data-hero-paint-stage]');
+    const replayPaintBtn = document.querySelector<HTMLButtonElement>('[data-replay-paint]');
+
+    const supportsEventAnimation =
+      typeof AnimationEvent !== 'undefined' && 'animation' in AnimationEvent.prototype;
+
+    if (heroPaintStage && !heroPaintStage.dataset.paintBound) {
+      heroPaintStage.dataset.paintBound = 'true';
+
+      heroPaintStage.addEventListener('animationend', (event: AnimationEvent) => {
+        const anim = supportsEventAnimation
+          ? (event as AnimationEvent & { animation?: Animation }).animation
+          : (event.target as Element | null)
+              ?.getAnimations?.()
+              .find((a) => (a as CSSAnimation).animationName === event.animationName);
+        if (anim && event.animationName === 'contractor-brush-stroke') {
+          replayPaintBtn?.removeAttribute('data-painting');
+        }
+      });
+    }
+
+    function replayHeroPaintEntrance() {
+      if (!heroPaintStage || reducedMotionQuery.matches) return;
+      replayPaintBtn?.setAttribute('data-painting', 'true');
+      const animations = heroPaintStage.getAnimations({ subtree: true });
+      animations.forEach((anim) => {
+        anim.cancel();
+        anim.play();
+      });
+    }
+
+    replayPaintBtn?.addEventListener('click', () => {
+      replayHeroPaintEntrance();
+    });
+
+    // 2. Services Photo Hover/Focus Preview
+    const serviceCols = document.querySelectorAll<HTMLAnchorElement>('[data-service-preview]');
+    const serviceImg = document.querySelector<HTMLImageElement>('#services-preview-img');
+    const serviceCaption = document.querySelector<HTMLElement>('#services-preview-caption');
+
+    serviceCols.forEach((col) => {
+      const swap = () => {
+        const src = col.dataset.servicePreview;
+        const cap = col.dataset.serviceCaption;
+        if (serviceImg && src) serviceImg.src = src;
+        if (serviceCaption && cap) serviceCaption.textContent = cap;
+      };
+      col.addEventListener('mouseenter', swap);
+      col.addEventListener('focus', swap);
+    });
+
+    // 3. Before & After Range Sliders + Inline Project Switcher Pills
+    const sliders = document.querySelectorAll<HTMLElement>('[data-ba-slider]');
+    sliders.forEach((slider) => {
+      if (slider.dataset.bound === 'true') return;
+      slider.dataset.bound = 'true';
+
+      const input = slider.querySelector<HTMLInputElement>('.ba-range-input');
+      const clip = slider.querySelector<HTMLElement>('.ba-before-clip');
+      const divider = slider.querySelector<HTMLElement>('.ba-divider');
+      if (!input || !clip || !divider) return;
+
+      const updatePosition = (val: string) => {
+        const pct = `${val}%`;
+        clip.style.setProperty('--pos', pct);
+        divider.style.setProperty('--pos', pct);
+      };
+
+      input.addEventListener('input', () => updatePosition(input.value), { passive: true });
+    });
+
+    const showcaseRows = document.querySelectorAll<HTMLElement>('[data-ba-showcase]');
+    showcaseRows.forEach((row) => {
+      const pills = row.querySelectorAll<HTMLButtonElement>('.ba-thumb-pill');
+      const videoEl = row.querySelector<HTMLVideoElement>('[data-showcase-video]');
+      const sliderLayers = row.querySelector<HTMLElement>('[data-showcase-slider-layers]');
+      const beforeImg = row.querySelector<HTMLImageElement>('[data-showcase-before]');
+      const afterImg = row.querySelector<HTMLImageElement>('[data-showcase-after]');
+      const kickerEl = row.querySelector<HTMLElement>('[data-showcase-kicker]');
+      const headlineEl = row.querySelector<HTMLElement>('[data-showcase-headline]');
+      const storyEl = row.querySelector<HTMLElement>('[data-showcase-story]');
+      const specEl = row.querySelector<HTMLElement>('[data-showcase-spec]');
+
+      pills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+          pills.forEach((p) => {
+            const active = p === pill;
+            p.classList.toggle('is-active', active);
+            p.setAttribute('aria-pressed', String(active));
+          });
+
+          const pillVideo = pill.dataset.video;
+          if (pillVideo && videoEl) {
+            if (videoEl.getAttribute('src') !== pillVideo) {
+              videoEl.src = pillVideo;
+            }
+            videoEl.hidden = false;
+            if (!reducedMotionQuery.matches) {
+              videoEl.play().catch(() => {});
+            }
+            if (sliderLayers) sliderLayers.hidden = true;
+          } else {
+            if (videoEl) {
+              videoEl.pause();
+              videoEl.hidden = true;
+            }
+            if (sliderLayers) sliderLayers.hidden = false;
+            if (beforeImg && pill.dataset.before) {
+              beforeImg.src = pill.dataset.before;
+              beforeImg.alt = pill.dataset.beforeAlt || '';
+            }
+            if (afterImg && pill.dataset.after) {
+              afterImg.src = pill.dataset.after;
+              afterImg.alt = pill.dataset.afterAlt || '';
+            }
+          }
+          if (kickerEl && pill.dataset.kicker) {
+            kickerEl.textContent = pill.dataset.kicker;
+          }
+          if (headlineEl && pill.dataset.headline) {
+            headlineEl.textContent = pill.dataset.headline;
+          }
+          if (storyEl && pill.dataset.story) {
+            storyEl.textContent = pill.dataset.story;
+          }
+          if (specEl && pill.dataset.spec) {
+            specEl.innerHTML = `<strong>System:</strong> ${pill.dataset.spec}`;
+          }
+        });
+      });
+    });
+  }
+
+  initHomeInteractions();
+  document.addEventListener('astro:page-load', initHomeInteractions);
+</script>
