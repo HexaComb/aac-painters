@@ -407,3 +407,157 @@ textarea {
   white-space: nowrap;
   border: 0;
 }
+
+/* ==========================================================================
+   INTERACTIVE BEFORE/AFTER PAINTBRUSH SLIDER & WET PAINT TRAIL (All Pages)
+   ========================================================================== */
+
+.ba-paint-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Vertical Seam Divider & Paintbrush Handle */
+.ba-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--pos, 50%);
+  width: 2px;
+  background-color: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 0 10px rgba(9, 13, 18, 0.45);
+  translate: -50% 0;
+  rotate: 0deg;
+  scale: 1;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.ba-seam-wet-glow {
+  position: absolute;
+  inset: 0 -3px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(20, 168, 232, 0.45) calc(var(--brush-y, 50%) - 14%),
+    rgba(255, 255, 255, 0.95) var(--brush-y, 50%),
+    rgba(20, 168, 232, 0.45) calc(var(--brush-y, 50%) + 14%),
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.ba-divider[data-painting='true'] .ba-seam-wet-glow {
+  opacity: 1;
+}
+
+.ba-handle {
+  position: absolute;
+  top: var(--brush-y, 50%);
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  /* MANDATORY base identity transformations (individual-transform-properties) */
+  translate: -50% -58%;
+  rotate: 0deg;
+  scale: 1;
+  transition:
+    scale 180ms var(--ease-out-quart),
+    top 90ms linear;
+}
+
+.ba-brush-actor {
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.48));
+  transform-origin: 50% 68%;
+  /* MANDATORY base identity transformations (individual-transform-properties) */
+  translate: 0px;
+  rotate: var(--brush-tilt, 0deg);
+  scale: 1;
+  transition:
+    rotate 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    scale 160ms var(--ease-out-quart);
+}
+
+.ba-brush-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.ba-brush-chevron {
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: 999px;
+  background: rgba(14, 20, 27, 0.86);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.9rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+  /* MANDATORY base identity transformations */
+  translate: 0px;
+  rotate: 0deg;
+  scale: 1;
+  transition:
+    translate 160ms var(--ease-out-quart),
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+}
+
+.ba-viewport:hover .ba-handle,
+.ba-viewport:focus-within .ba-handle {
+  scale: 1.08;
+}
+
+.ba-viewport:hover .ba-brush-chevron,
+.ba-viewport:focus-within .ba-brush-chevron {
+  background-color: var(--aac-blue);
+  border-color: #ffffff;
+  color: var(--bg-dark-deep);
+}
+
+.ba-viewport:hover .ba-brush-chevron-left,
+.ba-divider[data-swipe-dir='left'][data-painting='true'] .ba-brush-chevron-left {
+  translate: -3px 0;
+}
+
+.ba-viewport:hover .ba-brush-chevron-right,
+.ba-divider[data-swipe-dir='right'][data-painting='true'] .ba-brush-chevron-right {
+  translate: 3px 0;
+}
+
+.ba-viewport:focus-within {
+  outline: 3px solid var(--aac-blue);
+  outline-offset: 3px;
+}
+
+@supports not (translate: 0px) {
+  .ba-divider {
+    transform: translateX(-50%);
+  }
+  .ba-handle {
+    transform: translate(-50%, -58%);
+  }
+  .ba-viewport:hover .ba-handle,
+  .ba-viewport:focus-within .ba-handle {
+    transform: translate(-50%, -58%) scale(1.08);
+  }
+}
+

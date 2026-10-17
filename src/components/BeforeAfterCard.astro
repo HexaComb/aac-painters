@@ -43,17 +43,72 @@ const { item, priority = false, layout = 'card' } = Astro.props;
       />
     </div>
 
+    <!-- Wet Paint Brush Trail Canvas (Fades out after each swipe) -->
+    <canvas class="ba-paint-canvas" aria-hidden="true"></canvas>
+
     <!-- Bottom Corner Badges (Exact Reference Mockup Placement) -->
     <span class="ba-corner-badge ba-badge-before" aria-hidden="true">BEFORE</span>
     <span class="ba-corner-badge ba-badge-after" aria-hidden="true">AFTER</span>
 
-    <!-- Center White Divider Line & Circular < > Handle -->
-    <div class="ba-divider" style="--pos: 50%;" aria-hidden="true">
+    <!-- Paintbrush Seam Divider & Contractor Paintbrush Drag Handle -->
+    <div class="ba-divider" style="--pos: 50%; --brush-y: 50%; --brush-tilt: 0deg;" aria-hidden="true">
+      <span class="ba-seam-wet-glow"></span>
       <div class="ba-handle">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M15 18l-6-6 6-6" transform="translate(-4, 0) scale(0.85)" />
-          <path d="M9 18l6-6-6-6" transform="translate(6, 0) scale(0.85)" />
-        </svg>
+        <span class="ba-brush-chevron ba-brush-chevron-left">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </span>
+        <div class="ba-brush-actor">
+          <svg class="ba-brush-svg" width="64" height="64" viewBox="0 0 96 96" fill="none">
+            <!-- Varnished Hardwood Brush Handle -->
+            <path
+              d="M44 6 L52 6 C55 6 57 8 56 12 L59 38 L37 38 L40 12 C39 8 41 6 44 6 Z"
+              fill="#d99b52"
+              stroke="#090d12"
+              stroke-width="2.6"
+              stroke-linejoin="round"
+            />
+            <path d="M46 11 L45 34" stroke="#f3c68f" stroke-width="2" stroke-linecap="round" opacity="0.75" />
+            <circle cx="48" cy="13" r="2.4" fill="#090d12" />
+            <!-- Stainless Steel Ferrule with 4-Color AAC Spectrum Band -->
+            <rect x="33" y="37" width="30" height="13" rx="2" fill="#dbe4ee" stroke="#090d12" stroke-width="2.6" />
+            <rect x="34.5" y="38.5" width="6.75" height="3.2" fill="#ec193a" />
+            <rect x="41.25" y="38.5" width="6.75" height="3.2" fill="#9dbe39" />
+            <rect x="48" y="38.5" width="6.75" height="3.2" fill="#0493bc" />
+            <rect x="54.75" y="38.5" width="6.75" height="3.2" fill="#fcbb1f" />
+            <circle cx="39" cy="45.5" r="1.4" fill="#475569" />
+            <circle cx="48" cy="45.5" r="1.4" fill="#475569" />
+            <circle cx="57" cy="45.5" r="1.4" fill="#475569" />
+            <!-- Dark Natural Bristle Stock -->
+            <path
+              d="M33 50 L63 50 L68 74 C58 78 38 78 28 74 Z"
+              fill="#1b2430"
+              stroke="#090d12"
+              stroke-width="2.6"
+              stroke-linejoin="round"
+            />
+            <path d="M40 52 L37 68 M48 52 L48 69 M56 52 L59 68" stroke="#334155" stroke-width="1.5" stroke-linecap="round" />
+            <!-- Loaded Wet Cerulean Paint on Bristle Tip -->
+            <path
+              d="M30 62 C38 60 58 60 66 62 L69 75 C58 80 38 80 27 75 Z"
+              fill="#14a8e8"
+              stroke="#090d12"
+              stroke-width="2.4"
+              stroke-linejoin="round"
+            />
+            <!-- Glossy Wet Paint Specular Highlight -->
+            <path d="M33 67 Q48 65 63 67" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" opacity="0.85" />
+            <!-- Wet Paint Drips / Beads at Leading Edge -->
+            <circle class="ba-brush-drip" cx="38" cy="82" r="3.2" fill="#14a8e8" stroke="#090d12" stroke-width="1.5" />
+            <circle class="ba-brush-drip ba-brush-drip-2" cx="56" cy="84" r="2.4" fill="#fcbb1f" stroke="#090d12" stroke-width="1.4" />
+          </svg>
+        </div>
+        <span class="ba-brush-chevron ba-brush-chevron-right">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </span>
       </div>
     </div>
 
@@ -156,11 +211,20 @@ const { item, priority = false, layout = 'card' } = Astro.props;
     will-change: clip-path;
   }
 
+  .ba-paint-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+  }
+
   /* Exact bottom-left BEFORE & bottom-right AFTER dark badges from mockup */
   .ba-corner-badge {
     position: absolute;
     bottom: 1rem;
-    z-index: 3;
+    z-index: 4;
     padding: 0.4rem 0.85rem;
     background-color: rgba(14, 20, 27, 0.88);
     color: var(--text-light);
@@ -181,41 +245,144 @@ const { item, priority = false, layout = 'card' } = Astro.props;
     right: 1rem;
   }
 
-  /* Crisp white vertical divider & circular white handle */
+  /* Vertical Seam Divider & Paintbrush Handle */
   .ba-divider {
     position: absolute;
     top: 0;
     bottom: 0;
     left: var(--pos, 50%);
     width: 2px;
-    background-color: #ffffff;
-    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 0 10px rgba(9, 13, 18, 0.45);
+    translate: -50% 0;
+    rotate: 0deg;
+    scale: 1;
     z-index: 4;
     pointer-events: none;
   }
 
+  .ba-seam-wet-glow {
+    position: absolute;
+    inset: 0 -3px;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(20, 168, 232, 0.45) calc(var(--brush-y, 50%) - 14%),
+      rgba(255, 255, 255, 0.95) var(--brush-y, 50%),
+      rgba(20, 168, 232, 0.45) calc(var(--brush-y, 50%) + 14%),
+      transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+
+  .ba-divider[data-painting='true'] .ba-seam-wet-glow {
+    opacity: 1;
+  }
+
   .ba-handle {
     position: absolute;
-    top: 50%;
+    top: var(--brush-y, 50%);
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 999px;
-    background-color: #ffffff;
-    color: var(--text-dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    /* MANDATORY base identity transformations (individual-transform-properties) */
+    translate: -50% -58%;
+    rotate: 0deg;
+    scale: 1;
+    transition:
+      scale 180ms var(--ease-out-quart),
+      top 90ms linear;
+  }
+
+  .ba-brush-actor {
+    position: relative;
+    width: 4rem;
+    height: 4rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-    transition: transform 150ms var(--ease-out-quart), background-color 150ms ease, color 150ms ease;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.48));
+    transform-origin: 50% 68%;
+    /* MANDATORY base identity transformations (individual-transform-properties) */
+    translate: 0px;
+    rotate: var(--brush-tilt, 0deg);
+    scale: 1;
+    transition:
+      rotate 140ms cubic-bezier(0.22, 1, 0.36, 1),
+      scale 160ms var(--ease-out-quart);
+  }
+
+  .ba-brush-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+
+  .ba-brush-chevron {
+    width: 1.45rem;
+    height: 1.45rem;
+    border-radius: 999px;
+    background: rgba(14, 20, 27, 0.86);
+    border: 1.5px solid rgba(255, 255, 255, 0.85);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.9rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+    /* MANDATORY base identity transformations */
+    translate: 0px;
+    rotate: 0deg;
+    scale: 1;
+    transition:
+      translate 160ms var(--ease-out-quart),
+      background-color 150ms ease,
+      border-color 150ms ease,
+      color 150ms ease;
   }
 
   .ba-viewport:hover .ba-handle,
   .ba-viewport:focus-within .ba-handle {
-    transform: translate(-50%, -50%) scale(1.08);
+    scale: 1.08;
+  }
+
+  .ba-viewport:hover .ba-brush-chevron,
+  .ba-viewport:focus-within .ba-brush-chevron {
     background-color: var(--aac-blue);
+    border-color: #ffffff;
     color: var(--bg-dark-deep);
+  }
+
+  .ba-viewport:hover .ba-brush-chevron-left,
+  .ba-divider[data-swipe-dir='left'][data-painting='true'] .ba-brush-chevron-left {
+    translate: -3px 0;
+  }
+
+  .ba-viewport:hover .ba-brush-chevron-right,
+  .ba-divider[data-swipe-dir='right'][data-painting='true'] .ba-brush-chevron-right {
+    translate: 3px 0;
+  }
+
+  .ba-viewport:focus-within {
+    outline: 3px solid var(--aac-blue);
+    outline-offset: 3px;
+  }
+
+  @supports not (translate: 0px) {
+    .ba-divider {
+      transform: translateX(-50%);
+    }
+    .ba-handle {
+      transform: translate(-50%, -58%);
+    }
+    .ba-viewport:hover .ba-handle,
+    .ba-viewport:focus-within .ba-handle {
+      transform: translate(-50%, -58%) scale(1.08);
+    }
   }
 
   .ba-range-input {
@@ -283,27 +450,7 @@ const { item, priority = false, layout = 'card' } = Astro.props;
 </style>
 
 <script>
-  function initBeforeAfterSliders() {
-    const sliders = document.querySelectorAll<HTMLElement>('[data-ba-slider]');
-    sliders.forEach((slider) => {
-      if (slider.dataset.bound === 'true') return;
-      slider.dataset.bound = 'true';
-
-      const input = slider.querySelector<HTMLInputElement>('.ba-range-input');
-      const clip = slider.querySelector<HTMLElement>('.ba-before-clip');
-      const divider = slider.querySelector<HTMLElement>('.ba-divider');
-
-      if (!input || !clip || !divider) return;
-
-      const updatePosition = (val: string) => {
-        const pct = `${val}%`;
-        clip.style.setProperty('--pos', pct);
-        divider.style.setProperty('--pos', pct);
-      };
-
-      input.addEventListener('input', () => updatePosition(input.value), { passive: true });
-    });
-  }
+  import { initBeforeAfterSliders } from '../scripts/beforeAfterBrush';
 
   initBeforeAfterSliders();
   document.addEventListener('astro:page-load', initBeforeAfterSliders);
