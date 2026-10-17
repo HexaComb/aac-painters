@@ -251,21 +251,6 @@ const faqSchema = {
           <a href={brand.phoneHref} class="btn btn-outline-light">
             <span>Call {brand.phoneDisplay}</span>
           </a>
-          <button
-            type="button"
-            class="btn-replay-paint"
-            data-replay-paint
-            aria-label="Replay paintbrush text entrance animation"
-            title="Watch the 4-color paintbrush entrance again"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l9 9 1.59-1.59a2 2 0 0 0 0-2.82L17 10l4.37-4.37a2.12 2.12 0 1 0-3-3Z" />
-              <path d="M9 8c-2 3-4 3.5-7 4l8 10c2-1 6-5 6-7" />
-              <path d="M14.5 17.5 3.5 15" />
-            </svg>
-            <span>Replay Brush Stroke</span>
-            <span class="replay-color-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-          </button>
         </div>
       </div>
     </div>
@@ -1117,62 +1102,6 @@ const faqSchema = {
     --animation-reduced: none;
   }
 
-  .btn-replay-paint {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.65rem 0.95rem;
-    background: rgba(14, 20, 27, 0.78);
-    color: var(--text-light-secondary);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: 2px;
-    font-family: var(--font-display);
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    cursor: pointer;
-    /* MANDATORY base identity transformations (individual-transform-properties) */
-    translate: 0px;
-    rotate: 0deg;
-    scale: 1;
-    transition:
-      scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-      background-color 160ms ease,
-      color 160ms ease,
-      border-color 160ms ease;
-    transition-timing-function: var(--splatter-spring-easing), ease, ease, ease;
-  }
-
-  .btn-replay-paint:hover,
-  .btn-replay-paint:focus-visible {
-    background: rgba(22, 31, 42, 0.95);
-    color: var(--text-light);
-    border-color: var(--aac-blue);
-    scale: 1.04;
-  }
-
-  .btn-replay-paint:active {
-    scale: 0.97;
-  }
-
-  .replay-color-dots {
-    display: inline-grid;
-    grid-template-columns: repeat(4, 6px);
-    gap: 3px;
-    align-items: center;
-  }
-
-  .replay-color-dots > i {
-    width: 6px;
-    height: 6px;
-    border-radius: 999px;
-  }
-
-  .replay-color-dots > i:nth-child(1) { background-color: var(--aac-red); }
-  .replay-color-dots > i:nth-child(2) { background-color: var(--aac-green); }
-  .replay-color-dots > i:nth-child(3) { background-color: var(--aac-blue); }
-  .replay-color-dots > i:nth-child(4) { background-color: var(--aac-yellow); }
-
   /* Fallback when linear() physics easing is not supported (physics-based-easing) */
   @supports not (animation-timing-function: linear(0, 1)) {
     .paint-stroke-underlay,
@@ -1180,8 +1109,7 @@ const faqSchema = {
     .word-brush-actor {
       animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .paint-splatters > i,
-    .btn-replay-paint {
+    .paint-splatters > i {
       animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
   }
@@ -1339,9 +1267,6 @@ const faqSchema = {
     .word-brush-actor,
     .hero-roller-lead {
       display: none !important;
-    }
-    .btn-replay-paint {
-      transition: none !important;
     }
   }
 
@@ -1736,41 +1661,7 @@ const faqSchema = {
       syncReducedMotion(event.matches);
     });
 
-    // 1. Hero 4-Color Paintbrush Entrance Replay
-    const heroPaintStage = document.querySelector<HTMLElement>('[data-hero-paint-stage]');
-    const replayPaintBtn = document.querySelector<HTMLButtonElement>('[data-replay-paint]');
 
-    const supportsEventAnimation =
-      typeof AnimationEvent !== 'undefined' && 'animation' in AnimationEvent.prototype;
-
-    if (heroPaintStage && !heroPaintStage.dataset.paintBound) {
-      heroPaintStage.dataset.paintBound = 'true';
-
-      heroPaintStage.addEventListener('animationend', (event: AnimationEvent) => {
-        const anim = supportsEventAnimation
-          ? (event as AnimationEvent & { animation?: Animation }).animation
-          : (event.target as Element | null)
-              ?.getAnimations?.()
-              .find((a) => (a as CSSAnimation).animationName === event.animationName);
-        if (anim && event.animationName === 'contractor-brush-stroke') {
-          replayPaintBtn?.removeAttribute('data-painting');
-        }
-      });
-    }
-
-    function replayHeroPaintEntrance() {
-      if (!heroPaintStage || reducedMotionQuery.matches) return;
-      replayPaintBtn?.setAttribute('data-painting', 'true');
-      const animations = heroPaintStage.getAnimations({ subtree: true });
-      animations.forEach((anim) => {
-        anim.cancel();
-        anim.play();
-      });
-    }
-
-    replayPaintBtn?.addEventListener('click', () => {
-      replayHeroPaintEntrance();
-    });
 
     // 2. Services Photo Hover/Focus Preview
     const serviceCols = document.querySelectorAll<HTMLAnchorElement>('[data-service-preview]');
