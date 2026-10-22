@@ -472,7 +472,7 @@ export const SERVICES_LIST = [
     badge: 'SIGNATURE SPECIALTY',
     title: 'Epoxy, Polyaspartic & Decorative Flake Floors',
     shortDesc:
-      'Showroom-grade residential garages, auto service bays, and forklift-ready commercial warehouses—prepped with industrial planetary diamond grinders.',
+      'Showroom-grade residential garages, pool decks, auto service bays, and forklift-ready commercial warehouses—prepped with industrial planetary diamond grinders.',
     icon: 'epoxy',
     accentColor: '#E63946',
     features: [
@@ -480,6 +480,7 @@ export const SERVICES_LIST = [
       '1-Day Fast-Cure UV-Stable Polyaspartic Topcoats',
       'Self-Leveling High-Gloss Metallic & Solid Epoxy',
       'Concrete Grinding, Crack Chasing & Grind-and-Seal',
+      'Pool Deck, Patio & Wood Deck Floor Coatings',
     ],
     image: '/images/projects/residential-garage-flake-epoxy-after.png',
     imageAlt: 'Showroom decorative flake epoxy garage floor by AAC Painters Inc.',
@@ -490,7 +491,7 @@ export const SERVICES_LIST = [
     badge: 'COMMERCIAL & INDUSTRIAL',
     title: 'Commercial, Franchise & Industrial Painting',
     shortDesc:
-      'Zero-downtime exterior and interior painting for franchises, warehouses, historic downtown brick buildings, and multi-bay commercial centers.',
+      'Zero-downtime exterior and interior painting for franchises, warehouses, HOA communities, hotels, apartment complexes, historic downtown brick buildings, and multi-bay commercial centers.',
     icon: 'commercial',
     accentColor: '#1D70B8',
     features: [
@@ -498,6 +499,7 @@ export const SERVICES_LIST = [
       'Historic Brick Restoration & High-Reach Ladder/Lift Work',
       'Direct-to-Metal (DTM) Awnings, Canopies & 8+ Roll-Up Doors',
       'Night & Weekend Scheduling for Zero Business Disruption',
+      'HOA Community, Hotel & Apartment Complex Repaints',
     ],
     image: '/images/projects/mcdonalds-696-awning-after.png',
     imageAlt: 'McDonald’s #696 commercial exterior awning painted by AAC Painters Inc.',
@@ -508,7 +510,7 @@ export const SERVICES_LIST = [
     badge: 'HOMEOWNERS & ESTATES',
     title: 'Residential Interior, Exterior & Wood Staining',
     shortDesc:
-      'Crisp cut lines, obsessive masking, sun-proof exterior house painting, cabinet & trim enamels, and deep-penetrating wood fence & deck staining.',
+      'Crisp cut lines, obsessive masking, sun-proof exterior house painting, cabinet & trim enamels, popcorn ceiling removal, pressure washing, and deep-penetrating wood fence & deck staining.',
     icon: 'residential',
     accentColor: '#2A9D8F',
     features: [
@@ -516,6 +518,10 @@ export const SERVICES_LIST = [
       'Interior Walls, Ceilings, Baseboards & Doors',
       'Cedar & Redwood Fence Restoration & Penetrating Stains',
       'Patio Concrete Staining, Sealing & Garage Makeovers',
+      'Cabinet Painting & Fine-Finish Trim Enamels',
+      'Stairwell, Railing & Banister Painting',
+      'Popcorn Ceiling Removal & Re-Texturing',
+      'Pressure Washing & Exterior Surface Prep',
     ],
     image: '/images/projects/wood-fence-stained-after.png',
     imageAlt: 'Restored and stained residential cedar wood fence by AAC Painters Inc.',
