@@ -166,7 +166,7 @@ import { quoteServices } from '../data/quoteOptions';
             <select id="preferredFinish" name="selectedFinish" class="field-input">
               <option value="">Undecided — discuss options with estimator</option>
               {flakePalettes.map((p) => (
-                <option value={p.name} data-finish-type={p.category === 'Exterior Architectural' ? 'paint' : 'floor'}>{p.name} ({p.category})</option>
+                <option value={p.name} data-finish-type={p.category === 'Exterior Architectural' ? 'paint' : 'floor'} data-commercial-only={p.category === 'Exterior Architectural' ? 'true' : undefined}>{p.name} ({p.category})</option>
               ))}
               <option value="Custom Architectural Paint Color Match" data-finish-type="paint">Custom Paint / Coating Color Match</option>
               <option value="Natural Wood Tone" data-finish-type="stain">Natural Wood Tone</option>
@@ -484,7 +484,8 @@ import { quoteServices } from '../data/quoteOptions';
       service?.propertyTypes.forEach((property) => propertySelect.add(new Option(property, property)));
       if (service?.propertyTypes.includes(previousProperty)) propertySelect.value = previousProperty;
       finishSelect.replaceChildren(...finishOptions
-        .filter((option) => !option.value || option.dataset.finishType === service?.finishType)
+        .filter((option) => !option.value || (option.dataset.finishType === service?.finishType
+          && (!option.dataset.commercialOnly || serviceSelect.value === 'Commercial Painting & Stucco Restoration')))
         .map((option) => option.cloneNode(true)));
       if (Array.from(finishSelect.options).some((option) => option.value === previousFinish)) finishSelect.value = previousFinish;
       finishField.hidden = service?.finishType === 'none';

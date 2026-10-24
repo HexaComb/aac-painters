@@ -141,17 +141,20 @@ test('pending duplicate submission is blocked and newer edits survive success', 
   await expect(page.locator('#quote-submit-btn')).toBeEnabled();
 });
 
-test('coating lab selection restores a compatible service and finish after pressure washing', async ({ page }) => {
-  await page.goto('/services/epoxy-flooring');
+test('finish choices stay compatible and stale selections clear when changing services', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('#preferredFinish').selectOption({ index: 1 });
+  await expect(page.locator('#preferredFinish')).not.toHaveValue('');
+  await page.locator('#serviceType').selectOption('Cabinets, Trim & Interior Repaint');
+  await expect(page.locator('#preferredFinish')).toHaveValue('');
+  await expect(page.locator('#preferredFinish')).not.toContainText('Exterior Architectural');
+  await expect(page.locator('#preferredFinish')).not.toContainText('Tuxedo');
+  await page.locator('#preferredFinish').selectOption('Custom Architectural Paint Color Match');
   await page.locator('#serviceType').selectOption('Pressure Washing');
-  await page.locator('.swatch-row').last().click();
-  const chosen = await page.locator('.swatch-row').last().getAttribute('data-palette-name');
-  await page.locator('[data-select-finish-btn]').click();
-  await expect(page.locator('#serviceType')).toHaveValue('Commercial Painting & Stucco Restoration');
-  await expect(page.locator('#preferredFinish')).toHaveValue(chosen!);
+  await expect(page.locator('#preferredFinish')).toBeDisabled();
+  await expect(page.locator('#preferredFinish')).toHaveValue('');
+  await page.locator('#serviceType').selectOption('Full-Broadcast Flake Epoxy Floor');
   await expect(page.locator('#preferredFinish')).toBeEnabled();
-  await page.locator('.swatch-row').first().click();
-  await page.locator('[data-select-finish-btn]').click();
-  await expect(page.locator('#serviceType')).toHaveValue('Full-Broadcast Flake Epoxy Floor');
+  await expect(page.locator('#preferredFinish')).toHaveValue('');
   await expect(page.locator('#preferredFinish')).toContainText('Tuxedo');
 });

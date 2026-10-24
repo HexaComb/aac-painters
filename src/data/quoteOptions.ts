@@ -15,7 +15,7 @@ export const quoteServices: QuoteService[] = [
   { value: 'Interior & Exterior Residential Painting', label: 'Interior & Exterior Home Painting', finishType: 'paint', propertyTypes: homeProperties },
   { value: 'Commercial Painting & Stucco Restoration', label: 'Commercial Building / Facade Painting', finishType: 'paint', propertyTypes: ['Commercial — Office / Storefront', 'Commercial — Warehouse', 'Commercial — HOA / Hotel / Apartments', 'Commercial — Other'] },
   { value: 'Metallic & Solid-Color Epoxy Floor', label: 'Metallic & Solid-Color Epoxy Floor', finishType: 'floor', propertyTypes: floorProperties },
-  { value: 'Cabinets, Trim & Drywall Finishing', label: 'Cabinets, Trim & Interior Repaint', finishType: 'paint', propertyTypes: ['Residential — Home Interior', 'Commercial — Interior', 'Other'] },
+  { value: 'Cabinets, Trim & Interior Repaint', label: 'Cabinets, Trim & Interior Repaint', finishType: 'paint', propertyTypes: ['Residential — Home Interior', 'Commercial — Interior', 'Other'] },
   { value: 'Popcorn Ceiling Removal & Re-Texturing', label: 'Popcorn Ceiling Removal & Re-Texturing', finishType: 'none', propertyTypes: ['Residential — Home', 'Residential — Apartment / Condo', 'Commercial — Interior', 'Other'] },
   { value: 'Pressure Washing', label: 'Pressure Washing', finishType: 'none', propertyTypes: ['Residential — Home Exterior', 'Commercial — Building Exterior', 'Outdoor — Driveway / Patio / Walkway', 'Outdoor — Fence / Deck', 'Other'] },
   { value: 'Pool Deck & Patio Coatings', label: 'Pool Deck & Patio Coatings', finishType: 'paint', propertyTypes: ['Residential — Pool Deck / Patio', 'Commercial — Pool Deck / Patio', 'HOA / Apartments — Pool Deck / Patio', 'Other'] },
@@ -23,7 +23,11 @@ export const quoteServices: QuoteService[] = [
 ];
 
 export function getQuoteService(value: string) {
-  const currentValue = value === 'Metallic 3D Designer Epoxy Floor' ? 'Metallic & Solid-Color Epoxy Floor' : value;
+  const aliases: Record<string, string> = {
+    'Metallic 3D Designer Epoxy Floor': 'Metallic & Solid-Color Epoxy Floor',
+    'Cabinets, Trim & Drywall Finishing': 'Cabinets, Trim & Interior Repaint',
+  };
+  const currentValue = aliases[value] || value;
   return quoteServices.find((service) => service.value === currentValue);
 }
 
