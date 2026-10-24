@@ -5,86 +5,37 @@ import FieldReelsSection from '../components/FieldReelsSection.astro';
 import QuoteBuilderForm from '../components/QuoteBuilderForm.astro';
 import {
   brand,
+  beforeAfterGallery,
   faqItems
 } from '../data/siteData';
 
+function showcase(id: string, label: string, kicker: string, video?: string) {
+  const pair = beforeAfterGallery.find((item) => item.id === id);
+  if (!pair) throw new Error(`Missing project gallery item: ${id}`);
+  return {
+    label,
+    kicker,
+    headline: pair.title,
+    story: pair.story,
+    beforeImage: pair.beforeImage,
+    beforeAlt: pair.beforeAlt,
+    afterImage: pair.afterImage,
+    afterAlt: pair.afterAlt,
+    spec: pair.finishSystem,
+    video
+  };
+}
+
 const floorShowcases = [
-  {
-    label: '2-Car Garage Flake',
-    kicker: 'GARAGE & FLOOR COATINGS',
-    headline: 'Lorem Ipsum Dolor Sit Amet',
-    story:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    beforeImage: '/images/projects/residential-garage-before.png',
-    beforeAlt: 'Before: Residential garage floor before transformation',
-    afterImage: '/images/projects/residential-garage-flake-epoxy-after.png',
-    afterAlt: 'After: Finished residential garage floor',
-    spec: 'Lorem ipsum dolor sit amet consectetur'
-  },
-  {
-    label: 'Auto Bay Mirror Epoxy',
-    kicker: 'COMMERCIAL & AUTO SHOP FLOORS',
-    headline: 'Consectetur Adipiscing Elit',
-    story:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.',
-    beforeImage: '/images/projects/auto-shop-floor-before.png',
-    beforeAlt: 'Before: Auto service shop floor before transformation',
-    afterImage: '/images/projects/auto-shop-epoxy-floor-after.png',
-    afterAlt: 'After: Finished auto service shop floor',
-    spec: 'Lorem ipsum dolor sit amet consectetur'
-  },
-  {
-    label: 'Warehouse Flake Slab',
-    kicker: 'INDUSTRIAL FLOOR SYSTEMS',
-    headline: 'Sed Do Eiusmod Tempor Incididunt',
-    story:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.',
-    beforeImage: '/images/projects/warehouse-floor-before.jpeg',
-    beforeAlt: 'Before: Commercial warehouse concrete floor before transformation',
-    afterImage: '/images/projects/warehouse-flake-epoxy-after.png',
-    afterAlt: 'After: Finished commercial warehouse floor',
-    spec: 'Lorem ipsum dolor sit amet consectetur'
-  }
+  showcase('residential-garage-masterpiece', 'Garage Flake Finish', 'GARAGE & FLOOR COATINGS'),
+  showcase('auto-service-bay', 'Auto Service Bay', 'COMMERCIAL & AUTO SHOP FLOORS'),
+  showcase('commercial-warehouse-flake', 'Warehouse Flake Floor', 'INDUSTRIAL FLOOR SYSTEMS')
 ];
 
 const exteriorShowcases = [
-  {
-    label: 'Landmark Building',
-    kicker: 'EXTERIOR & COMMERCIAL PAINTING',
-    headline: 'Lorem Ipsum Dolor Sit Amet',
-    story:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    video: '/videos/before-after-video.mp4',
-    beforeImage: '/images/projects/mcauley-building-before.png',
-    beforeAlt: 'Before: Commercial building exterior before painting',
-    afterImage: '/images/projects/mcauley-building-after.png',
-    afterAlt: 'After: Finished commercial building exterior',
-    spec: 'Lorem ipsum dolor sit amet consectetur'
-  },
-  {
-    label: 'McDonald’s Awning',
-    kicker: 'COMMERCIAL STOREFRONT EXTERIOR',
-    headline: 'Consectetur Adipiscing Elit',
-    story:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.',
-    beforeImage: '/images/projects/mcdonalds-696-awning-before.png',
-    beforeAlt: 'Before: Commercial awning before painting',
-    afterImage: '/images/projects/mcdonalds-696-awning-after.png',
-    afterAlt: 'After: Finished commercial awning',
-    spec: 'Lorem ipsum dolor sit amet consectetur'
-  },
-  {
-    label: 'Cedar Fence Revival',
-    kicker: 'RESIDENTIAL WOOD STAINING',
-    headline: 'Sed Do Eiusmod Tempor Incididunt',
-    story:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.',
-    beforeImage: '/images/projects/wood-fence-before.png',
-    beforeAlt: 'Before: Wooden privacy fence before staining',
-    afterImage: '/images/projects/wood-fence-stained-after.png',
-    afterAlt: 'After: Finished stained wooden privacy fence',
-    spec: 'Lorem ipsum dolor sit amet consectetur'
-  }
+  showcase('mcauley-landmark-restoration', 'Storefront Exterior', 'EXTERIOR & COMMERCIAL PAINTING', '/videos/before-after-video.mp4'),
+  showcase('mcdonalds-696-refresh', 'Storefront Canopy', 'COMMERCIAL STOREFRONT EXTERIOR'),
+  showcase('residential-cedar-fence', 'Wood Fence Staining', 'RESIDENTIAL WOOD STAINING')
 ];
 
 const faqSchema = {
@@ -277,7 +228,7 @@ const faqSchema = {
           </h2>
 
           <p class="services-lead">
-            From single rooms and custom wood staining to full exterior stucco restorations and diamond-ground epoxy floors, we deliver high-quality results that last.
+            From single rooms, cabinet painting, and popcorn ceiling removal to full exterior stucco restorations, pressure washing, and diamond-ground epoxy floors, we deliver high-quality results that last.
           </p>
 
           <!-- 3 Icon Columns with Vertical Dividers (Matching Reference Mockup) -->
@@ -286,7 +237,7 @@ const faqSchema = {
               href="/services/residential-painting"
               class="service-icon-col"
               data-service-preview="/images/projects/wood-fence-stained-after.png"
-              data-service-caption="Residential Interior, Exterior, Trim & Deep-Penetrating Wood Staining"
+              data-service-caption="Residential Interior, Exterior, Cabinets, Popcorn Removal & Wood Staining"
             >
               <svg class="service-line-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M3 10.5L12 3l9 7.5V21a1 1 0 01-1 1H4a1 1 0 01-1-1V10.5z" />
@@ -300,7 +251,7 @@ const faqSchema = {
               href="/services/commercial-painting"
               class="service-icon-col"
               data-service-preview="/images/projects/mcauley-building-after.png"
-              data-service-caption="Commercial Exterior Stucco, National Franchises & Multi-Bay Doors"
+              data-service-caption="Commercial Exterior Stucco, HOAs, Hotels, Franchises & Multi-Bay Doors"
             >
               <svg class="service-line-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M3 21h18" />
@@ -315,7 +266,7 @@ const faqSchema = {
               href="/services/epoxy-flooring"
               class="service-icon-col"
               data-service-preview="/images/projects/residential-garage-flake-epoxy-after.png"
-              data-service-caption="Full-Broadcast Flake & Liquid-Glass Mirror Epoxy Floors"
+              data-service-caption="Full-Broadcast Flake & Liquid-Glass Mirror Epoxy Floors for Garages & Pool Decks"
             >
               <svg class="service-line-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polygon points="12 2 2 7 12 12 22 7 12 2" />
@@ -497,7 +448,6 @@ const faqSchema = {
               poster={exteriorShowcases[0].afterImage}
               width="1660"
               height="1244"
-              loading="lazy"
               autoplay
               loop
               muted
@@ -647,7 +597,7 @@ const faqSchema = {
   <!-- 4. DARK "WHY CHOOSE US" BAND + LIGHT "OUR PROCESS" DOCUMENTARY -->
   <StoryChapters />
 
-  <!-- 5. DARK "WHAT OUR CLIENTS SAY: REAL PEOPLE. REAL RESULTS." + LIVE JOBSITE VIDEO REELS -->
+  <!-- 5. PROJECT PLANNING GUIDANCE + EXTERIOR VIDEO REELS -->
   <FieldReelsSection />
 
   <!-- 7. FAQ SECTION (Structured for Local SEO & Voice Search) -->

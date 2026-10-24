@@ -1,138 +1,95 @@
 import type { APIRoute } from 'astro';
+import { getQuoteService, isValidPhone } from '../../data/quoteOptions.ts';
 
 export const prerender = false;
 
-interface QuotePayload {
-  name?: string;
-  phone?: string;
-  email?: string;
-  city?: string;
-  propertyType?: string;
-  services?: string[] | string;
-  squareFootage?: string;
-  timeline?: string;
-  selectedFinish?: string;
-  projectDetails?: string;
-}
+const fallback = 'Please call or text (209) 485-5103 directly.';
+const json = (body: Record<string, unknown>, status = 200) => new Response(JSON.stringify(body), {
+  status,
+  headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+});
+const text = (value: unknown) => typeof value === 'string' ? value.trim() : '';
 
 export const POST: APIRoute = async ({ request, locals }) => {
+  let data: Record<string, unknown>;
   try {
-    const contentType = request.headers.get('content-type') || '';
-    let data: QuotePayload = {};
-
-    if (contentType.includes('application/json')) {
-      data = (await request.json()) as QuotePayload;
+    if (request.headers.get('content-type')?.includes('application/json')) {
+      const body: unknown = await request.json();
+      if (!body || typeof body !== 'object' || Array.isArray(body)) throw new Error('Invalid body');
+      data = body as Record<string, unknown>;
     } else {
-      const formData = await request.formData();
-      data = {
-        name: String(formData.get('name') || ''),
-        phone: String(formData.get('phone') || ''),
-        email: String(formData.get('email') || ''),
-        city: String(formData.get('city') || ''),
-        propertyType: String(formData.get('propertyType') || 'Residential'),
-        services: formData.getAll('services').map(String),
-        squareFootage: String(formData.get('squareFootage') || ''),
-        timeline: String(formData.get('timeline') || ''),
-        selectedFinish: String(formData.get('selectedFinish') || ''),
-        projectDetails: String(formData.get('projectDetails') || ''),
-      };
+      const form = await request.formData();
+      data = Object.fromEntries(form.entries());
+      if (form.has('services')) data.services = form.getAll('services');
     }
-
-    const name = (data.name || '').trim();
-    const phone = (data.phone || '').trim();
-    const email = (data.email || '').trim();
-
-    if (!name || !phone) {
-      return new Response(
-        JSON.stringify({
-          ok: false,
-          error: 'Please provide both your name and phone number so Alex can reach you.',
-        }),
-        {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
-    }
-
-    const servicesList = Array.isArray(data.services)
-      ? data.services
-      : data.services
-      ? [data.services]
-      : ['General Painting / Epoxy Consultation'];
-
-    const quoteId = `AAC-${Date.now().toString(36).toUpperCase().slice(-6)}`;
-    const submittedAt = new Date().toISOString();
-
-    const quoteRecord = {
-      quoteId,
-      submittedAt,
-      name,
-      phone,
-      email,
-      city: (data.city || 'Central Valley (209)').trim(),
-      propertyType: data.propertyType || 'Residential',
-      services: servicesList,
-      squareFootage: data.squareFootage || 'Not specified',
-      timeline: data.timeline || 'Flexible',
-      selectedFinish: data.selectedFinish || 'Custom Consultation',
-      projectDetails: (data.projectDetails || '').trim(),
-    };
-
-    // Optional webhook forwarding if configured in Cloudflare Workers environment variables
-    const runtimeEnv = (locals as Record<string, any>)?.runtime?.env || {};
-    const webhookUrl = runtimeEnv.QUOTE_WEBHOOK_URL;
-    if (webhookUrl && typeof webhookUrl === 'string') {
-      try {
-        await fetch(webhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(quoteRecord),
-        });
-      } catch {
-        // Non-blocking if external webhook fails
-      }
-    }
-
-    const smsBody = encodeURIComponent(
-      `Hi Alex! I just requested quote #${quoteId} on AACPaintersInc.com.\n` +
-        `Name: ${quoteRecord.name}\n` +
-        `Type: ${quoteRecord.propertyType} (${quoteRecord.city})\n` +
-        `Services: ${quoteRecord.services.join(', ')}\n` +
-        (quoteRecord.selectedFinish && quoteRecord.selectedFinish !== 'Custom Consultation'
-          ? `Selected System: ${quoteRecord.selectedFinish}\n`
-          : '') +
-        (quoteRecord.squareFootage ? `Est. Size: ${quoteRecord.squareFootage}\n` : '') +
-        (quoteRecord.projectDetails ? `Details: ${quoteRecord.projectDetails}` : '')
-    );
-
-    return new Response(
-      JSON.stringify({
-        ok: true,
-        quoteId,
-        submittedAt,
-        message: `Thanks ${name}! Your quote request (${quoteId}) has been logged for Alex Delgadillo & the AAC Painters Inc. team.`,
-        smsLink: `sms:+12094855103?&body=${smsBody}`,
-        quote: quoteRecord,
-      }),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-store',
-        },
-      }
-    );
-  } catch (err) {
-    return new Response(
-      JSON.stringify({
-        ok: false,
-        error: 'Unable to process your quote request right now. Please call or text (209) 485-5103 directly.',
-      }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
+  } catch {
+    return json({ ok: false, error: `Unable to read your request. ${fallback}` }, 400);
   }
+
+  // Accept the former form names as well, so already-open pages remain usable.
+  const name = text(data.name ?? data.fullName);
+  const phone = text(data.phone);
+  const email = text(data.email);
+  const city = text(data.city);
+  const rawServices = data.services ?? data.serviceType;
+  const services = (Array.isArray(rawServices) ? rawServices : [rawServices]).map(text).filter(Boolean);
+  const propertyType = text(data.propertyType ?? data.propertyScope);
+  const selectedFinish = text(data.selectedFinish ?? data.preferredFinish);
+  const projectDetails = text(data.projectDetails);
+
+  if (text(data.companyWebsite)) return json({ ok: false, error: 'Unable to process this request.' }, 400);
+  if (name.length < 2 || name.length > 120 || !isValidPhone(phone) || phone.length > 30) {
+    return json({ ok: false, error: 'Please provide your name and a valid 10-digit phone number.' }, 400);
+  }
+  if (city.length < 2 || city.length > 120 || services.length === 0 || services.some((service) => !getQuoteService(service))) {
+    return json({ ok: false, error: 'Please provide the project city and select a service.' }, 400);
+  }
+  if ((email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) || email.length > 254) {
+    return json({ ok: false, error: 'Please provide a valid email address, or leave it blank.' }, 400);
+  }
+  if (propertyType.length > 200 || selectedFinish.length > 200 || projectDetails.length > 5000) {
+    return json({ ok: false, error: 'Please shorten the project details and try again.' }, 400);
+  }
+
+  const quoteId = `AAC-${crypto.randomUUID()}`;
+  const submittedAt = new Date().toISOString();
+  const quoteRecord = {
+    quoteId, submittedAt, name, phone, email, city, services,
+    propertyType: propertyType || 'Not specified',
+    squareFootage: text(data.squareFootage).slice(0, 100) || 'Not specified',
+    timeline: text(data.timeline).slice(0, 200) || 'Not specified',
+    // Cleaning and ceiling removal should not carry a stale coating selection.
+    selectedFinish: services.every((service) => getQuoteService(service)?.finishType === 'none')
+      ? 'Not applicable' : selectedFinish || 'Not specified',
+    projectDetails,
+  };
+  const smsBody = encodeURIComponent(
+    `Hi AAC Painters, I'd like an estimate.\nName: ${name}\nPhone: ${phone}\nCity: ${city}\n` +
+    `Services: ${services.join(', ')}\nProperty: ${quoteRecord.propertyType}\n` +
+    (email ? `Email: ${email}\n` : '') +
+    `Finish: ${quoteRecord.selectedFinish}\nSize: ${quoteRecord.squareFootage}\nTimeline: ${quoteRecord.timeline}\n` +
+    (projectDetails ? `Details: ${projectDetails}` : '')
+  );
+  const smsLink = `sms:+12094855103?&body=${smsBody}`;
+  const runtime = (locals as { runtime?: { env?: { QUOTE_WEBHOOK_URL?: string } } }).runtime;
+  const webhookUrl = runtime?.env?.QUOTE_WEBHOOK_URL;
+
+  // There is no database here: only acknowledge receipt after the configured
+  // destination accepts the request. Never silently discard an estimate lead.
+  if (!webhookUrl) {
+    return json({ ok: false, error: `Online requests are not available right now. Your request has not been sent. ${fallback}`, smsLink }, 503);
+  }
+  try {
+    const delivery = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(quoteRecord),
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!delivery.ok) throw new Error('Delivery not accepted');
+  } catch {
+    return json({ ok: false, error: `We could not confirm delivery of your request. ${fallback}`, smsLink }, 502);
+  }
+
+  return json({ ok: true, quoteId, submittedAt, message: 'Your estimate request has been sent to the AAC Painters team.' });
 };

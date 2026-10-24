@@ -11,20 +11,20 @@ import { flakePalettes } from '../data/siteData';
           <span class="kicker-text">Interactive Floor &amp; Coating Visualizer</span>
         </div>
         <h2 id="lab-heading" class="lab-main-title">
-          Test Our Real Epoxy &amp; Metallic Systems.
+          Explore Floor &amp; Exterior Color Directions.
         </h2>
       </div>
       <p class="lab-intro">
-        Select any of our 5 field-installed floor systems below to compare actual cured jobsite photography, flake composition, and recommended rooms — then send your choice directly into the estimate form below.
+        Compare the color directions and reference photos below, then add a preference to your estimate request. On-screen colors are approximate; confirm samples, materials and suitability for your project.
       </p>
     </div>
 
     <div class="lab-workspace" data-flake-lab>
       <!-- Left: Swatch Matrix -->
       <div class="swatch-column">
-        <h3 class="swatch-list-heading">Select a Coating System (01 &ndash; 05)</h3>
+        <h3 class="swatch-list-heading">Select a Color Direction</h3>
 
-        <div class="swatch-list" role="listbox" aria-label="Floor coating systems">
+        <div class="swatch-list" role="listbox" aria-label="Floor and exterior color directions">
           {flakePalettes.map((palette, index) => (
             <button
               type="button"
@@ -74,7 +74,7 @@ import { flakePalettes } from '../data/siteData';
               decoding="async"
               data-lab-img
             />
-            <figcaption class="installed-caption">Actual Installed AAC Jobsite Photo</figcaption>
+            <figcaption class="installed-caption">Project Photo Reference</figcaption>
           </figure>
         </div>
 
@@ -89,6 +89,7 @@ import { flakePalettes } from '../data/siteData';
               class="btn btn-dark"
               data-select-finish-btn
               data-selected-finish={flakePalettes[0].name}
+              data-selected-category={flakePalettes[0].category}
             >
               <span>Use This Finish in My Estimate</span>
               <span aria-hidden="true">&rarr;</span>
@@ -99,16 +100,16 @@ import { flakePalettes } from '../data/siteData';
 
           <dl class="spec-metrics">
             <div class="metric-cell">
-              <dt>Recommended Application</dt>
+              <dt>Color Inspiration</dt>
               <dd data-lab-best>{flakePalettes[0].bestFor}</dd>
             </div>
             <div class="metric-cell">
-              <dt>Mechanical Surface Prep</dt>
-              <dd>CSP-2/3 HEPA Diamond Grind + Crack Fill</dd>
+              <dt>Surface Preparation</dt>
+              <dd>Confirm after a site assessment</dd>
             </div>
             <div class="metric-cell">
-              <dt>UV &amp; Tire Protection</dt>
-              <dd>Polyaspartic / High-Wear Clear Topcoat</dd>
+              <dt>Materials &amp; Care</dt>
+              <dd>Confirm the proposed products and care guidance</dd>
             </div>
           </dl>
         </div>
@@ -415,21 +416,20 @@ import { flakePalettes } from '../data/siteData';
         if (headingEl) headingEl.textContent = tagline;
         if (descEl) descEl.textContent = desc;
         if (bestEl) bestEl.textContent = best;
-        if (selectBtn) selectBtn.dataset.selectedFinish = name;
+        if (selectBtn) {
+          selectBtn.dataset.selectedFinish = name;
+          selectBtn.dataset.selectedCategory = cat;
+        }
       });
     });
 
     if (selectBtn) {
       selectBtn.addEventListener('click', () => {
         const chosen = selectBtn.dataset.selectedFinish || '';
-        const finishSelect = document.querySelector<HTMLSelectElement>('#preferredFinish');
-        if (finishSelect && chosen) {
-          for (const opt of Array.from(finishSelect.options)) {
-            if (opt.value.includes(chosen) || chosen.includes(opt.value)) {
-              finishSelect.value = opt.value;
-              break;
-            }
-          }
+        if (chosen) {
+          document.dispatchEvent(new CustomEvent('aac:finish-selected', {
+            detail: { finish: chosen, category: selectBtn.dataset.selectedCategory || '' }
+          }));
         }
       });
     }

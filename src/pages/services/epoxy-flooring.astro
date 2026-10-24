@@ -2,16 +2,17 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BeforeAfterCard from '../../components/BeforeAfterCard.astro';
 import QuoteBuilderForm from '../../components/QuoteBuilderForm.astro';
+import ServiceOverview from '../../components/ServiceOverview.astro';
 import { brand, beforeAfterGallery, dustBagsProof } from '../../data/siteData';
 
 const epoxyPairs = beforeAfterGallery.filter(
-  (item) => item.category === 'Epoxy Flooring' || item.id === 'autoshop-transformation'
+  (item) => item.category === 'Epoxy Flooring' || item.id === 'residential-garage-masterpiece'
 );
 ---
 
 <BaseLayout
   title="Epoxy & Metallic Concrete Flooring | AAC Painters Inc. (CSLB #1039849)"
-  description="Transform your garage, patio, living space, or commercial auto shop with diamond-ground 100% solids full-broadcast flake and 3D metallic epoxy floors by AAC Painters Inc. Call (209) 485-5103."
+  description="Explore epoxy and decorative flake floors, concrete preparation, and pool deck and patio coatings for Central Valley homes and commercial properties. Call (209) 485-5103."
   ogImage="/images/projects/residential-garage-flake-epoxy-after.png"
 >
   <!-- Dark Hero Banner with 4-Color Spectrum Bar -->
@@ -42,7 +43,7 @@ const epoxyPairs = beforeAfterGallery.filter(
       </h1>
 
       <p class="subpage-lead">
-        Every AAC epoxy floor begins with heavy HEPA-shrouded diamond grinding, structural crack reconstruction, and 100% solids industrial resins — never watered-down hardware store kits.
+        Explore floor finishes for garages, auto service bays, and warehouses, along with coating options for pool decks and patios. The surface condition and intended use guide the proposed system.
       </p>
 
       <div class="subpage-actions">
@@ -61,6 +62,8 @@ const epoxyPairs = beforeAfterGallery.filter(
     </div>
   </section>
 
+  <ServiceOverview serviceId="epoxy-flooring" />
+
   <!-- 6-Bag Dust Proof & Technical Spec Section -->
   <section class="prep-spec-section">
     <div class="container prep-spec-grid">
@@ -69,27 +72,27 @@ const epoxyPairs = beforeAfterGallery.filter(
           <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
           <span class="kicker-text">Mechanical Surface Preparation</span>
         </div>
-        <h2 class="section-heading">Why Our Epoxy Floors Never Peel Under Hot Tires.</h2>
+        <h2 class="section-heading">Start with the Surface.</h2>
         <p class="section-copy">
-          Acid washing leaves concrete pores sealed and contaminated with oil. Before a single drop of primer touches your slab, our crew mechanically profiles the concrete to CSP-2/3 using industrial planetary diamond grinders.
+          Surface preparation, repairs, and coating selection should be reviewed together. Your estimate can outline the preparation and finish recommended for the slab and how you plan to use it.
         </p>
 
         <dl class="spec-list">
           <div class="spec-row">
-            <dt>01. Diamond Profiling</dt>
-            <dd>Opens laitance and removes oil, curing compounds, and old paint.</dd>
+            <dt>01. Surface Review</dt>
+            <dd>Identify existing coatings, contamination, and areas needing preparation.</dd>
           </div>
           <div class="spec-row">
-            <dt>02. Structural Crack Rebuild</dt>
-            <dd>Spalled joints and deep pits are chased and rebuilt flush with polyurea filler.</dd>
+            <dt>02. Preparation &amp; Repairs</dt>
+            <dd>Discuss grinding and repair needs before choosing the coating system.</dd>
           </div>
           <div class="spec-row">
-            <dt>03. 100% Solids Broadcast</dt>
-            <dd>Deep-wicking epoxy vapor barrier with full-refusal vinyl flake or 3D metallic pigments.</dd>
+            <dt>03. Finish Selection</dt>
+            <dd>Compare decorative flake, solid-color, and metallic floor options.</dd>
           </div>
           <div class="spec-row">
-            <dt>04. UV Polyaspartic Topcoat</dt>
-            <dd>Crystal-clear chemical, abrasion, and UV-stable seal coat.</dd>
+            <dt>04. Use &amp; Care</dt>
+            <dd>Confirm cure times, return-to-use timing, and maintenance for the selected finish.</dd>
           </div>
         </dl>
       </div>
@@ -118,7 +121,7 @@ const epoxyPairs = beforeAfterGallery.filter(
         <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <span class="kicker-text">Epoxy &amp; Concrete Before &amp; Afters</span>
       </div>
-      <h2 class="section-heading">6 Verified Concrete &amp; Epoxy Transformations</h2>
+      <h2 class="section-heading">Garage, Auto Bay &amp; Warehouse Floors</h2>
 
       <div class="split-list">
         {epoxyPairs.map((pair) => (
