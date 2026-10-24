@@ -1,5 +1,6 @@
 ---
 import { brand, flakePalettes } from '../data/siteData';
+import { quoteServices } from '../data/quoteOptions';
 ---
 
 <section class="estimate-cta-section" id="quote-builder" aria-labelledby="quote-heading">
@@ -32,7 +33,7 @@ import { brand, flakePalettes } from '../data/siteData';
         </h2>
 
         <p class="estimate-lead">
-          Fill out the form and company president <strong>{brand.president}</strong> will get back to you within 24 hours with on-site sample boards and a written specification quote.
+          Tell us about the work you have in mind. Contact <strong>{brand.president}</strong> and the AAC Painters team to discuss the scope, scheduling, and next steps for an estimate.
         </p>
 
         <dl class="estimate-credentials">
@@ -66,11 +67,12 @@ import { brand, flakePalettes } from '../data/siteData';
               <input
                 type="text"
                 id="fullName"
-                name="fullName"
+                name="name"
                 class="field-input"
                 autocomplete="name"
                 required
                 minlength="2"
+                maxlength="120"
                 aria-describedby="name-hint name-error"
               />
               <p class="field-error" id="name-error" role="alert">Please enter your name.</p>
@@ -89,7 +91,7 @@ import { brand, flakePalettes } from '../data/siteData';
                 autocomplete="tel"
                 inputmode="tel"
                 required
-                pattern="[\d\s\-\+\(\)\.]{10,20}"
+                maxlength="30"
                 aria-describedby="phone-hint phone-error"
               />
               <p class="field-error" id="phone-error" role="alert">Please enter a valid 10-digit phone number.</p>
@@ -100,13 +102,14 @@ import { brand, flakePalettes } from '../data/siteData';
           <div class="form-row-2">
             <div class="field-group">
               <label for="email" class="field-label">Email</label>
-              <p class="field-hint" id="email-hint">Optional — for your written PDF estimate</p>
+              <p class="field-hint" id="email-hint">Optional — for estimate follow-up</p>
               <input
                 type="email"
                 id="email"
                 name="email"
                 class="field-input"
                 autocomplete="email"
+                maxlength="254"
                 inputmode="email"
                 aria-describedby="email-hint email-error"
               />
@@ -126,6 +129,7 @@ import { brand, flakePalettes } from '../data/siteData';
                 autocomplete="address-level2"
                 required
                 minlength="2"
+                maxlength="120"
                 aria-describedby="city-hint city-error"
               />
               <p class="field-error" id="city-error" role="alert">Please enter the project city.</p>
@@ -138,41 +142,35 @@ import { brand, flakePalettes } from '../data/siteData';
               <label for="serviceType" class="field-label">
                 What are you interested in? <span class="req-star" aria-hidden="true">*</span>
               </label>
-              <p class="field-hint" id="service-hint">Primary painting or epoxy service</p>
-              <select id="serviceType" name="serviceType" class="field-input" required aria-describedby="service-hint">
-                <option value="Full-Broadcast Flake Epoxy Floor">Full-Broadcast Flake Epoxy Floor</option>
-                <option value="Interior & Exterior Residential Painting">Interior &amp; Exterior Home Painting</option>
-                <option value="Commercial Painting & Stucco Restoration">Commercial Building / Facade Painting</option>
-                <option value="Metallic 3D Designer Epoxy Floor">3D Metallic Designer Epoxy Floor</option>
-                <option value="Cabinets, Trim & Drywall Finishing">Cabinets, Trim &amp; Interior Repaint</option>
-                <option value="Popcorn Ceiling Removal & Re-Texturing">Popcorn Ceiling Removal &amp; Re-Texturing</option>
-                <option value="Pressure Washing">Pressure Washing</option>
-                <option value="Pool Deck & Patio Coatings">Pool Deck &amp; Patio Coatings</option>
-                <option value="Fence & Deck Staining">Fence &amp; Deck Staining</option>
+              <p class="field-hint" id="service-hint">Choose the main service for this request</p>
+              <select id="serviceType" name="services" class="field-input" required aria-describedby="service-hint">
+                {quoteServices.map((service) => (
+                  <option value={service.value}>{service.label}</option>
+                ))}
               </select>
             </div>
 
             <div class="field-group">
-              <label for="propertyScope" class="field-label">Property Type &amp; Approx. Size</label>
-              <p class="field-hint" id="scope-hint">Helps us plan crew &amp; sample boards</p>
-              <select id="propertyScope" name="propertyScope" class="field-input" aria-describedby="scope-hint">
-                <option value="Residential — 2-3 Car Garage / Patio">Residential — Garage or Patio Slab</option>
-                <option value="Residential — Full Home Interior / Exterior">Residential — Home Interior or Exterior</option>
-                <option value="Commercial — Auto Shop / Warehouse">Commercial — Auto Shop or Warehouse</option>
-                <option value="Commercial — Storefront / Multi-Story">Commercial — Storefront or Multi-Story</option>
+              <label for="propertyScope" class="field-label">Property / Work Area</label>
+              <p class="field-hint" id="scope-hint">Optional — choose the closest match</p>
+              <select id="propertyScope" name="propertyType" class="field-input" aria-describedby="scope-hint">
+                <option value="">Not sure yet — discuss with estimator</option>
+                {quoteServices[0].propertyTypes.map((property) => <option value={property}>{property}</option>)}
               </select>
             </div>
           </div>
 
-          <!-- Hidden or Optional Preferred Finish synced from Coating Lab -->
-          <div class="field-group">
-            <label for="preferredFinish" class="field-label">Selected Coating System or Color Direction</label>
-            <select id="preferredFinish" name="preferredFinish" class="field-input">
-              <option value="Bring Sample Boards to Walkthrough">Undecided — Bring Sample Boards to My Walkthrough</option>
+          <!-- Optional and service-specific; also synced from the Coating Lab. -->
+          <div class="field-group" id="finish-field">
+            <label for="preferredFinish" class="field-label">Finish or Color Direction (Optional)</label>
+            <select id="preferredFinish" name="selectedFinish" class="field-input">
+              <option value="">Undecided — discuss options with estimator</option>
               {flakePalettes.map((p) => (
-                <option value={p.name}>{p.name} ({p.category})</option>
+                <option value={p.name} data-finish-type={p.category === 'Exterior Architectural' ? 'paint' : 'floor'}>{p.name} ({p.category})</option>
               ))}
-              <option value="Custom Architectural Paint Color Match">Custom Architectural Paint Color Match</option>
+              <option value="Custom Architectural Paint Color Match" data-finish-type="paint">Custom Paint / Coating Color Match</option>
+              <option value="Natural Wood Tone" data-finish-type="stain">Natural Wood Tone</option>
+              <option value="Custom Stain Color" data-finish-type="stain">Custom Stain Color</option>
             </select>
           </div>
 
@@ -184,6 +182,7 @@ import { brand, flakePalettes } from '../data/siteData';
               id="projectDetails"
               name="projectDetails"
               rows="3"
+              maxlength="5000"
               class="field-input field-textarea"
               aria-describedby="details-hint"
             ></textarea>
@@ -199,6 +198,8 @@ import { brand, flakePalettes } from '../data/siteData';
             <span>Request My Free Estimate</span>
             <span aria-hidden="true">&rarr;</span>
           </button>
+
+          <p class="field-hint">Prefer to talk? <a href={brand.phoneHref}>Call {brand.phoneDisplay}</a> or <a href="sms:+12094855103" id="quote-text-link">text your project details</a>.</p>
 
           <div class="form-feedback" id="quote-feedback" role="status" aria-live="polite" hidden></div>
         </form>
@@ -323,8 +324,13 @@ import { brand, flakePalettes } from '../data/siteData';
   }
 
   .field-group {
+    min-width: 0;
     display: flex;
     flex-direction: column;
+  }
+
+  .field-group[hidden] {
+    display: none;
   }
 
   .field-label {
@@ -347,6 +353,7 @@ import { brand, flakePalettes } from '../data/siteData';
   }
 
   .field-input {
+    min-width: 0;
     width: 100%;
     padding: 0.72rem 0.9rem;
     background-color: var(--bg-light);
@@ -419,6 +426,7 @@ import { brand, flakePalettes } from '../data/siteData';
   }
 
   .form-feedback {
+    overflow-wrap: anywhere;
     padding: 0.9rem 1.1rem;
     font-size: 0.92rem;
     line-height: 1.5;
@@ -451,104 +459,149 @@ import { brand, flakePalettes } from '../data/siteData';
 </style>
 
 <script>
+  import { getQuoteService, isValidPhone } from '../data/quoteOptions';
+
   const form = document.querySelector<HTMLFormElement>('#aac-quote-form');
   const feedback = document.querySelector<HTMLElement>('#quote-feedback');
   const submitBtn = document.querySelector<HTMLButtonElement>('#quote-submit-btn');
+  const textLink = document.querySelector<HTMLAnchorElement>('#quote-text-link');
 
   if (form) {
     const inputs = form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>('.field-input');
-    const prevValues = new WeakMap<Element, string>();
+    const serviceSelect = form.querySelector<HTMLSelectElement>('#serviceType')!;
+    const propertySelect = form.querySelector<HTMLSelectElement>('#propertyScope')!;
+    const finishSelect = form.querySelector<HTMLSelectElement>('#preferredFinish')!;
+    const finishField = form.querySelector<HTMLElement>('#finish-field')!;
+    const phone = form.querySelector<HTMLInputElement>('#phone')!;
+    const finishOptions = Array.from(finishSelect.options).map((option) => option.cloneNode(true) as HTMLOptionElement);
+    let submitting = false;
 
+    const syncServiceOptions = () => {
+      const service = getQuoteService(serviceSelect.value);
+      const previousProperty = propertySelect.value;
+      const previousFinish = finishSelect.value;
+      propertySelect.replaceChildren(new Option('Not sure yet — discuss with estimator', ''));
+      service?.propertyTypes.forEach((property) => propertySelect.add(new Option(property, property)));
+      if (service?.propertyTypes.includes(previousProperty)) propertySelect.value = previousProperty;
+      finishSelect.replaceChildren(...finishOptions
+        .filter((option) => !option.value || option.dataset.finishType === service?.finishType)
+        .map((option) => option.cloneNode(true)));
+      if (Array.from(finishSelect.options).some((option) => option.value === previousFinish)) finishSelect.value = previousFinish;
+      finishField.hidden = service?.finishType === 'none';
+      finishSelect.disabled = finishField.hidden;
+      if (finishField.hidden) finishSelect.value = '';
+    };
+    syncServiceOptions();
+    const updateTextLink = () => {
+      if (!textLink) return;
+      const values = new FormData(form);
+      const details = [
+        "Hi AAC Painters, I'd like an estimate.",
+        `Name: ${values.get('name') || ''}`,
+        `Phone: ${values.get('phone') || ''}`,
+        `Email: ${values.get('email') || 'Not specified'}`,
+        `City: ${values.get('city') || ''}`,
+        `Service: ${values.get('services') || ''}`,
+        `Property: ${values.get('propertyType') || 'Not specified'}`,
+        `Finish: ${values.get('selectedFinish') || (finishField.hidden ? 'Not applicable' : 'Not specified')}`,
+        `Details: ${values.get('projectDetails') || ''}`,
+      ].join('\n');
+      textLink.href = `sms:+12094855103?&body=${encodeURIComponent(details)}`;
+    };
+    textLink?.addEventListener('click', updateTextLink);
+    form.addEventListener('input', updateTextLink);
+    form.addEventListener('change', updateTextLink);
+    serviceSelect.addEventListener('change', syncServiceOptions);
+    document.addEventListener('aac:finish-selected', ((event: CustomEvent<{ finish: string; category: string }>) => {
+      serviceSelect.value = event.detail.category === 'Exterior Architectural'
+        ? 'Commercial Painting & Stucco Restoration'
+        : event.detail.category === 'Auto Bay & High-Gloss'
+          ? 'Metallic & Solid-Color Epoxy Floor' : 'Full-Broadcast Flake Epoxy Floor';
+      syncServiceOptions();
+      if (Array.from(finishSelect.options).some((option) => option.value === event.detail.finish)) {
+        finishSelect.value = event.detail.finish;
+      }
+    }) as EventListener);
+
+    const validate = (input: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) => {
+      if (input === phone) phone.setCustomValidity(isValidPhone(phone.value) ? '' : 'Enter a valid 10-digit phone number.');
+      if (input.id === 'fullName' || input.id === 'city') {
+        input.setCustomValidity(input.value.trim().length >= 2 ? '' : 'Please enter at least two characters.');
+      }
+      if (input.classList.contains('touched')) input.setAttribute('aria-invalid', String(!input.validity.valid));
+    };
     inputs.forEach((input) => {
-      input.addEventListener('focus', () => {
-        if (!prevValues.has(input)) {
-          prevValues.set(input, input.value);
-        }
-      });
-
       input.addEventListener('blur', () => {
-        if (prevValues.get(input) !== input.value) {
-          input.classList.add('touched');
-        }
-        if (input.classList.contains('touched')) {
-          input.setAttribute('aria-invalid', String(!input.validity.valid));
-        }
+        if (input.value) input.classList.add('touched');
+        validate(input);
       });
-
-      input.addEventListener('input', () => {
-        if (input.classList.contains('touched')) {
-          input.setAttribute('aria-invalid', String(!input.validity.valid));
-        }
-      });
+      input.addEventListener('input', () => validate(input));
     });
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (submitting) return;
       let firstInvalid: HTMLElement | null = null;
       inputs.forEach((input) => {
+        if (input.disabled) return;
         input.classList.add('touched');
-        const isValid = input.validity.valid;
-        input.setAttribute('aria-invalid', String(!isValid));
-        if (!isValid && !firstInvalid) {
-          firstInvalid = input;
-        }
+        validate(input);
+        if (!input.validity.valid && !firstInvalid) firstInvalid = input;
       });
-
       if (firstInvalid) {
         (firstInvalid as HTMLElement).focus();
         return;
       }
 
+      submitting = true;
       if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Sending Estimate Request...';
       }
-
       if (feedback) {
         feedback.hidden = true;
         feedback.className = 'form-feedback';
       }
-
+      const submittedPayload = JSON.stringify(Object.fromEntries(new FormData(form).entries()));
       try {
-        const formData = new FormData(form);
-        const payload = Object.fromEntries(formData.entries());
-
         const response = await fetch('/api/quote', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
-          },
-          body: JSON.stringify(payload)
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: submittedPayload
         });
-
         const result = await response.json();
-
         if (response.ok && result.ok) {
           if (feedback) {
             feedback.hidden = false;
             feedback.classList.add('is-success');
-            feedback.innerHTML = `<strong>Estimate Request Received (Ref #${result.referenceId}):</strong> ${result.message}`;
+            feedback.textContent = `Estimate request sent (Ref ${result.quoteId}). ${result.message}`;
           }
-          form.reset();
+          if (JSON.stringify(Object.fromEntries(new FormData(form).entries())) === submittedPayload) {
+            form.reset();
+            syncServiceOptions();
+          } else if (feedback) {
+            feedback.textContent += ' Your newer edits are still in the form and have not been sent.';
+          }
+          if (textLink) textLink.href = 'sms:+12094855103';
           inputs.forEach((input) => {
             input.classList.remove('touched');
             input.removeAttribute('aria-invalid');
+            input.setCustomValidity('');
           });
         } else {
-          throw new Error(result.error || 'Could not submit your estimate request. Please call (209) 485-5103.');
+          if (textLink && typeof result.smsLink === 'string' && result.smsLink.startsWith('sms:+12094855103?')) {
+            textLink.href = result.smsLink;
+          }
+          throw new Error(result.error || 'Could not submit your request. Please call (209) 485-5103.');
         }
-      } catch (err) {
+      } catch (error) {
         if (feedback) {
           feedback.hidden = false;
           feedback.classList.add('is-error');
-          feedback.textContent =
-            err instanceof Error
-              ? err.message
-              : 'Network error while submitting. Please call Alex directly at (209) 485-5103.';
+          feedback.textContent = error instanceof Error ? error.message : 'Could not confirm delivery. Please call or text (209) 485-5103.';
         }
       } finally {
+        submitting = false;
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerHTML = '<span>Request My Free Estimate</span> <span aria-hidden="true">&rarr;</span>';

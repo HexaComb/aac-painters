@@ -38,5 +38,21 @@ This project is pre-configured with both [`wrangler.jsonc`](./wrangler.jsonc) an
    - `CLOUDFLARE_ACCOUNT_ID` (Found on your Cloudflare Workers overview sidebar)
 3. Pushing to `main` triggers `.github/workflows/deploy.yml` to build and publish to Cloudflare Workers.
 
-### Optional Webhook Forwarding for Quote Leads
-To forward `/api/quote` form submissions to an external CRM, Slack channel, Zapier/Make webhook, or email service, add a `QUOTE_WEBHOOK_URL` environment variable in your Cloudflare Worker settings.
+### Quote delivery configuration (required for online submissions)
+Set `QUOTE_WEBHOOK_URL` in the Cloudflare Worker environment to an approved CRM or email-service webhook that accepts a JSON POST. Keep the endpoint private; do not commit it. Configure preview and production environments separately as appropriate.
+
+The route acknowledges a request only after the destination returns a successful HTTP status. An unconfigured destination returns 503; a failed or timed-out delivery returns 502. In either case, the form retains the entered details and offers the existing call/text contact, including a prefilled text message. A timeout does not prove the destination failed to receive the request; avoid automatic retries that could duplicate leads.
+
+Mocked tests verify the application contract, not production delivery. Before relying on online leads, the owner should verify the configured destination and receipt with an authorized test. No destination or credentials are provisioned by this change.
+
+### Validation
+
+```bash
+npm run check
+npm test                 # API tests with mocked delivery; no real leads
+npm run build
+npx playwright install chromium
+npm run test:browser     # desktop/mobile browser flows, mocked API delivery
+```
+
+`npm run validate` runs all four checks. Browser tests can use an existing Chromium binary by setting `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`. Node 22.6+ is required for the TypeScript API tests (CI uses Node 22).

@@ -1,0 +1,76 @@
+---
+import { SERVICES_LIST } from '../data/siteData';
+
+interface Props {
+  serviceId: string;
+}
+
+const { serviceId } = Astro.props;
+const service = SERVICES_LIST.find((item) => item.id === serviceId);
+if (!service) throw new Error(`Unknown service: ${serviceId}`);
+---
+
+<section class="service-overview" aria-labelledby={`${service.id}-scope-heading`}>
+  <div class="container service-overview-grid">
+    <div>
+      <div class="section-kicker">
+        <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="kicker-text">{service.badge}</span>
+      </div>
+      <h2 id={`${service.id}-scope-heading`}>{service.title}</h2>
+      <p>{service.shortDesc}</p>
+    </div>
+    <ul class="service-features" aria-label="Available services">
+      {service.features.map((feature) => <li>{feature}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .service-overview {
+    padding: 4rem 1.5rem;
+    background: var(--bg-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .service-overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  h2 {
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: var(--text-dark-secondary);
+    line-height: 1.65;
+  }
+
+  .service-features {
+    padding-left: 1.25rem;
+    color: var(--text-dark);
+    list-style: disc;
+  }
+
+  .service-features li {
+    padding: 0.65rem 0 0.65rem 0.25rem;
+    border-bottom: 1px solid var(--border-light);
+    line-height: 1.5;
+  }
+
+  .service-features li::marker {
+    color: var(--aac-blue-deep);
+  }
+
+  @media (max-width: 760px) {
+    .service-overview-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>

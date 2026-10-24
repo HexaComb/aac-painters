@@ -1,27 +1,24 @@
 ---
 import { videoShowcase } from '../data/siteData';
 
-const clientReviews = [
+const projectPlanning = [
   {
-    quote:
-      'Professional, on time, and the quality of work was outstanding. They ground our stained garage slab, repaired every crack, and our full-flake epoxy floor looks brand new.',
-    author: 'Sarah',
-    initial: 'M.',
-    scope: 'Residential Garage Epoxy & Interior Repaint'
+    title: 'Define Your Scope',
+    description:
+      'Tell us which rooms, surfaces or outdoor areas you want to update, along with any repairs or existing finish concerns.',
+    detail: 'Painting, staining, cleaning and floor coatings'
   },
   {
-    quote:
-      'They made the whole process simple and stress-free. Alex and his crew prepped and coated our multi-bay shop on schedule without disrupting our mechanics. I highly recommend them!',
-    author: 'James',
-    initial: 'T.',
-    scope: 'Commercial Auto Shop Floor & Bay Walls'
+    title: 'Plan Property Access',
+    description:
+      'Share the details that affect access, such as parked vehicles, stored items, business hours or occupied rooms.',
+    detail: 'Homes, businesses and shared properties'
   },
   {
-    quote:
-      'Great communication, clean crew, and amazing results on our exterior stucco and trim. Zero overspray on our windows or walkways. We will definitely use AAC Painters again!',
-    author: 'Melissa',
-    initial: 'R.',
-    scope: 'Full Exterior Stucco & Trim Transformation'
+    title: 'Discuss Finish and Timing',
+    description:
+      'Bring your color ideas and target dates. Ask which preparation steps, materials and drying or cure times belong in your estimate.',
+    detail: 'A scope tailored to your project'
   }
 ];
 ---
@@ -33,10 +30,10 @@ const clientReviews = [
       <div>
         <div class="section-kicker">
           <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-          <span class="kicker-text kicker-text-light">What Our Clients Say &amp; Live Jobsite Proof</span>
+          <span class="kicker-text kicker-text-light">Plan Your Project &amp; Explore Site Videos</span>
         </div>
         <h2 id="reviews-heading" class="reviews-main-title">
-          Real People. <span class="accent-blue">Real Results.</span>
+          A Clearer Plan. <span class="accent-blue">A Closer Look.</span>
         </h2>
       </div>
 
@@ -46,22 +43,13 @@ const clientReviews = [
       </a>
     </div>
 
-    <!-- 3 Client Testimonial Cards (Exact Reference Mockup Design) -->
+    <!-- Project-planning guidance, not customer testimonials -->
     <div class="reviews-grid">
-      {clientReviews.map((review) => (
+      {projectPlanning.map((item) => (
         <article class="review-card">
-          <div class="review-stars" aria-label="5 out of 5 stars">
-            <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-          </div>
-          <blockquote class="review-quote">
-            &ldquo;{review.quote}&rdquo;
-          </blockquote>
-          <footer class="review-footer">
-            <strong class="review-author">
-              &mdash; {review.author} <span class="accent-blue">{review.initial}</span>
-            </strong>
-            <span class="review-scope">{review.scope}</span>
-          </footer>
+          <h3 class="review-title">{item.title}</h3>
+          <p class="review-description">{item.description}</p>
+          <p class="review-scope">{item.detail}</p>
         </article>
       ))}
     </div>
@@ -69,9 +57,9 @@ const clientReviews = [
     <!-- Live Unfiltered Jobsite Video Reels: High-Contrast DURING (Dark/Amber) vs. AFTER (Light/Green) -->
     <div class="reels-subband">
       <div class="reels-subheader">
-        <h3 class="reels-subtitle">Unfiltered Jobsite Video: In Progress vs. Completed Result</h3>
+        <h3 class="reels-subtitle">Exterior Video: In Progress and Finished Views</h3>
         <p class="reels-subcopy">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+          Watch the exterior clips to see details of the brick storefront during work and after the protective coverings are removed.
         </p>
       </div>
 
@@ -142,7 +130,7 @@ const clientReviews = [
     color: var(--text-light);
   }
 
-  /* 3-Column Dark Slate Review Cards from Reference Mockup */
+  /* 3-Column Project Planning Cards */
   .reviews-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -159,32 +147,17 @@ const clientReviews = [
     gap: 1rem;
   }
 
-  .review-stars {
-    color: var(--aac-yellow);
-    font-size: 1.15rem;
-    letter-spacing: 0.12em;
+  .review-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--text-light);
   }
 
-  .review-quote {
+  .review-description {
     font-size: 0.98rem;
     line-height: 1.65;
     color: var(--text-light-secondary);
-    font-style: italic;
     flex: 1;
-  }
-
-  .review-footer {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    padding: 0.75rem 0 0 0;
-    border-top: 1px solid var(--border-dark);
-  }
-
-  .review-author {
-    font-family: var(--font-display);
-    font-size: 0.95rem;
-    color: var(--text-light);
   }
 
   .review-scope {

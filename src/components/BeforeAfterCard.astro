@@ -131,7 +131,7 @@ const { item, priority = false, layout = 'card' } = Astro.props;
   <div class="ba-content">
     <div class="section-kicker">
       <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-      <span class="kicker-text">{item.category} &bull; {item.duration}</span>
+      <span class="kicker-text">{item.category}{item.duration && ` • ${item.duration}`}</span>
     </div>
 
     <h3 class="ba-title">{item.title}</h3>

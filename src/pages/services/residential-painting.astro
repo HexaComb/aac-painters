@@ -2,21 +2,24 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BeforeAfterCard from '../../components/BeforeAfterCard.astro';
 import QuoteBuilderForm from '../../components/QuoteBuilderForm.astro';
+import ServiceOverview from '../../components/ServiceOverview.astro';
 import { brand, beforeAfterGallery, interiorCraftGallery } from '../../data/siteData';
 
-const residentialPairs = beforeAfterGallery.slice(0, 4);
+const residentialPairs = beforeAfterGallery.filter((item) => item.category === 'Residential');
+const residentialImages = new Set(residentialPairs.map((item) => item.afterImage));
+const residentialCraftGallery = interiorCraftGallery.filter((item) => residentialImages.has(item.image));
 ---
 
 <BaseLayout
   title="Residential Interior & Exterior Painting | AAC Painters Inc. (CSLB #1039849)"
-  description="Quality Paint. Lasting Results. Residential interior, exterior, trim, and garage epoxy painting in California's Central Valley. Call Alex Delgadillo at (209) 485-5103."
+  description="Residential painting, cabinets, stairwells, popcorn ceiling removal, pressure washing, and fence and deck staining in California's Central Valley. Call (209) 485-5103."
   ogImage="/images/projects/residential-garage-flake-epoxy-after.png"
 >
   <section class="subpage-hero">
     <div class="subpage-hero-bg">
       <img
         src="/images/projects/residential-garage-flake-epoxy-after.png"
-        alt="Completed residential garage and home exterior transformation by AAC Painters Inc."
+        alt="Residential garage with a decorative flake floor finish"
         width="1600"
         height="900"
         loading="eager"
@@ -39,7 +42,7 @@ const residentialPairs = beforeAfterGallery.slice(0, 4);
       </h1>
 
       <p class="subpage-lead">
-        From single rooms and custom wainscoting to full exterior stucco transformations and showroom garage floors, we treat your home like our own.
+        Plan interior and exterior painting, cabinet and trim updates, ceiling re-texturing, pressure washing, or wood staining for your home.
       </p>
 
       <div class="subpage-actions">
@@ -58,14 +61,16 @@ const residentialPairs = beforeAfterGallery.slice(0, 4);
     </div>
   </section>
 
+  <ServiceOverview serviceId="residential-painting" />
+
   <!-- Featured Residential Before & After Split Rows -->
   <section class="res-ba-section">
     <div class="container">
       <div class="section-kicker">
         <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="kicker-text">Residential Before &amp; After Proof</span>
+        <span class="kicker-text">Residential Before &amp; After</span>
       </div>
-      <h2 class="section-heading">Curb Appeal &amp; Home Transformations</h2>
+      <h2 class="section-heading">Garage Floors &amp; Wood Fences</h2>
 
       <div class="split-list">
         {residentialPairs.map((pair) => (
@@ -75,17 +80,17 @@ const residentialPairs = beforeAfterGallery.slice(0, 4);
     </div>
   </section>
 
-  <!-- Interior Craftsmanship Photo Gallery -->
+  <!-- Residential Photo Gallery -->
   <section class="interior-gallery-section">
     <div class="container">
       <div class="section-kicker">
         <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="kicker-text">Interior Craftsmanship</span>
+        <span class="kicker-text">Residential Finish Details</span>
       </div>
-      <h2 class="section-heading">Crisp Cut-Ins, Wainscoting &amp; Designer Finishes</h2>
+      <h2 class="section-heading">A Closer Look at Residential Finishes</h2>
 
       <div class="interior-grid">
-        {interiorCraftGallery.map((item) => (
+        {residentialCraftGallery.map((item) => (
           <figure class="interior-figure">
             <img src={item.image} alt={item.alt} width="700" height="520" loading="lazy" decoding="async" />
             <figcaption>
@@ -187,7 +192,7 @@ const residentialPairs = beforeAfterGallery.slice(0, 4);
 
   .interior-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.75rem;
   }
 
