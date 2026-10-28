@@ -16,6 +16,8 @@ export const quoteServices: QuoteService[] = [
   { value: 'Commercial Painting & Stucco Restoration', label: 'Commercial Building / Facade Painting', finishType: 'paint', propertyTypes: ['Commercial — Office / Storefront', 'Commercial — Warehouse', 'Commercial — HOA / Hotel / Apartments', 'Commercial — Other'] },
   { value: 'Metallic & Solid-Color Epoxy Floor', label: 'Metallic & Solid-Color Epoxy Floor', finishType: 'floor', propertyTypes: floorProperties },
   { value: 'Cabinets, Trim & Interior Repaint', label: 'Cabinets, Trim & Interior Repaint', finishType: 'paint', propertyTypes: ['Residential — Home Interior', 'Commercial — Interior', 'Other'] },
+  { value: 'Stairwell & Railing Painting', label: 'Stairwell & Railing Painting', finishType: 'paint', propertyTypes: ['Residential — Home Interior', 'Commercial — Interior', 'Other'] },
+  { value: 'Grind & Seal Concrete', label: 'Grind & Seal Concrete', finishType: 'none', propertyTypes: floorProperties },
   { value: 'Popcorn Ceiling Removal & Re-Texturing', label: 'Popcorn Ceiling Removal & Re-Texturing', finishType: 'none', propertyTypes: ['Residential — Home', 'Residential — Apartment / Condo', 'Commercial — Interior', 'Other'] },
   { value: 'Pressure Washing', label: 'Pressure Washing', finishType: 'none', propertyTypes: ['Residential — Home Exterior', 'Commercial — Building Exterior', 'Outdoor — Driveway / Patio / Walkway', 'Outdoor — Fence / Deck', 'Other'] },
   { value: 'Pool Deck & Patio Coatings', label: 'Pool Deck & Patio Coatings', finishType: 'paint', propertyTypes: ['Residential — Pool Deck / Patio', 'Commercial — Pool Deck / Patio', 'HOA / Apartments — Pool Deck / Patio', 'Other'] },

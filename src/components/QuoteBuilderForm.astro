@@ -43,11 +43,11 @@ import { quoteServices } from '../data/quoteOptions';
           </div>
           <div class="cred-item">
             <dt>California License</dt>
-            <dd>{brand.license} &bull; {brand.insurance}</dd>
+            <dd>{brand.license}</dd>
           </div>
           <div class="cred-item">
             <dt>Project Scopes</dt>
-            <dd>Residential, Commercial &amp; Industrial Epoxy</dd>
+            <dd>Painting, floor coatings, staining &amp; surface work</dd>
           </div>
         </dl>
       </div>
@@ -144,6 +144,7 @@ import { quoteServices } from '../data/quoteOptions';
               </label>
               <p class="field-hint" id="service-hint">Choose the main service for this request</p>
               <select id="serviceType" name="services" class="field-input" required aria-describedby="service-hint">
+                <option value="" selected disabled>Choose a service</option>
                 {quoteServices.map((service) => (
                   <option value={service.value}>{service.label}</option>
                 ))}
@@ -155,15 +156,14 @@ import { quoteServices } from '../data/quoteOptions';
               <p class="field-hint" id="scope-hint">Optional — choose the closest match</p>
               <select id="propertyScope" name="propertyType" class="field-input" aria-describedby="scope-hint">
                 <option value="">Not sure yet — discuss with estimator</option>
-                {quoteServices[0].propertyTypes.map((property) => <option value={property}>{property}</option>)}
               </select>
             </div>
           </div>
 
           <!-- Optional and service-specific; also synced from the Coating Lab. -->
-          <div class="field-group" id="finish-field">
+          <div class="field-group" id="finish-field" hidden>
             <label for="preferredFinish" class="field-label">Finish or Color Direction (Optional)</label>
-            <select id="preferredFinish" name="selectedFinish" class="field-input">
+            <select id="preferredFinish" name="selectedFinish" class="field-input" disabled>
               <option value="">Undecided — discuss options with estimator</option>
               {flakePalettes.map((p) => (
                 <option value={p.name} data-finish-type={p.category === 'Exterior Architectural' ? 'paint' : 'floor'} data-commercial-only={p.category === 'Exterior Architectural' ? 'true' : undefined}>{p.name} ({p.category})</option>
@@ -488,7 +488,7 @@ import { quoteServices } from '../data/quoteOptions';
           && (!option.dataset.commercialOnly || serviceSelect.value === 'Commercial Painting & Stucco Restoration')))
         .map((option) => option.cloneNode(true)));
       if (Array.from(finishSelect.options).some((option) => option.value === previousFinish)) finishSelect.value = previousFinish;
-      finishField.hidden = service?.finishType === 'none';
+      finishField.hidden = !service || service.finishType === 'none';
       finishSelect.disabled = finishField.hidden;
       if (finishField.hidden) finishSelect.value = '';
     };

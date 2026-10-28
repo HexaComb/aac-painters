@@ -69,7 +69,7 @@ export const BUSINESS_INFO = {
   secondarySlogan: 'Transform Your Concrete Into a Masterpiece',
   president: 'Alex Delgadillo',
   license: '1039849',
-  licenseDisplay: 'CSLB Lic #1039849 • Fully Insured',
+  licenseDisplay: 'CSLB Lic #1039849',
   phone: '(209) 485-5103',
   phoneHref: 'tel:+12094855103',
   smsHref: 'sms:+12094855103?&body=Hi%20Alex%2C%20I%27d%20like%20a%20free%20quote%20from%20AAC%20Painters%20Inc.!',
@@ -530,34 +530,44 @@ export const SERVICES_LIST = [
 
 export const FAQ_ITEMS = [
   {
-    question: 'How is concrete prepared for a floor coating?',
+    question: 'What should I include when requesting a quote?',
     answer:
-      'Surface preparation should match the condition of the concrete and the requirements of the selected coating. During an estimate, ask whether grinding, cleaning, repairs or other preparation is needed and how dust will be managed.',
+      'Share your city, the service you need, the approximate size or number of areas, current surface condition, and your preferred timing. Photos can help show existing paint, coatings or damage. Use the form below or call or text (209) 485-5103.',
   },
   {
-    question: 'What is the difference between Epoxy and a Polyaspartic topcoat?',
+    question: 'What affects the price and schedule?',
     answer:
-      'Epoxy and polyaspartic are different coating options and may be used in different layers of a floor system. Ask which products are proposed for your slab, how they suit the intended use, and what their care and cure-time requirements are.',
+      'The work area, surface condition, existing paint or coatings, needed preparation, access and finish choice can all affect a proposal. Share any deadline or access limits early, then confirm the scope and schedule in your quote.',
   },
   {
-    question: 'Do you handle both residential homes and large commercial properties?',
+    question: 'How should I plan for room, cabinet, stairwell or railing painting?',
     answer:
-      'AAC Painters offers residential and commercial painting and floor coating services. Share the property type, location and approximate size so the scope and scheduling can be discussed.',
+      'List the rooms and surfaces, note existing finishes or damage, and point out areas that are hard to reach. Before work begins, confirm who will move items, remove hardware, protect nearby surfaces and handle cleanup.',
   },
   {
-    question: 'Can you paint our commercial building without shutting down our business or drive-thru?',
+    question: 'What should I share for exterior painting, staining or pressure washing?',
     answer:
-      'Access and scheduling depend on the property and work involved. Discuss operating hours, entrances, pedestrian routes and any areas that must remain available when planning the work. Any temporary closures should be agreed as part of the scope.',
+      'Describe the siding, fence, deck or other surface, its current paint or stain, and any peeling, weathering or access limits. For an occupied business, mention entrances and operating hours. Confirm cleaning, drying and protection of nearby areas in the proposed scope.',
   },
   {
-    question: 'What areas in the 209 & Central Valley do you serve?',
+    question: 'What should I know about popcorn removal and new texture?',
     answer:
-      'Based in the 209 area code, Alex Delgadillo and the AAC Painters Inc. crew serve Merced, Modesto, Turlock, Atwater, Stockton, Manteca, Tracy, Los Banos, Ceres, Oakdale, Livingston, Chowchilla, and surrounding Central Valley communities.',
+      'AAC Painters lists popcorn removal and texture work. Share the approximate ceiling area and any known leaks, damage or prior coatings. Ask how material assessment, containment, the new texture and cleanup will be handled before scheduling.',
   },
   {
-    question: 'How fast can I get an accurate quote?',
+    question: 'How do I choose between epoxy flooring and grind-and-seal?',
     answer:
-      'Use the quote form on this page or call/text (209) 485-5103. Include your city, the service you need and a few project details so the next steps and estimate availability can be discussed.',
+      'Epoxy adds a coating; grind-and-seal grinds the concrete surface and applies a sealer. The slab condition, desired appearance and intended use matter. Ask what preparation, repairs, finish and care each option would require for your space.',
+  },
+  {
+    question: 'When can I use the room, deck or garage again?',
+    answer:
+      'Drying and cure time vary by material, weather and site conditions. Preparation may also limit access. Ask for a project-specific return-to-use plan before work begins rather than relying on a general time estimate.',
+  },
+  {
+    question: 'Where does AAC Painters work, and how do I get started?',
+    answer:
+      'AAC Painters lists Central Valley and Bay Area service, including Modesto, Turlock, Patterson and surrounding communities. Share your city and service through the quote form or call or text (209) 485-5103 to discuss the next step.',
   },
 ];
 
@@ -584,7 +594,6 @@ export const brand = {
   phoneHref: BUSINESS_INFO.phoneHref,
   phoneE164: '+12094855103',
   license: 'CSLB #1039849',
-  insurance: 'Fully Insured & Bonded',
   domain: BUSINESS_INFO.website,
   instagramUrl: BUSINESS_INFO.instagramUrl,
   facebookSearchUrl: BUSINESS_INFO.facebookUrl
