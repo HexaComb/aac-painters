@@ -69,7 +69,7 @@ export const BUSINESS_INFO = {
   secondarySlogan: 'Transform Your Concrete Into a Masterpiece',
   president: 'Alex Delgadillo',
   license: '1039849',
-  licenseDisplay: 'CSLB Lic #1039849 • Fully Insured',
+  licenseDisplay: 'CSLB Lic #1039849',
   phone: '(209) 485-5103',
   phoneHref: 'tel:+12094855103',
   smsHref: 'sms:+12094855103?&body=Hi%20Alex%2C%20I%27d%20like%20a%20free%20quote%20from%20AAC%20Painters%20Inc.!',
@@ -584,7 +584,6 @@ export const brand = {
   phoneHref: BUSINESS_INFO.phoneHref,
   phoneE164: '+12094855103',
   license: 'CSLB #1039849',
-  insurance: 'Fully Insured & Bonded',
   domain: BUSINESS_INFO.website,
   instagramUrl: BUSINESS_INFO.instagramUrl,
   facebookSearchUrl: BUSINESS_INFO.facebookUrl

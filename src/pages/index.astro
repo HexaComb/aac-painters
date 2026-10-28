@@ -215,89 +215,21 @@ const faqSchema = {
   <!-- 2. "OUR SERVICES" LIGHT SPLIT SECTION (Exact Reference Mockup Layout + Real Interior/Exterior/Epoxy Photos) -->
   <section class="services-overview-section" id="our-services" aria-labelledby="services-heading">
     <div class="container">
-      <div class="services-split-grid">
-        <!-- Left Column: Kicker + Heading + 3 Vertical-Divider Icon Columns -->
-        <div class="services-left-col">
-          <div class="section-kicker">
-            <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-            <span class="kicker-text">Our Services</span>
-          </div>
-
-          <h2 id="services-heading" class="services-main-title">
-            Interior, Exterior &amp; Epoxy Coating for Your Property
-          </h2>
-
-          <p class="services-lead">
-            From single rooms, cabinet painting, and popcorn ceiling removal to full exterior stucco restorations, pressure washing, and diamond-ground epoxy floors, we deliver high-quality results that last.
-          </p>
-
-          <!-- 3 Icon Columns with Vertical Dividers (Matching Reference Mockup) -->
-          <div class="services-icon-columns">
-            <a
-              href="/services/residential-painting"
-              class="service-icon-col"
-              data-service-preview="/images/projects/wood-fence-stained-after.png"
-              data-service-caption="Residential Interior, Exterior, Cabinets, Popcorn Removal & Wood Staining"
-            >
-              <svg class="service-line-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M3 10.5L12 3l9 7.5V21a1 1 0 01-1 1H4a1 1 0 01-1-1V10.5z" />
-                <path d="M9 21V13h6v8" />
-              </svg>
-              <h3 class="service-col-name">Residential &amp; Trim</h3>
-              <span class="service-col-arrow" aria-hidden="true">&rarr;</span>
-            </a>
-
-            <a
-              href="/services/commercial-painting"
-              class="service-icon-col"
-              data-service-preview="/images/projects/mcauley-building-after.png"
-              data-service-caption="Commercial Exterior Stucco, HOAs, Hotels, Franchises & Multi-Bay Doors"
-            >
-              <svg class="service-line-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M3 21h18" />
-                <path d="M5 21V7l7-4 7 4v14" />
-                <path d="M9 10h6M9 14h6" />
-              </svg>
-              <h3 class="service-col-name">Exterior &amp; Commercial</h3>
-              <span class="service-col-arrow" aria-hidden="true">&rarr;</span>
-            </a>
-
-            <a
-              href="/services/epoxy-flooring"
-              class="service-icon-col"
-              data-service-preview="/images/projects/residential-garage-flake-epoxy-after.png"
-              data-service-caption="Full-Broadcast Flake & Liquid-Glass Mirror Epoxy Floors for Garages & Pool Decks"
-            >
-              <svg class="service-line-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                <polyline points="2 17 12 22 22 17" />
-                <polyline points="2 12 12 17 22 12" />
-              </svg>
-              <h3 class="service-col-name">Epoxy Flooring</h3>
-              <span class="service-col-arrow" aria-hidden="true">&rarr;</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Right Column: Large Bright Architectural Showcase Photo (Hovering/Focusing Service Columns Swaps Photo) -->
-        <div class="services-right-col">
-          <figure class="services-showcase-frame">
-            <img
-              src="/images/projects/residential-garage-flake-epoxy-after.png"
-              alt="Showroom decorative flake epoxy garage floor and crisp painted walls by AAC Painters Inc."
-              width="900"
-              height="640"
-              loading="lazy"
-              decoding="async"
-              class="services-showcase-img"
-              id="services-preview-img"
-            />
-            <figcaption class="services-showcase-caption" id="services-preview-caption">
-              Full-Broadcast Flake &amp; Liquid-Glass Epoxy Floors + Architectural Painting
-            </figcaption>
-          </figure>
-        </div>
+      <div class="section-kicker">
+        <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="kicker-text">Our Services</span>
       </div>
+      <h2 id="services-heading" class="services-main-title">Painting, flooring &amp; surface services</h2>
+      <p class="services-lead">Explore the work AAC Painters offers. Select a service to see more.</p>
+      <ul class="services-list">
+        <li><a href="/services/residential-painting">Interior &amp; exterior painting <span aria-hidden="true">&rarr;</span></a></li>
+        <li><a href="/services/residential-painting">Cabinet, stairwell &amp; railing painting <span aria-hidden="true">&rarr;</span></a></li>
+        <li><a href="/services/residential-painting">Fence &amp; deck staining <span aria-hidden="true">&rarr;</span></a></li>
+        <li><a href="/services/epoxy-flooring">Epoxy flooring <span aria-hidden="true">&rarr;</span></a></li>
+        <li><a href="/services/epoxy-flooring">Grind &amp; seal concrete <span aria-hidden="true">&rarr;</span></a></li>
+        <li><a href="/services/residential-painting">Popcorn removal &amp; texture <span aria-hidden="true">&rarr;</span></a></li>
+        <li><a href="/services/residential-painting">Pressure washing <span aria-hidden="true">&rarr;</span></a></li>
+      </ul>
     </div>
   </section>
 
@@ -1229,105 +1161,63 @@ const faqSchema = {
     border-bottom: 1px solid var(--border-light);
   }
 
-  .services-split-grid {
-    display: grid;
-    grid-template-columns: 6fr 6fr;
-    gap: 3rem;
-    align-items: center;
-  }
-
   .services-main-title {
+    max-width: 780px;
+    margin: 1.25rem 0 0.85rem;
     font-size: clamp(2.1rem, 3.6vw, 3.1rem);
-    line-height: 1.08;
+    line-height: 1.12;
     color: var(--text-dark);
-    margin-bottom: 1.15rem;
   }
 
   .services-lead {
-    font-size: 1.02rem;
+    margin: 0 0 2.5rem;
+    font-size: 1.05rem;
     line-height: 1.65;
     color: var(--text-dark-secondary);
-    margin-bottom: 2.5rem;
   }
 
-  /* 3 Icon Columns with Vertical Dividers from Mockup */
-  .services-icon-columns {
+  .services-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(2rem, 6vw, 6rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .services-list li {
+    min-width: 0;
     border-top: 1px solid var(--border-light-strong);
-    padding: 1.75rem 0 0 0;
   }
 
-  .service-icon-col {
+  .services-list a {
     display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-    padding: 0.5rem 1.25rem;
-    border-right: 1px solid var(--border-light-strong);
-  }
-
-  .service-icon-col:first-child {
-    padding-left: 0;
-  }
-
-  .service-icon-col:last-child {
-    border-right: 0;
-    padding-right: 0;
-  }
-
-  .service-line-icon {
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 5.5rem;
+    padding: 1.2rem 0;
     color: var(--text-dark);
-    transition: color 150ms ease, transform 150ms ease;
-  }
-
-  .service-col-name {
-    font-size: 1.02rem;
-    font-weight: 800;
-    color: var(--text-dark);
-  }
-
-  .service-col-arrow {
-    font-size: 1.1rem;
+    font-size: clamp(1.05rem, 1.5vw, 1.28rem);
     font-weight: 700;
-    color: var(--text-dark-muted);
-    transition: transform 150ms ease, color 150ms ease;
+    line-height: 1.4;
+    text-decoration: none;
   }
 
-  .service-icon-col:hover .service-line-icon,
-  .service-icon-col:hover .service-col-name,
-  .service-icon-col:hover .service-col-arrow {
+  .services-list a span {
+    flex: none;
+    color: var(--aac-blue-deep);
+    transition: transform 150ms ease;
+  }
+
+  .services-list a:hover,
+  .services-list a:focus-visible {
     color: var(--aac-blue-deep);
   }
 
-  .service-icon-col:hover .service-col-arrow {
+  .services-list a:hover span,
+  .services-list a:focus-visible span {
     transform: translateX(4px);
-  }
-
-  .services-showcase-frame {
-    position: relative;
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.1);
-    aspect-ratio: 4 / 3;
-    background: var(--bg-dark);
-  }
-
-  .services-showcase-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .services-showcase-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 0.75rem 1.15rem;
-    background: rgba(14, 20, 27, 0.86);
-    color: var(--text-light);
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
   }
 
   /* ==========================================================================
@@ -1570,7 +1460,6 @@ const faqSchema = {
   }
 
   @media (max-width: 980px) {
-    .services-split-grid,
     .ba-split-row,
     .faq-layout {
       grid-template-columns: 1fr;
@@ -1578,16 +1467,12 @@ const faqSchema = {
   }
 
   @media (max-width: 640px) {
-    .services-icon-columns {
+    .services-list {
       grid-template-columns: 1fr;
-      gap: 1.25rem;
     }
 
-    .service-icon-col,
-    .service-icon-col:not(:first-child) {
-      padding: 0 0 1rem 0;
-      border-right: 0;
-      border-bottom: 1px solid var(--border-light-strong);
+    .services-list a {
+      min-height: 5rem;
     }
   }
 </style>
@@ -1612,22 +1497,6 @@ const faqSchema = {
     });
 
 
-
-    // 2. Services Photo Hover/Focus Preview
-    const serviceCols = document.querySelectorAll<HTMLAnchorElement>('[data-service-preview]');
-    const serviceImg = document.querySelector<HTMLImageElement>('#services-preview-img');
-    const serviceCaption = document.querySelector<HTMLElement>('#services-preview-caption');
-
-    serviceCols.forEach((col) => {
-      const swap = () => {
-        const src = col.dataset.servicePreview;
-        const cap = col.dataset.serviceCaption;
-        if (serviceImg && src) serviceImg.src = src;
-        if (serviceCaption && cap) serviceCaption.textContent = cap;
-      };
-      col.addEventListener('mouseenter', swap);
-      col.addEventListener('focus', swap);
-    });
 
     // 3. Before & After Paintbrush Sliders (Shared Controller)
     initBeforeAfterSliders();

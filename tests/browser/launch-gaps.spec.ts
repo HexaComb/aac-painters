@@ -6,7 +6,54 @@ async function fillContact(page: Page) {
   await page.locator('#phone').fill('(209) 555-0100');
   await page.locator('#city').fill('Modesto');
   await page.locator('#projectDetails').fill('TEST ONLY: driveway cleaning.');
+  await page.locator('#serviceType').selectOption('Pressure Washing');
 }
+
+test('services are an equal, text-only list and route to a neutral estimate choice', async ({ page }) => {
+  const services = [
+    ['Interior & exterior painting', '/services/residential-painting'],
+    ['Cabinet, stairwell & railing painting', '/services/residential-painting'],
+    ['Fence & deck staining', '/services/residential-painting'],
+    ['Epoxy flooring', '/services/epoxy-flooring'],
+    ['Grind & seal concrete', '/services/epoxy-flooring'],
+    ['Popcorn removal & texture', '/services/residential-painting'],
+    ['Pressure washing', '/services/residential-painting'],
+  ] as const;
+  await page.goto('/');
+  const list = page.locator('#our-services .services-list');
+  await expect(list.locator('li')).toHaveCount(services.length);
+  await expect(page.locator('#our-services img, #our-services picture, #our-services svg, #our-services figure')).toHaveCount(0);
+  await expect(page.locator('#serviceType')).toHaveValue('');
+  await expect(page.locator('#finish-field')).toBeHidden();
+  await expect(page.locator('#preferredFinish option')).toHaveCount(1);
+  let unselectedRequests = 0;
+  await page.route('**/api/quote', (route) => { unselectedRequests++; return route.abort(); });
+  await page.locator('#fullName').fill('Test Contact');
+  await page.locator('#phone').fill('2095550100');
+  await page.locator('#city').fill('Modesto');
+  await page.locator('#quote-submit-btn').click();
+  await expect(page.locator('#serviceType')).toHaveAttribute('aria-invalid', 'true');
+  expect(unselectedRequests).toBe(0);
+  for (const [label, path] of services) {
+    const link = list.getByRole('link', { name: label });
+    await expect(link).toHaveAttribute('href', path);
+  }
+  await list.getByRole('link', { name: 'Grind & seal concrete' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/\/services\/epoxy-flooring$/);
+  await expect(page.locator('#serviceType')).toHaveValue('');
+  await expect(page.locator('#serviceType')).toContainText('Grind & Seal Concrete');
+  await page.goBack();
+  await expect(page.locator('#serviceType')).toHaveValue('');
+  await page.goForward();
+  await expect(page.locator('#serviceType')).toHaveValue('');
+  await page.goto('/services/residential-painting');
+  await expect(page.locator('#serviceType')).toHaveValue('');
+  await expect(page.locator('.estimate-credentials')).toContainText('Painting, floor coatings, staining & surface work');
+  await expect(page.locator('.estimate-credentials')).not.toContainText('Fully Insured');
+  await page.locator('#serviceType').selectOption('Stairwell & Railing Painting');
+  await expect(page.locator('#propertyScope')).toContainText('Home Interior');
+});
 
 // Exercise the real route handler with an isolated delivery stub. Never send leads.
 async function fulfillApi(route: Route, deliveryStatus?: number) {
@@ -143,6 +190,7 @@ test('pending duplicate submission is blocked and newer edits survive success', 
 
 test('finish choices stay compatible and stale selections clear when changing services', async ({ page }) => {
   await page.goto('/');
+  await page.locator('#serviceType').selectOption('Full-Broadcast Flake Epoxy Floor');
   await page.locator('#preferredFinish').selectOption({ index: 1 });
   await expect(page.locator('#preferredFinish')).not.toHaveValue('');
   await page.locator('#serviceType').selectOption('Cabinets, Trim & Interior Repaint');
