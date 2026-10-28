@@ -1,6 +1,6 @@
 # AAC Painters Inc. — Astro + Cloudflare Workers Website
 
-Official story-driven, high-SEO website for **AAC Painters Inc.** (*"Coloring Your Dream" — CSLB License #1039849*), featuring interactive Before & After comparison sliders, 4-stage jobsite documentaries, an interactive Flake & Coating System Lab, live field video reels, and a Cloudflare Workers Quote Builder API (`/api/quote`).
+Official story-driven, high-SEO website for **AAC Painters Inc.** (*"Coloring Your Dream" — CSLB License #1039849*), featuring interactive Before & After comparison sliders, 4-stage jobsite documentaries, an interactive Flake & Coating System Lab, and a Cloudflare Workers Quote Builder API (`/api/quote`).
 
 ## Quick Start
 
@@ -20,23 +20,14 @@ npm run deploy
 
 ## Deploying to Cloudflare Workers from GitHub
 
-This project is pre-configured with both [`wrangler.jsonc`](./wrangler.jsonc) and [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml). You can deploy automatically from GitHub in either of two ways:
+This project is configured with [`wrangler.jsonc`](./wrangler.jsonc) and deploys from GitHub through Cloudflare's native Git integration.
 
-### Option A: Cloudflare Dashboard Native Git Integration (Recommended — Zero Secrets Setup)
-1. Push this repository to GitHub.
-2. In the **Cloudflare Dashboard**, go to **Compute (Workers) → Workers & Pages → Create → Import a repository**.
-3. Select your GitHub repository (`aac-painters`).
-4. Set the build configuration:
-   - **Build command:** `npm run build`
-   - **Deploy command:** `npx wrangler deploy`
-5. Every push to `main` (and every Pull Request preview) will automatically build and deploy to Cloudflare Workers.
+In the **Cloudflare Dashboard**, connect the `aac-painters` repository to the Worker and set:
 
-### Option B: GitHub Actions Workflow (Included in `.github/workflows/deploy.yml`)
-1. In your GitHub repository, navigate to **Settings → Secrets and variables → Actions**.
-2. Add two repository secrets:
-   - `CLOUDFLARE_API_TOKEN` (Create in Cloudflare Dashboard → My Profile → API Tokens → *"Edit Cloudflare Workers"* template)
-   - `CLOUDFLARE_ACCOUNT_ID` (Found on your Cloudflare Workers overview sidebar)
-3. Pushing to `main` triggers `.github/workflows/deploy.yml` to build and publish to Cloudflare Workers.
+- **Build command:** `npm run build`
+- **Deploy command:** `npx wrangler deploy`
+
+Every push to `main` builds and deploys through Cloudflare. GitHub Actions does not need a Cloudflare API token for this setup.
 
 ### Quote delivery configuration (required for online submissions)
 Set `QUOTE_WEBHOOK_URL` in the Cloudflare Worker environment to an approved CRM or email-service webhook that accepts a JSON POST. Keep the endpoint private; do not commit it. Configure preview and production environments separately as appropriate.
