@@ -55,6 +55,47 @@ test('services are an equal, text-only list and route to a neutral estimate choi
   await expect(page.locator('#propertyScope')).toContainText('Home Interior');
 });
 
+test('FAQ covers the service range, matches JSON-LD, and toggles by keyboard and touch', async ({ page }, testInfo) => {
+  await page.goto('/');
+  const faq = page.locator('#faq');
+  const items = faq.locator('details.faq-item');
+  await expect(items).toHaveCount(8);
+  await expect(faq).toContainText('cabinet');
+  await expect(faq).toContainText('staining');
+  await expect(faq).toContainText('pressure washing');
+  await expect(faq).toContainText('popcorn removal');
+  await expect(faq).toContainText('grind-and-seal');
+  const visible = await items.evaluateAll((details) => details.map((detail) => ({
+    question: detail.querySelector('summary span')?.textContent?.trim(),
+    answer: detail.querySelector('.faq-answer p')?.textContent?.trim(),
+  })));
+  const scripts = await page.locator('script[type="application/ld+json"]').allTextContents();
+  const schema = scripts.map((script) => JSON.parse(script)).find((item) => item['@type'] === 'FAQPage');
+  expect(schema?.mainEntity.map((item: { name: string; acceptedAnswer: { text: string } }) => ({
+    question: item.name, answer: item.acceptedAnswer.text,
+  }))).toEqual(visible);
+
+  await expect(items.nth(0)).toHaveAttribute('open', '');
+  await expect(items.nth(1)).not.toHaveAttribute('open', '');
+  const second = items.nth(1).locator('summary');
+  await second.focus();
+  await page.keyboard.press('Enter');
+  await expect(items.nth(1)).toHaveAttribute('open', '');
+  await page.keyboard.press('Space');
+  await expect(items.nth(1)).not.toHaveAttribute('open', '');
+  if (testInfo.project.name === 'mobile') {
+    await second.tap();
+    await expect(items.nth(1)).toHaveAttribute('open', '');
+    await second.tap();
+  } else {
+    await second.click();
+    await expect(items.nth(1)).toHaveAttribute('open', '');
+    await second.click();
+  }
+  await expect(items.nth(1)).not.toHaveAttribute('open', '');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
 // Exercise the real route handler with an isolated delivery stub. Never send leads.
 async function fulfillApi(route: Route, deliveryStatus?: number) {
   const original = globalThis.fetch;
