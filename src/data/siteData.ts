@@ -665,27 +665,6 @@ export const flakePalettes = FLAKE_PRESETS.map((p) => ({
   cssGradient: p.gradientCss
 }));
 
-export const videoShowcase = [
-  {
-    id: 'video-ladder-action',
-    src: '/videos/historic-brick-schut-in-action.mp4',
-    poster: '/images/projects/historic-brick-schut-before.png',
-    badge: 'EXTERIOR PAINTING • IN PROGRESS',
-    title: 'Working Around a Brick Storefront',
-    description:
-      'A view of the brick facade during exterior work, with masking and protective covering visible.'
-  },
-  {
-    id: 'video-brick-after',
-    src: '/videos/historic-brick-schut-after.mp4',
-    poster: undefined,
-    badge: 'EXTERIOR PAINTING • FINISHED VIEW',
-    title: 'A Closer Look at the Finished Exterior',
-    description:
-      'The follow-up clip shows the brickwork, windows and ground-floor storefront after the protective coverings are removed.'
-  }
-];
-
 export const interiorCraftGallery = [
   {
     tag: 'RESIDENTIAL GARAGE SHOWROOM',
