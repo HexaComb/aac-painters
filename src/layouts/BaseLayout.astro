@@ -14,12 +14,14 @@ const {
   title = 'AAC Painters Inc. | Quality Paint, Epoxy Flooring & Commercial Finishes',
   description = 'Quality Paint. Lasting Results. Licensed California painting and epoxy flooring contractor (CSLB #1039849). View 7 real before-and-after transformations, 4-stage jobsite documentaries, and request a free estimate with Alex Delgadillo at (209) 485-5103.',
   canonicalPath = Astro.url.pathname,
-  ogImage = '/images/projects/mcauley-building-after.png',
+  ogImage = '/images/brand/aac-og.png',
   structuredData
 } = Astro.props;
 
 const canonicalUrl = new URL(canonicalPath, brand.domain).toString();
-const ogImageUrl = new URL(ogImage, brand.domain).toString();
+const ogImageUrl = new URL(ogImage, 'https://aac-painters.marcode-chavez-jr.workers.dev').toString();
+const isBrandCard = ogImage === '/images/brand/aac-og.png';
+const ogImageAlt = isBrandCard ? 'AAC Painters — Quality paint. Lasting results. Painting, epoxy and polish. (209) 485-5103.' : title;
 const currentPath = Astro.url.pathname;
 
 const localBusinessSchema = {
@@ -81,6 +83,12 @@ const extraSchemas = structuredData
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    {isBrandCard && <>
+      <meta property="og:image:type" content="image/png" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+    </>}
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter Card -->
@@ -88,6 +96,7 @@ const extraSchemas = structuredData
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png" />
