@@ -9,6 +9,9 @@ import {
   faqItems
 } from '../data/siteData';
 
+// Set to true to restore the original animated hero tagline without changing layout.
+const showHeroTagline = false;
+
 function showcase(id: string, label: string, kicker: string, video?: string) {
   const pair = beforeAfterGallery.find((item) => item.id === id);
   if (!pair) throw new Error(`Missing project gallery item: ${id}`);
@@ -147,7 +150,7 @@ const faqSchema = {
           <span class="kicker-text kicker-text-light kicker-text-brush-reveal">RESIDENTIAL, COMMERCIAL &amp; EPOXY FLOORING</span>
         </div>
 
-        <h1 id="hero-heading" class="hero-title hero-title-painted">
+        <h1 id="hero-heading" class="hero-title hero-title-painted" style={showHeroTagline ? undefined : 'visibility: hidden;'}>
           <span class="hero-title-line">
             <!-- STROKE 1: "Coloring" in AAC Logo Crimson Red (#EC193A) + Green (#9DBE39) Under-Stroke -->
             <span class="paint-word paint-word--coloring" style="--stroke-idx: 0;">
