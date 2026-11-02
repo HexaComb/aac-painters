@@ -144,7 +144,7 @@ const faqSchema = {
     </svg>
 
     <div class="container hero-container">
-      <div class="hero-copy-block" data-hero-paint-stage>
+      <div class="hero-copy-block" data-hero-paint-stage style={`--hero-description-delay: ${showHeroTagline ? '1.78s' : '0s'};`}>
         <div class="section-kicker hero-kicker-painted">
           <span class="kicker-bars kicker-bars-animated" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
           <span class="kicker-text kicker-text-light kicker-text-brush-reveal">RESIDENTIAL, COMMERCIAL &amp; EPOXY FLOORING</span>
@@ -945,7 +945,7 @@ const faqSchema = {
     mask-size: 300% 100%;
     mask-repeat: no-repeat;
     mask-position: 0% 0%;
-    animation: bristle-mask-sweep 0.68s cubic-bezier(0.22, 1, 0.36, 1) 1.78s both;
+    animation: bristle-mask-sweep 0.68s cubic-bezier(0.22, 1, 0.36, 1) var(--hero-description-delay) both;
     --animation-reduced: none;
   }
 
@@ -970,7 +970,7 @@ const faqSchema = {
     rotate: 0deg;
     scale: 1;
     opacity: 0;
-    animation: description-roller-sweep 0.68s cubic-bezier(0.22, 1, 0.36, 1) 1.78s both;
+    animation: description-roller-sweep 0.68s cubic-bezier(0.22, 1, 0.36, 1) var(--hero-description-delay) both;
     --animation-reduced: none;
   }
 
@@ -983,7 +983,7 @@ const faqSchema = {
     translate: 0px;
     rotate: 0deg;
     scale: 1;
-    animation: actions-paint-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) 2.05s both;
+    animation: actions-paint-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--hero-description-delay) + 0.27s) both;
     --animation-reduced: none;
   }
 
