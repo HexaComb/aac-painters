@@ -1,14 +1,14 @@
 import { test, expect } from '@playwright/test';
 
-test('hero shows the original logo above its label and starts the subtitle immediately', async ({ page }) => {
+test('hero keeps the original logo above its label and delays the subtitle for the slogan', async ({ page }) => {
   await page.goto('/');
-  const heading = page.locator('#hero-heading');
+  const heading = page.locator('.hero-brand-heading');
   const logo = heading.locator('img');
   const label = heading.locator('span');
   await expect(heading).toBeVisible();
   await expect(label).toHaveText('AAC Painters');
   await expect(logo).toHaveAttribute('src', '/images/brand/aac-painters-logo.png');
-  await expect(heading.locator('.paint-word')).toHaveCount(0);
+  await expect(page.locator('#hero-heading')).toHaveText('Preserving the past, inspiring the future.');
   await expect.poll(() => logo.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
   const logoBox = await logo.boundingBox();
   const labelBox = await label.boundingBox();
@@ -24,7 +24,7 @@ test('hero shows the original logo above its label and starts the subtitle immed
       const effect = element.getAnimations()[0]?.effect;
       return { delay: effect?.getTiming().delay, duration: effect?.getTiming().duration };
     });
-    expect(animation).toEqual({ delay: 0, duration: 680 });
+    expect(animation).toEqual({ delay: 1780, duration: 680 });
   }
   await expect(page.locator('.hero-actions')).toBeVisible();
 });

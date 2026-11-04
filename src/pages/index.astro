@@ -9,8 +9,11 @@ import {
   faqItems
 } from '../data/siteData';
 
-// Set to true to restore the original animated hero tagline without changing layout.
-const showHeroTagline = false;
+const heroSloganLines = [
+  ['Preserving', 'the', 'past,'],
+  ['inspiring', 'the', 'future.']
+];
+const heroPaintColors = ['red', 'blue', 'yellow'];
 
 function showcase(id: string, label: string, kicker: string, video?: string) {
   const pair = beforeAfterGallery.find((item) => item.id === id);
@@ -144,58 +147,37 @@ const faqSchema = {
     </svg>
 
     <div class="container hero-container">
-      <div class="hero-copy-block" data-hero-paint-stage style={`--hero-description-delay: ${showHeroTagline ? '1.78s' : '0s'};`}>
+      <div class="hero-copy-block" data-hero-paint-stage>
         <div class="section-kicker hero-kicker-painted">
           <span class="kicker-bars kicker-bars-animated" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
           <span class="kicker-text kicker-text-light kicker-text-brush-reveal">RESIDENTIAL, COMMERCIAL &amp; EPOXY FLOORING</span>
         </div>
 
-        {showHeroTagline ? (
-        <h1 id="hero-heading" class="hero-title hero-title-painted">
-          <span class="hero-title-line">
-            <!-- STROKE 1: "Coloring" in AAC Logo Crimson Red (#EC193A) + Green (#9DBE39) Under-Stroke -->
-            <span class="paint-word paint-word--coloring" style="--stroke-idx: 0;">
-              <span class="paint-stroke-underlay" aria-hidden="true"></span>
-              <span class="paint-splatters" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="paint-word-reveal">
-                <span class="paint-word-ink" data-word="Coloring">Coloring</span>
-              </span>
-              <span class="word-brush-actor" aria-hidden="true">
-                <svg viewBox="0 0 120 120" class="word-brush-svg"><use href="#aac-contractor-brush" /></svg>
-              </span>
-            </span>{' '}
-            <!-- STROKE 2: "Your" in AAC Logo Cerulean Blue (#0493BC) -->
-            <span class="paint-word paint-word--your" style="--stroke-idx: 1;">
-              <span class="paint-stroke-underlay" aria-hidden="true"></span>
-              <span class="paint-splatters" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="paint-word-reveal">
-                <span class="paint-word-ink" data-word="Your">Your</span>
-              </span>
-              <span class="word-brush-actor" aria-hidden="true">
-                <svg viewBox="0 0 120 120" class="word-brush-svg"><use href="#aac-contractor-brush" /></svg>
-              </span>
+        <div class="hero-brand-heading">
+          <img src="/images/brand/aac-painters-logo.png" alt="" width="560" height="513" class="hero-brand-logo" fetchpriority="high" />
+          <span>AAC Painters</span>
+        </div>
+
+        <h1 id="hero-heading" class="hero-title hero-title-painted" aria-label={heroSloganLines.flat().join(' ')}>
+          {heroSloganLines.map((words, lineIndex) => (
+            <span class="hero-title-line">
+              {words.map((word, wordIndex) => (
+                <>
+                  <span class={`paint-word paint-word--${heroPaintColors[wordIndex]}`} style={`--stroke-idx: ${lineIndex * 3 + wordIndex};`}>
+                    <span class="paint-stroke-underlay" aria-hidden="true"></span>
+                    <span class="paint-splatters" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="paint-word-reveal">
+                      <span class="paint-word-ink" data-word={word}>{word}</span>
+                    </span>
+                    <span class="word-brush-actor" aria-hidden="true">
+                      <svg viewBox="0 0 120 120" class="word-brush-svg"><use href="#aac-contractor-brush" /></svg>
+                    </span>
+                  </span>{' '}
+                </>
+              ))}
             </span>
-          </span>{' '}
-          <span class="hero-title-line">
-            <!-- STROKE 3: "Dreams." in AAC Logo Marigold Gold (#FCBB1F) -->
-            <span class="paint-word paint-word--dreams" style="--stroke-idx: 2;" data-last-paint-word>
-              <span class="paint-stroke-underlay" aria-hidden="true"></span>
-              <span class="paint-splatters" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="paint-word-reveal">
-                <span class="paint-word-ink" data-word="Dreams.">Dreams.</span>
-              </span>
-              <span class="word-brush-actor" aria-hidden="true">
-                <svg viewBox="0 0 120 120" class="word-brush-svg"><use href="#aac-contractor-brush" /></svg>
-              </span>
-            </span>
-          </span>
+          ))}
         </h1>
-        ) : (
-          <h1 id="hero-heading" class="hero-brand-heading">
-            <img src="/images/brand/aac-painters-logo.png" alt="" width="560" height="513" class="hero-brand-logo" fetchpriority="high" />
-            <span>AAC Painters</span>
-          </h1>
-        )}
 
         <div class="hero-description-stage">
           <span class="hero-roller-lead" aria-hidden="true"></span>
@@ -633,6 +615,7 @@ const faqSchema = {
 
   .hero-copy-block {
     max-width: 680px;
+    --hero-description-delay: 1.78s;
   }
 
   .hero-svg-defs {
@@ -719,7 +702,7 @@ const faqSchema = {
 
   /* Headline Painted Stage — Clean First-Pass Design with Exact AAC Logo Colors */
   .hero-title-painted {
-    font-size: clamp(2.85rem, 6vw, 4.75rem);
+    font-size: clamp(1.85rem, 4.6vw, 3.25rem);
     font-weight: 800;
     font-style: normal;
     letter-spacing: -0.025em;
@@ -742,7 +725,8 @@ const faqSchema = {
   /* Individual Word Stage Painted in AAC Logo Colors */
   .paint-word {
     --stroke-duration: 0.6s;
-    --stroke-delay: calc(0.14s + (var(--stroke-idx, 0) * 0.54s));
+    /* Fit six words into the original 0.14s–1.22s stroke-start window. */
+    --stroke-delay: calc(0.14s + (var(--stroke-idx, 0) * 0.216s));
     position: relative;
     display: inline-block;
     isolation: isolate;
@@ -754,24 +738,21 @@ const faqSchema = {
     scale: 1;
   }
 
-  /* STROKE 1: "Coloring" — Exact Logo Crimson Red (#EC193A) + Logo Lime-Green (#9DBE39) Swath */
-  .paint-word--coloring {
+  .paint-word--red {
     --word-paint: var(--aac-red);        /* #EC193A */
     --word-ink: #f41e42;
     --word-deep: #9c0d24;
     --word-swath-end: var(--aac-green);  /* #9DBE39 Logo Green */
   }
 
-  /* STROKE 2: "Your" — Exact Logo Cerulean Blue (#0493BC) */
-  .paint-word--your {
+  .paint-word--blue {
     --word-paint: var(--aac-blue);       /* #0493BC */
     --word-ink: #17b2df;
     --word-deep: #036582;
     --word-swath-end: #0493bc;
   }
 
-  /* STROKE 3: "Dreams." — Exact Logo Marigold Amber (#FCBB1F) + Logo Green (#9DBE39) */
-  .paint-word--dreams {
+  .paint-word--yellow {
     --word-paint: var(--aac-yellow);     /* #FCBB1F */
     --word-ink: #fcbb1f;
     --word-deep: #b87e00;
@@ -1170,6 +1151,9 @@ const faqSchema = {
 
   /* Reduced Motion Override: Keep all painted colors and brush swaths visible with zero motion */
   @media (prefers-reduced-motion: reduce) {
+    .paint-word-ink::after {
+      animation: none;
+    }
     .kicker-text-brush-reveal,
     .paint-word-reveal,
     .hero-description-painted {
