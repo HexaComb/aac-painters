@@ -12,7 +12,7 @@ async function seekHero(page: Page, time: number) {
 }
 
 async function expectHeroFits(page: Page) {
-  const overflow = await page.locator('.paint-word, .hero-brand-logo, .hero-description-painted, .hero-actions a').evaluateAll((elements) =>
+  const overflow = await page.locator('.paint-word, .hero-brand-heading, .hero-description-painted, .hero-actions a').evaluateAll((elements) =>
     elements.filter((element) => {
       const rect = element.getBoundingClientRect();
       return rect.left < 0 || rect.right > innerWidth;
@@ -22,14 +22,12 @@ async function expectHeroFits(page: Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 }
 
-test('logo and complete painted slogan coexist and fit responsive layouts', async ({ page }, testInfo) => {
+test('larger painted slogan fits responsive layouts without a hero logo', async ({ page }, testInfo) => {
   await page.goto('/');
   await page.evaluate(() => document.fonts.ready);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(slogan);
   await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName(slogan);
-  const logo = page.locator('.hero-brand-logo');
-  await expect(logo).toBeVisible();
-  expect(await logo.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+  await expect(page.locator('.hero-brand-logo')).toHaveCount(0);
   await seekHero(page, 3000);
   await expectHeroFits(page);
   await page.screenshot({ path: testInfo.outputPath('hero-complete.png') });
@@ -78,7 +76,7 @@ test('painted slogan leads into the historical subtitle, roller, and button timi
   await expect(subtitle).toHaveCSS('mask-position', '0% 0%');
   await expect(page.locator('.hero-actions')).toHaveCSS('opacity', '1');
   for (const word of await page.locator('.paint-word-reveal').all()) {
-    await expect(word).toHaveCSS('mask-position', '0% 0%');
+    await expect(word).toHaveCSS('clip-path', /^inset\(0px(?: 0% 0px 0px)?\)$/);
   }
 });
 
@@ -86,8 +84,11 @@ test('reduced motion reveals the slogan and subtitle immediately with no hero an
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(slogan);
-  for (const reveal of await page.locator('.paint-word-reveal, .hero-description-painted').all()) {
+  for (const reveal of await page.locator('.hero-description-painted').all()) {
     await expect(reveal).toHaveCSS('mask-position', '0% 0%');
+  }
+  for (const word of await page.locator('.paint-word-reveal, .paint-stroke-underlay').all()) {
+    await expect(word).toHaveCSS('clip-path', /^inset\(0px(?: 0% 0px 0px)?\)$/);
   }
   await expect(page.locator('.hero-actions')).toHaveCSS('opacity', '1');
   expect(await page.locator('.hero-copy-block').evaluate((hero) => hero.getAnimations({ subtree: true }).length)).toBe(0);
@@ -95,4 +96,32 @@ test('reduced motion reveals the slogan and subtitle immediately with no hero an
   await expect.poll(() => page.locator('.hero-bg-video').evaluate((video: HTMLVideoElement) => video.paused)).toBe(true);
   await expectHeroFits(page);
   await page.screenshot({ path: testInfo.outputPath('hero-reduced-motion.png') });
+});
+
+test('paint and brush move forward together without reversing or flashing back', async ({ page }, testInfo) => {
+  await page.goto('/');
+  await page.evaluate(() => document.fonts.ready);
+  const word = page.locator('.paint-word').first();
+  const reveal = word.locator('.paint-word-reveal');
+  const underlay = word.locator('.paint-stroke-underlay');
+  const brush = word.locator('.word-brush-actor');
+  let previousRight = 100;
+  let previousBrushX = -Infinity;
+  for (let elapsed = 0; elapsed <= 600; elapsed += 25) {
+    await seekHero(page, 140 + elapsed);
+    const clip = await reveal.evaluate(element => getComputedStyle(element).clipPath);
+    await expect(underlay).toHaveCSS('clip-path', clip);
+    const right = Number.parseFloat(clip.slice(6, -1).split(' ')[1] ?? '0');
+    expect(right).toBeGreaterThanOrEqual(0);
+    expect(right).toBeLessThanOrEqual(previousRight);
+    previousRight = right;
+    const box = await brush.boundingBox();
+    if (!box) throw new Error('Paintbrush must remain laid out during its sweep');
+    expect(box.x).toBeGreaterThanOrEqual(previousBrushX);
+    previousBrushX = box.x;
+  }
+  await expect(reveal).toHaveCSS('clip-path', /^inset\(0px(?: 0% 0px 0px)?\)$/);
+  await expect(brush).toHaveCSS('opacity', '0');
+  await seekHero(page, 450);
+  await page.screenshot({ path: testInfo.outputPath('hero-paint-in-progress.png') });
 });

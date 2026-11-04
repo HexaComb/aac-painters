@@ -1,23 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-test('hero keeps the original logo above its label and delays the subtitle for the slogan', async ({ page }) => {
+test('hero leads with the brand name and slogan without a duplicate logo', async ({ page }) => {
   await page.goto('/');
   const heading = page.locator('.hero-brand-heading');
-  const logo = heading.locator('img');
-  const label = heading.locator('span');
   await expect(heading).toBeVisible();
-  await expect(label).toHaveText('AAC Painters');
-  await expect(logo).toHaveAttribute('src', '/images/brand/aac-painters-logo.png');
+  await expect(heading).toHaveText('AAC Painters');
+  await expect(page.locator('.hero-banner img')).toHaveCount(0);
   await expect(page.locator('#hero-heading')).toHaveText('Preserving the past, inspiring the future.');
-  await expect.poll(() => logo.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
-  const logoBox = await logo.boundingBox();
-  const labelBox = await label.boundingBox();
-  expect(logoBox).not.toBeNull();
-  expect(labelBox).not.toBeNull();
-  expect(logoBox!.width).toBeGreaterThanOrEqual(120);
-  expect(logoBox!.width).toBeLessThanOrEqual(144);
-  expect(labelBox!.y).toBeGreaterThanOrEqual(logoBox!.y + logoBox!.height);
-  expect(labelBox!.y - (logoBox!.y + logoBox!.height)).toBeLessThan(16);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   for (const selector of ['.hero-description-painted', '.hero-roller-lead']) {
     const animation = await page.locator(selector).evaluate(element => {

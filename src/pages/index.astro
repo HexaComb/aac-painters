@@ -154,7 +154,6 @@ const faqSchema = {
         </div>
 
         <div class="hero-brand-heading">
-          <img src="/images/brand/aac-painters-logo.png" alt="" width="560" height="513" class="hero-brand-logo" fetchpriority="high" />
           <span>AAC Painters</span>
         </div>
 
@@ -633,18 +632,7 @@ const faqSchema = {
     /* Ragged 14-bristle SVG wipe mask — solid white [0..136] guarantees 0% clipping at rest */
     --bristle-wipe-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 100' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0,0 H136 L162,4 L140,9 L168,15 L139,21 L164,28 L142,35 L170,42 L138,49 L166,56 L141,63 L169,70 L139,77 L163,84 L140,91 L160,96 L136,100 H0 Z'/%3E%3Cpath fill='rgba(255,255,255,0.55)' d='M134,0 H150 L176,6 L146,13 L178,20 L145,28 L173,36 L148,44 L180,52 L144,60 L175,68 L147,76 L176,84 L146,92 L168,98 L142,100 H134 Z'/%3E%3C/svg%3E");
 
-    /* Physics-based spring & brush-stroke easings (Modern Web Guidance: physics-based-easing) */
-    --brush-glide-easing: linear(
-      0, 0.018 2.1%, 0.074 4.6%, 0.168 7.5%, 0.304 11.2%, 0.562 18.2%,
-      0.784 25.8%, 0.924 33.4%, 1.012 42.5%, 1.034 50.2%, 1.018 62.4%,
-      1.003 78.5%, 1
-    );
-    --splatter-spring-easing: linear(
-      0, 0.016 0.5%, 0.06 1%, 0.226 2%, 1.116 5.4%, 1.375 6.6%, 1.527 7.7%,
-      1.585 8.8%, 1.458 10.9%, 0.937 14.3%, 0.693 16.6%, 0.657 17.7%,
-      0.729 19.8%, 1.13 24.5%, 1.201 26.7%, 1.156 28.8%, 0.925 33.4%,
-      0.882 35.6%, 1.045 42.4%, 1.069 44.5%, 0.979 50.9%, 1.013 59.9%, 1
-    );
+    --brush-glide-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
   }
 
   /* Kicker 4-Color Dab & Bristle Wipe */
@@ -655,7 +643,6 @@ const faqSchema = {
     scale: 1;
     transform-origin: left center;
     animation: kicker-bar-dab 0.36s cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-timing-function: var(--splatter-spring-easing);
     --animation-reduced: none;
   }
 
@@ -687,22 +674,15 @@ const faqSchema = {
     gap: 0.65rem;
     margin: 0 0 1.45rem;
     color: var(--text-light);
-    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-size: clamp(2.125rem, 4.4vw, 2.75rem);
     line-height: 1.1;
     font-weight: 800;
     letter-spacing: -0.025em;
   }
 
-  .hero-brand-logo {
-    display: block;
-    width: clamp(120px, 13vw, 144px);
-    height: auto;
-    filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.45));
-  }
-
   /* Headline Painted Stage — Clean First-Pass Design with Exact AAC Logo Colors */
   .hero-title-painted {
-    font-size: clamp(1.85rem, 4.6vw, 3.25rem);
+    font-size: clamp(2rem, 5.2vw, 3.75rem);
     font-weight: 800;
     font-style: normal;
     letter-spacing: -0.025em;
@@ -783,8 +763,8 @@ const faqSchema = {
     transform-origin: left center;
     translate: 0px;
     rotate: -1.2deg;
-    scale: 1 1;
-    animation: swath-brush-laydown var(--stroke-duration) cubic-bezier(0.22, 1, 0.36, 1) var(--stroke-delay) both;
+    clip-path: inset(0);
+    animation: word-paint-sweep var(--stroke-duration) cubic-bezier(0.22, 1, 0.36, 1) var(--stroke-delay) both;
     animation-timing-function: var(--brush-glide-easing);
     --animation-reduced: none;
   }
@@ -812,8 +792,7 @@ const faqSchema = {
     translate: 0px;
     rotate: 0deg;
     scale: 1;
-    animation: splatter-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    animation-timing-function: var(--splatter-spring-easing);
+    animation: splatter-pop 0.3s ease-out both;
     --animation-reduced: none;
   }
 
@@ -843,23 +822,15 @@ const faqSchema = {
     animation-delay: calc(var(--stroke-delay) + 0.44s);
   }
 
-  /* Layer 3: Bristle-Masked Word Reveal — Padded so Descenders ("g", "y") & Outlines Never Clip */
+  /* Reveal letters and their paint swath with the same forward-only sweep. */
   .paint-word-reveal {
     position: relative;
     display: inline-block;
     z-index: 1;
     padding: 0.14em 0.24em 0.24em 0.14em;
     margin: -0.14em -0.24em -0.24em -0.14em;
-    /* MANDATORY vendor prefix + standard mask properties (complex-shapes) */
-    -webkit-mask-image: var(--bristle-wipe-mask);
-    -webkit-mask-size: 300% 100%;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: 0% 0%;
-    mask-image: var(--bristle-wipe-mask);
-    mask-size: 300% 100%;
-    mask-repeat: no-repeat;
-    mask-position: 0% 0%;
-    animation: bristle-mask-sweep var(--stroke-duration) cubic-bezier(0.22, 1, 0.36, 1) var(--stroke-delay) both;
+    clip-path: inset(0);
+    animation: word-paint-sweep var(--stroke-duration) var(--brush-glide-easing) var(--stroke-delay) both;
     animation-timing-function: var(--brush-glide-easing);
     --animation-reduced: none;
   }
@@ -879,7 +850,7 @@ const faqSchema = {
       drop-shadow(0 8px 18px rgba(0, 0, 0, 0.58));
   }
 
-  /* Wet Paint Gloss Coat that Flashes as Bristles Touch the Letters */
+  /* Static wet-paint finish keeps the lettering steady during the reveal. */
   .paint-word-ink::after {
     content: attr(data-word);
     position: absolute;
@@ -899,8 +870,6 @@ const faqSchema = {
     color: transparent;
     -webkit-text-stroke: 0px transparent;
     opacity: 0.36;
-    animation: wet-paint-sheen calc(var(--stroke-duration) + 0.35s) ease-out var(--stroke-delay) both;
-    --animation-reduced: none;
   }
 
   /* Layer 4: Animated Angled Contractor Paintbrush Actor Sweeping Across Each Word */
@@ -908,7 +877,7 @@ const faqSchema = {
     position: absolute;
     top: -0.42em;
     left: 0;
-    width: 1.25em;
+    width: 100%;
     height: 1.25em;
     z-index: 5;
     pointer-events: none;
@@ -919,13 +888,15 @@ const faqSchema = {
     rotate: 0deg;
     scale: 1;
     opacity: 0;
-    animation: contractor-brush-stroke var(--stroke-duration) cubic-bezier(0.22, 1, 0.36, 1) var(--stroke-delay) both;
-    animation-timing-function: var(--brush-glide-easing);
+    animation:
+      contractor-brush-stroke var(--stroke-duration) var(--brush-glide-easing) var(--stroke-delay) both,
+      contractor-brush-presence var(--stroke-duration) linear var(--stroke-delay) both;
     --animation-reduced: none;
   }
 
   .word-brush-svg {
-    width: 100%;
+    margin-left: -0.25em;
+    width: 1.25em;
     height: 100%;
     display: block;
     overflow: visible;
@@ -995,18 +966,6 @@ const faqSchema = {
     --animation-reduced: none;
   }
 
-  /* Fallback when linear() physics easing is not supported (physics-based-easing) */
-  @supports not (animation-timing-function: linear(0, 1)) {
-    .paint-stroke-underlay,
-    .paint-word-reveal,
-    .word-brush-actor {
-      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .paint-splatters > i {
-      animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-  }
-
   /* Keyframes for 4-Color Paintbrush Entrance */
   @keyframes kicker-bar-dab {
     0% {
@@ -1030,85 +989,25 @@ const faqSchema = {
     }
   }
 
-  @keyframes swath-brush-laydown {
-    0% {
-      scale: 0 0.72;
-      opacity: 0;
-    }
-    12% {
-      opacity: 1;
-    }
-    78% {
-      scale: 1.03 1.06;
-      opacity: 1;
-    }
-    100% {
-      scale: 1 1;
-      opacity: 1;
-    }
-  }
-
-  @keyframes wet-paint-sheen {
-    0% {
-      opacity: 0;
-      filter: brightness(1.8);
-    }
-    30% {
-      opacity: 1;
-      filter: brightness(1.45);
-    }
-    100% {
-      opacity: 0.38;
-      filter: brightness(1);
-    }
+  @keyframes word-paint-sweep {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0); }
   }
 
   @keyframes contractor-brush-stroke {
-    0% {
-      left: -8%;
-      translate: 0px 8px;
-      rotate: -24deg;
-      scale: 0.78;
-      opacity: 0;
-    }
-    12% {
-      left: 0%;
-      translate: 0px 0px;
-      rotate: -12deg;
-      scale: 1.04;
-      opacity: 1;
-    }
-    55% {
-      left: 56%;
-      translate: 0px -3px;
-      rotate: -4deg;
-      scale: 1.06;
-      opacity: 1;
-    }
-    86% {
-      left: 96%;
-      translate: 0px 2px;
-      rotate: 10deg;
-      scale: 1;
-      opacity: 1;
-    }
-    100% {
-      left: 106%;
-      translate: 10px -14px;
-      rotate: 22deg;
-      scale: 0.82;
-      opacity: 0;
-    }
+    from { translate: 0% 0; }
+    to { translate: 100% 0; }
+  }
+
+  @keyframes contractor-brush-presence {
+    0%, 100% { opacity: 0; }
+    10%, 85% { opacity: 1; }
   }
 
   @keyframes splatter-pop {
     0% {
       scale: 0;
       opacity: 0;
-    }
-    65% {
-      scale: 1.25;
-      opacity: 1;
     }
     100% {
       scale: 1;
@@ -1151,11 +1050,7 @@ const faqSchema = {
 
   /* Reduced Motion Override: Keep all painted colors and brush swaths visible with zero motion */
   @media (prefers-reduced-motion: reduce) {
-    .paint-word-ink::after {
-      animation: none;
-    }
     .kicker-text-brush-reveal,
-    .paint-word-reveal,
     .hero-description-painted {
       -webkit-mask-position: 0% 0% !important;
       mask-position: 0% 0% !important;
