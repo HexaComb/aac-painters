@@ -30,11 +30,23 @@ In the **Cloudflare Dashboard**, connect the `aac-painters` repository to the Wo
 Every push to `main` builds and deploys through Cloudflare. GitHub Actions does not need a Cloudflare API token for this setup.
 
 ### Quote delivery configuration (required for online submissions)
-Set `QUOTE_WEBHOOK_URL` in the Cloudflare Worker environment to an approved CRM or email-service webhook that accepts a JSON POST. Keep the endpoint private; do not commit it. Configure preview and production environments separately as appropriate.
+The existing serverless `/api/quote` route sends email through the [Resend API](https://resend.com/docs/api-reference/emails/send-email):
 
-The route acknowledges a request only after the destination returns a successful HTTP status. An unconfigured destination returns 503; a failed or timed-out delivery returns 502. In either case, the form retains the entered details and offers the existing call/text contact, including a prefilled text message. A timeout does not prove the destination failed to receive the request; avoid automatic retries that could duplicate leads.
+- **From:** `AAC Painters Website <submission@aacpaintersinc.com>`
+- **To:** `aacpaintersinc@gmail.com`
+- **Reply-to:** the customer's email, when supplied
+- **Contents:** all submitted contact and project details, a reference ID, and submission time
 
-Mocked tests verify the application contract, not production delivery. Before relying on online leads, the owner should verify the configured destination and receipt with an authorized test. No destination or credentials are provisioned by this change.
+Before enabling production submissions:
+
+1. Add and [verify `aacpaintersinc.com` in Resend](https://resend.com/docs/dashboard/domains/introduction), using the DNS records Resend provides.
+2. Create a Resend API key with permission to send from this domain.
+3. In Cloudflare, open the `aac-painters-inc` Worker → **Settings → Variables and Secrets**, add a **Secret** named `RESEND_API_KEY`, and save/deploy it. This must be a Worker runtime secret, not only a build variable. Alternatively, from this project run `npx wrangler secret put RESEND_API_KEY` and paste the key at the prompt; this updates the deployed Worker. See [Cloudflare secrets](https://developers.cloudflare.com/workers/configuration/secrets/).
+4. Submit a test through the deployed form and confirm it arrives at `aacpaintersinc@gmail.com` with the expected sender, details, and reply-to address.
+
+No additional server or SDK is needed. The API key stays on the server. `QUOTE_WEBHOOK_URL` is no longer used. For local email testing, copy `.dev.vars.example` to `.dev.vars`, enter a real key, and restart `npm run dev`. Local submissions with a real key send real emails to the recipient above; the automated tests mock Resend and never send email. Configure preview and production secrets separately as appropriate.
+
+The route acknowledges a request only after Resend returns success and an email ID. An absent API key returns 503; a rejected, malformed, or timed-out response returns 502. In either case, the form retains the entered details and offers the existing call/text contact, including a prefilled text message. A timeout does not prove Resend failed to accept the request; there are no automatic retries. Resend acceptance does not guarantee inbox delivery, so verify receipt before relying on online leads. The endpoint does not store submissions in a database.
 
 ### Validation
 

@@ -102,14 +102,14 @@ async function fulfillApi(route: Route, deliveryStatus?: number) {
   let record: Record<string, unknown> | undefined;
   globalThis.fetch = async (_url, init) => {
     record = JSON.parse(String(init?.body));
-    return new Response(null, { status: deliveryStatus ?? 204 });
+    return Response.json({ id: 'test-email-id' }, { status: deliveryStatus ?? 200 });
   };
   try {
     const response = await POST({
       request: new Request('http://localhost/api/quote', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: route.request().postData()!,
       }),
-      locals: { runtime: { env: deliveryStatus ? { QUOTE_WEBHOOK_URL: 'https://delivery.invalid/test-only' } : {} } },
+      locals: { runtime: { env: deliveryStatus ? { RESEND_API_KEY: 'test-only-resend-key' } : {} } },
     } as unknown as Parameters<typeof POST>[0]);
     await route.fulfill({ status: response.status, contentType: 'application/json', body: await response.text() });
     return record;
@@ -153,15 +153,21 @@ test('pressure washing and ceiling removal do not request a coating; choices ada
 
 test('valid form reaches the API with canonical fields and shows the returned quote ID', async ({ page }) => {
   let record: Record<string, unknown> | undefined;
-  await page.route('**/api/quote', async (route) => { record = await fulfillApi(route, 202); });
+  await page.route('**/api/quote', async (route) => { record = await fulfillApi(route, 200); });
   await page.goto('/');
   await fillContact(page);
   await page.locator('#serviceType').selectOption('Pressure Washing');
   await page.locator('#propertyScope').selectOption('Outdoor — Driveway / Patio / Walkway');
   await page.locator('#quote-submit-btn').click();
   await expect(page.locator('#quote-feedback')).toHaveClass(/is-success/);
-  expect(record).toMatchObject({ name: 'Test Contact', services: ['Pressure Washing'], propertyType: 'Outdoor — Driveway / Patio / Walkway', selectedFinish: 'Not applicable' });
-  await expect(page.locator('#quote-feedback')).toContainText(String(record!.quoteId));
+  expect(record).toMatchObject({
+    from: 'AAC Painters Website <submission@aacpaintersinc.com>', to: ['aacpaintersinc@gmail.com'],
+  });
+  for (const detail of ['Name: Test Contact', 'Services: Pressure Washing', 'Property: Outdoor — Driveway / Patio / Walkway', 'Finish: Not applicable']) {
+    expect(record?.text).toContain(detail);
+  }
+  const quoteId = String(record?.subject).replace('New estimate request — ', '');
+  await expect(page.locator('#quote-feedback')).toContainText(quoteId);
   await expect(page.locator('#quote-feedback')).not.toContainText('undefined');
   await expect(page.locator('#fullName')).toHaveValue('');
 });
@@ -195,7 +201,7 @@ test('delivery rejection and network failure are recoverable without clearing th
   await page.route('**/api/quote', async (route) => {
     calls++;
     if (calls === 2) await route.abort();
-    else await fulfillApi(route, calls === 1 ? 500 : 204);
+    else await fulfillApi(route, calls === 1 ? 500 : 200);
   });
   await page.goto('/');
   await fillContact(page);
@@ -215,7 +221,7 @@ test('pending duplicate submission is blocked and newer edits survive success', 
   let release!: () => void;
   const pending = new Promise<void>((resolve) => { release = resolve; });
   let requests = 0;
-  await page.route('**/api/quote', async (route) => { requests++; await pending; await fulfillApi(route, 202); });
+  await page.route('**/api/quote', async (route) => { requests++; await pending; await fulfillApi(route, 200); });
   await page.goto('/');
   await fillContact(page);
   await page.locator('#quote-submit-btn').click();

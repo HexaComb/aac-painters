@@ -71,22 +71,50 @@ export const POST: APIRoute = async ({ request, locals }) => {
     (projectDetails ? `Details: ${projectDetails}` : '')
   );
   const smsLink = `sms:+12094855103?&body=${smsBody}`;
-  const runtime = (locals as { runtime?: { env?: { QUOTE_WEBHOOK_URL?: string } } }).runtime;
-  const webhookUrl = runtime?.env?.QUOTE_WEBHOOK_URL;
+  const runtime = (locals as { runtime?: { env?: { RESEND_API_KEY?: string } } }).runtime;
+  const apiKey = runtime?.env?.RESEND_API_KEY?.trim();
 
   // There is no database here: only acknowledge receipt after the configured
   // destination accepts the request. Never silently discard an estimate lead.
-  if (!webhookUrl) {
+  if (!apiKey) {
     return json({ ok: false, error: `Online requests are not available right now. Your request has not been sent. ${fallback}`, smsLink }, 503);
   }
   try {
-    const delivery = await fetch(webhookUrl, {
+    const delivery = await fetch('https://api.resend.com/emails', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(quoteRecord),
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        from: 'AAC Painters Website <submission@aacpaintersinc.com>',
+        to: ['aacpaintersinc@gmail.com'],
+        subject: `New estimate request — ${quoteId}`,
+        ...(email ? { reply_to: email } : {}),
+        text: [
+          'New estimate request from the AAC Painters website',
+          '',
+          `Reference: ${quoteId}`,
+          `Submitted at (UTC): ${submittedAt}`,
+          '',
+          `Name: ${name}`,
+          `Phone: ${phone}`,
+          `Email: ${email || 'Not provided'}`,
+          `City: ${city}`,
+          `Services: ${services.join(', ')}`,
+          `Property: ${quoteRecord.propertyType}`,
+          `Size: ${quoteRecord.squareFootage}`,
+          `Timeline: ${quoteRecord.timeline}`,
+          `Finish: ${quoteRecord.selectedFinish}`,
+          '',
+          'Project details:',
+          projectDetails || 'Not provided',
+        ].join('\n'),
+      }),
       signal: AbortSignal.timeout(10_000),
     });
     if (!delivery.ok) throw new Error('Delivery not accepted');
+    const receipt: unknown = await delivery.json();
+    if (!receipt || typeof receipt !== 'object' || !('id' in receipt) || typeof receipt.id !== 'string' || !receipt.id.trim()) {
+      throw new Error('Missing delivery receipt');
+    }
   } catch {
     return json({ ok: false, error: `We could not confirm delivery of your request. ${fallback}`, smsLink }, 502);
   }

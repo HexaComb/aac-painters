@@ -3,7 +3,7 @@ import { test, type TestContext } from 'node:test';
 import { POST } from '../src/pages/api/quote.ts';
 import { getQuoteService, isValidPhone, quoteServices } from '../src/data/quoteOptions.ts';
 
-const webhook = 'https://quote-delivery.example.invalid/test-only';
+const apiKey = 'test-only-resend-key';
 const valid = {
   name: 'Sample Contact',
   phone: '(209) 555-0100',
@@ -18,8 +18,8 @@ const valid = {
 type RouteContext = Parameters<typeof POST>[0];
 type Delivery = (url: string | URL | Request, init?: RequestInit) => Promise<Response>;
 
-function mockDelivery(t: TestContext, implementation: Delivery = async () => new Response(null, { status: 204 })) {
-  // Every invocation is intercepted. The .invalid address can never receive leads.
+function mockDelivery(t: TestContext, implementation: Delivery = async () => Response.json({ id: 'test-email-id' })) {
+  // Every fetch is intercepted; the test key is not a real credential.
   return t.mock.method(globalThis, 'fetch', implementation as typeof fetch);
 }
 
@@ -32,7 +32,7 @@ function jsonRequest(data: unknown) {
 async function invoke(request: Request, configured = true) {
   const response = await POST({
     request,
-    locals: configured ? { runtime: { env: { QUOTE_WEBHOOK_URL: webhook } } } : {},
+    locals: configured ? { runtime: { env: { RESEND_API_KEY: apiKey } } } : {},
   } as RouteContext);
   assert.equal(response.headers.get('content-type'), 'application/json');
   assert.equal(response.headers.get('cache-control'), 'no-store');
@@ -53,16 +53,26 @@ test('canonical JSON fields are forwarded intact after confirmed delivery', asyn
   assert.equal(body.quote, undefined, 'Do not reflect contact PII in the success response.');
   assert.equal(delivery.mock.callCount(), 1);
   const [url, init] = delivery.mock.calls[0].arguments;
-  assert.equal(url, webhook);
+  assert.equal(url, 'https://api.resend.com/emails');
   assert.equal(init?.method, 'POST');
-  assert.deepEqual(init?.headers, { 'Content-Type': 'application/json' });
+  assert.deepEqual(init?.headers, { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` });
   assert.ok(init?.signal instanceof AbortSignal);
   assert.equal(init.signal.aborted, false);
-  assert.deepEqual(JSON.parse(String(init?.body)), {
-    quoteId: body.quoteId, submittedAt: body.submittedAt,
-    ...valid, name: 'Sample Contact', services: [valid.services],
-    squareFootage: '450', timeline: 'Discuss availability',
-  });
+  const message = JSON.parse(String(init?.body));
+  assert.deepEqual(Object.keys(message).sort(), ['from', 'reply_to', 'subject', 'text', 'to']);
+  assert.equal(message.from, 'AAC Painters Website <submission@aacpaintersinc.com>');
+  assert.deepEqual(message.to, ['aacpaintersinc@gmail.com']);
+  assert.equal(message.reply_to, valid.email);
+  assert.equal(message.subject, `New estimate request — ${body.quoteId}`);
+  assert.equal(message.text, [
+    'New estimate request from the AAC Painters website', '',
+    `Reference: ${body.quoteId}`, `Submitted at (UTC): ${body.submittedAt}`, '',
+    `Name: ${valid.name}`, `Phone: ${valid.phone}`, `Email: ${valid.email}`, `City: ${valid.city}`,
+    `Services: ${valid.services}`, `Property: ${valid.propertyType}`, 'Size: 450',
+    'Timeline: Discuss availability', `Finish: ${valid.selectedFinish}`, '',
+    'Project details:', valid.projectDetails,
+  ].join('\n'));
+  assert.ok(!JSON.stringify(body).includes(apiKey));
 });
 
 test('legacy JSON form names still map into the canonical record', async (t) => {
@@ -75,9 +85,9 @@ test('legacy JSON form names still map into the canonical record', async (t) => 
   assert.equal(response.status, 200);
   const record = JSON.parse(String(delivery.mock.calls[0].arguments[1]?.body));
   for (const field of ['name', 'phone', 'email', 'city', 'propertyType', 'selectedFinish', 'projectDetails'] as const) {
-    assert.equal(record[field], valid[field]);
+    assert.ok(record.text.includes(valid[field]));
   }
-  assert.deepEqual(record.services, [valid.services]);
+  assert.ok(record.text.includes(`Services: ${valid.services}`));
   assert.equal(record.fullName, undefined);
   assert.equal(record.propertyScope, undefined);
 });
@@ -89,10 +99,10 @@ test('canonical names take precedence over legacy aliases', async (t) => {
   }));
   assert.equal(response.status, 200);
   const record = JSON.parse(String(delivery.mock.calls[0].arguments[1]?.body));
-  assert.equal(record.name, valid.name);
-  assert.deepEqual(record.services, [valid.services]);
-  assert.equal(record.propertyType, valid.propertyType);
-  assert.equal(record.selectedFinish, valid.selectedFinish);
+  assert.ok(record.text.includes(`Name: ${valid.name}`));
+  assert.ok(record.text.includes(`Services: ${valid.services}`));
+  assert.ok(record.text.includes(`Property: ${valid.propertyType}`));
+  assert.ok(record.text.includes(`Finish: ${valid.selectedFinish}`));
 });
 
 test('multipart form fields preserve multiple canonical services', async (t) => {
@@ -103,9 +113,9 @@ test('multipart form fields preserve multiple canonical services', async (t) => 
   const { response } = await invoke(new Request('https://website.example.invalid/api/quote', { method: 'POST', body: form }));
   assert.equal(response.status, 200);
   const record = JSON.parse(String(delivery.mock.calls[0].arguments[1]?.body));
-  assert.deepEqual(record.services, [valid.services, 'Fence & Deck Staining']);
-  assert.equal(record.name, valid.name);
-  assert.equal(record.propertyType, valid.propertyType);
+  assert.ok(record.text.includes(`Services: ${valid.services}, Fence & Deck Staining`));
+  assert.ok(record.text.includes(`Name: ${valid.name}`));
+  assert.ok(record.text.includes(`Property: ${valid.propertyType}`));
 });
 
 test('URL-encoded legacy form fields remain compatible', async (t) => {
@@ -117,9 +127,9 @@ test('URL-encoded legacy form fields remain compatible', async (t) => {
   const { response } = await invoke(new Request('https://website.example.invalid/api/quote', { method: 'POST', body: form }));
   assert.equal(response.status, 200);
   const record = JSON.parse(String(delivery.mock.calls[0].arguments[1]?.body));
-  assert.equal(record.name, valid.name);
-  assert.deepEqual(record.services, [valid.services]);
-  assert.equal(record.selectedFinish, valid.selectedFinish);
+  assert.ok(record.text.includes(`Name: ${valid.name}`));
+  assert.ok(record.text.includes(`Services: ${valid.services}`));
+  assert.ok(record.text.includes(`Finish: ${valid.selectedFinish}`));
 });
 
 for (const service of ['Pressure Washing', 'Popcorn Ceiling Removal & Re-Texturing']) {
@@ -128,8 +138,8 @@ for (const service of ['Pressure Washing', 'Popcorn Ceiling Removal & Re-Texturi
     const { response } = await invoke(jsonRequest({ ...valid, services: service }));
     assert.equal(response.status, 200);
     const record = JSON.parse(String(delivery.mock.calls[0].arguments[1]?.body));
-    assert.deepEqual(record.services, [service]);
-    assert.equal(record.selectedFinish, 'Not applicable');
+    assert.ok(record.text.includes(`Services: ${service}`));
+    assert.ok(record.text.includes('Finish: Not applicable'));
   });
 }
 
@@ -138,11 +148,12 @@ test('optional details have neutral defaults, not a forced coating or property',
   const { response } = await invoke(jsonRequest({ name: valid.name, phone: valid.phone, city: valid.city, services: valid.services }));
   assert.equal(response.status, 200);
   const record = JSON.parse(String(delivery.mock.calls[0].arguments[1]?.body));
-  assert.equal(record.email, '');
-  assert.equal(record.propertyType, 'Not specified');
-  assert.equal(record.selectedFinish, 'Not specified');
-  assert.equal(record.squareFootage, 'Not specified');
-  assert.equal(record.timeline, 'Not specified');
+  assert.equal(record.reply_to, undefined);
+  assert.ok(record.text.includes('Email: Not provided'));
+  assert.ok(record.text.includes('Property: Not specified'));
+  assert.ok(record.text.includes('Finish: Not specified'));
+  assert.ok(record.text.includes('Size: Not specified'));
+  assert.ok(record.text.includes('Timeline: Not specified'));
 });
 
 const invalidFields: [string, Record<string, unknown>][] = [
@@ -186,7 +197,7 @@ test('invalid JSON syntax is rejected without attempting delivery', async (t) =>
   assert.equal(delivery.mock.callCount(), 0);
 });
 
-test('missing webhook never claims successful receipt and includes a usable text fallback', async (t) => {
+test('missing Resend key never claims successful receipt and includes a usable text fallback', async (t) => {
   const delivery = mockDelivery(t);
   const { response, body } = await invoke(jsonRequest(valid), false);
   assert.equal(response.status, 503);
@@ -200,8 +211,8 @@ test('missing webhook never claims successful receipt and includes a usable text
   assert.equal(delivery.mock.callCount(), 0);
 });
 
-for (const status of [400, 429, 500]) {
-  test(`webhook HTTP ${status} is not reported as success`, async (t) => {
+for (const status of [400, 401, 403, 429, 500]) {
+  test(`Resend HTTP ${status} is not reported as success`, async (t) => {
     const delivery = mockDelivery(t, async () => new Response('Not accepted', { status }));
     const { response, body } = await invoke(jsonRequest(valid));
     assert.equal(response.status, 502);
@@ -223,6 +234,39 @@ for (const error of [new Error('Simulated connection reset'), new DOMException('
     assert.equal(delivery.mock.callCount(), 1, 'No silent retry that could duplicate a delivered request.');
   });
 }
+
+for (const receipt of [{}, { id: '' }, { id: 42 }, { error: 'Rejected' }, null]) {
+  test(`Resend success without a valid email ID is rejected: ${JSON.stringify(receipt)}`, async (t) => {
+    mockDelivery(t, async () => Response.json(receipt));
+    const { response, body } = await invoke(jsonRequest(valid));
+    assert.equal(response.status, 502);
+    assert.equal(body.ok, false);
+    assert.equal(body.quoteId, undefined);
+  });
+}
+
+test('invalid JSON from Resend is not reported as success', async (t) => {
+  mockDelivery(t, async () => new Response('invalid JSON'));
+  const { response } = await invoke(jsonRequest(valid));
+  assert.equal(response.status, 502);
+});
+
+test('visitor fields cannot override email routing and project markup stays plain text', async (t) => {
+  const delivery = mockDelivery(t);
+  const projectDetails = '<script>alert("test")</script>\nSecond line & details';
+  const { response } = await invoke(jsonRequest({
+    ...valid, projectDetails, from: 'attacker@example.invalid', to: 'attacker@example.invalid',
+    reply_to: 'attacker@example.invalid', subject: 'Injected subject',
+  }));
+  assert.equal(response.status, 200);
+  const message = JSON.parse(String(delivery.mock.calls[0].arguments[1]?.body));
+  assert.equal(message.from, 'AAC Painters Website <submission@aacpaintersinc.com>');
+  assert.deepEqual(message.to, ['aacpaintersinc@gmail.com']);
+  assert.equal(message.reply_to, valid.email);
+  assert.ok(message.text.endsWith(projectDetails));
+  assert.equal(message.html, undefined);
+  assert.match(message.subject, /^New estimate request — AAC-/);
+});
 
 test('service catalog includes every newly advertised service and appropriate secondary fields', () => {
   assert.equal(new Set(quoteServices.map((service) => service.value)).size, quoteServices.length);
