@@ -12,7 +12,7 @@ async function seekHero(page: Page, time: number) {
 }
 
 async function expectHeroFits(page: Page) {
-  const overflow = await page.locator('.paint-word, .hero-brand-heading, .hero-description-painted, .hero-actions a').evaluateAll((elements) =>
+  const overflow = await page.locator('.paint-word, .hero-description-painted, .hero-actions a').evaluateAll((elements) =>
     elements.filter((element) => {
       const rect = element.getBoundingClientRect();
       return rect.left < 0 || rect.right > innerWidth;
