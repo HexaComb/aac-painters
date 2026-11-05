@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 
 test('hero uses the slogan as its heading and preserves header and footer branding', async ({ page }) => {
   await page.goto('/');

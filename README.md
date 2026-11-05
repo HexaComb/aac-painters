@@ -48,6 +48,24 @@ No additional server or SDK is needed. The API key stays on the server. `QUOTE_W
 
 The route acknowledges a request only after Resend returns success and an email ID. An absent API key returns 503; a rejected, malformed, or timed-out response returns 502. In either case, the form retains the entered details and offers the existing call/text contact, including a prefilled text message. A timeout does not prove Resend failed to accept the request; there are no automatic retries. Resend acceptance does not guarantee inbox delivery, so verify receipt before relying on online leads. The endpoint does not store submissions in a database.
 
+### GA4 analytics
+
+The shared layout loads Tag Manager container `GTM-N3ZWT8VH`, whose published Google tag sends to GA4 measurement ID `G-EX8HXMVRGP`. Its existing configuration owns `page_view`, `first_visit`, and enhanced measurement; the site does not send an additional page view or load a second Google tag.
+
+Custom events are sent through `gtag` to that same destination:
+
+| Event | When | Parameters |
+| --- | --- | --- |
+| `first_landing` | First page in a browser tab's session; requires session storage | `landing_page` |
+| `scroll_depth` | First time each 25%, 50%, 75%, and 90% depth is reached per page | `percent_scrolled` |
+| `navigation_click` | Internal navigation links | `link_name`, `link_url`, `link_location` |
+| `cta_click` | Estimate buttons, project CTAs, call/text/email links, and submit-button clicks | `link_name`, `link_url`, `link_location` |
+| `generate_lead` | Quote API confirms a successful submission | `form_id`, `form_name` |
+
+Every custom event includes `page_path`. Link destinations omit query strings; phone, SMS, and email links report only their protocol. Custom events never include form values, quote IDs, or the prefilled SMS body. GA4's automatic `form_submit` can represent a submission attempt; use `generate_lead` to count confirmed leads. `first_landing` is once per tab session, while GA4's `first_visit` identifies a new visitor.
+
+GA4 property `562468727` has event-scoped custom dimensions for `link_name` (Link name), `link_location` (Link location), `percent_scrolled` (Scroll depth), and `landing_page` (First landing path). `generate_lead` is registered as a key event, counted once per event, with no default monetary value. These property settings are managed in GA4, outside this repository. Events can be checked in Realtime/DebugView; custom-dimension reports require processing time. Browser tests block Google analytics traffic and mock quote delivery.
+
 ### Validation
 
 ```bash

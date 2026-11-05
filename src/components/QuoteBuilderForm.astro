@@ -460,6 +460,7 @@ import { quoteServices } from '../data/quoteOptions';
 
 <script>
   import { getQuoteService, isValidPhone } from '../data/quoteOptions';
+  import { trackEvent } from '../scripts/analytics';
 
   const form = document.querySelector<HTMLFormElement>('#aac-quote-form');
   const feedback = document.querySelector<HTMLElement>('#quote-feedback');
@@ -572,6 +573,10 @@ import { quoteServices } from '../data/quoteOptions';
         });
         const result = await response.json();
         if (response.ok && result.ok) {
+          trackEvent({
+            name: 'generate_lead',
+            parameters: { form_id: 'aac-quote-form', form_name: 'Free Estimate' },
+          });
           if (feedback) {
             feedback.hidden = false;
             feedback.classList.add('is-success');

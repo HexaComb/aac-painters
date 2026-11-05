@@ -70,6 +70,13 @@ const extraSchemas = structuredData
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      window.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+    </script>
+    <script is:inline async src="https://www.googletagmanager.com/gtm.js?id=GTM-N3ZWT8VH"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -117,6 +124,7 @@ const extraSchemas = structuredData
     ))}
   </head>
   <body>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N3ZWT8VH" height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <!-- Dark Slate Navigation Header (Matching Reference Mockup) -->
@@ -224,6 +232,10 @@ const extraSchemas = structuredData
 
     <!-- IntersectionObserver Fallback for Scroll Entry Effects -->
     <script>
+      import { initializeAnalytics } from '../scripts/analytics';
+
+      initializeAnalytics();
+
       const supportsViewTimeline =
         typeof CSS !== 'undefined' &&
         CSS.supports('animation-timeline: view()') &&
