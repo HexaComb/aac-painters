@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://www.aacpaintersinc.com/sitemap-index.xml
+Sitemap: https://www.aacpaintersinc.com/sitemap.xml
