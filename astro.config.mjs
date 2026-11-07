@@ -7,7 +7,7 @@ export default defineConfig({
   site: 'https://www.aacpaintersinc.com',
   output: 'static',
   adapter: cloudflare({
-    imageService: 'passthrough',
+    imageService: 'compile',
     platformProxy: {
       enabled: true,
     },

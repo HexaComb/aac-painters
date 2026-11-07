@@ -1,5 +1,13 @@
 ---
-import { flakePalettes } from '../data/siteData';
+import { flakePalettes as flakePalettesRaw } from '../data/siteData';
+import { optimizedImageUrl } from '../utils/optimizedImages';
+
+const flakePalettes = await Promise.all(
+  flakePalettesRaw.map(async (palette) => ({
+    ...palette,
+    previewImage: await optimizedImageUrl(palette.previewImage),
+  })),
+);
 ---
 
 <section class="lab-section" id="color-lab" aria-labelledby="lab-heading">
