@@ -8,6 +8,12 @@ import {
   beforeAfterGallery,
   faqItems
 } from '../data/siteData';
+import { optimizedImageUrl, optimizedBeforeAfterPair } from '../utils/optimizedImages';
+
+const gallery = await Promise.all(beforeAfterGallery.map(optimizedBeforeAfterPair));
+
+// Hero video poster, optimized WebP (also preloaded in <head> via the head slot).
+const heroPosterUrl = await optimizedImageUrl('/images/projects/mcauley-building-after.png');
 
 const heroSloganLines = [
   ['Preserving', 'the', 'past,'],
@@ -16,7 +22,7 @@ const heroSloganLines = [
 const heroPaintColors = ['red', 'blue', 'yellow'];
 
 function showcase(id: string, label: string, kicker: string, video?: string) {
-  const pair = beforeAfterGallery.find((item) => item.id === id);
+  const pair = gallery.find((item) => item.id === id);
   if (!pair) throw new Error(`Missing project gallery item: ${id}`);
   return {
     label,
@@ -63,21 +69,24 @@ const faqSchema = {
   description="Quality Paint. Lasting Results. Licensed California painting and epoxy flooring contractor (CSLB #1039849). Explore interactive before & after transformations, real jobsite documentaries, and request a free estimate with Alex Delgadillo at (209) 485-5103."
   structuredData={faqSchema}
 >
+  <link slot="head" rel="preload" as="image" href={heroPosterUrl} fetchpriority="high" />
   <!-- 1. FULL-BLEED CINEMATIC HERO SECTION -->
   <section class="hero-banner" aria-labelledby="hero-heading" data-hero-banner>
     <div class="hero-bg-stage">
       <video
         src="/videos/before-after-video.mp4"
-        poster="/images/projects/mcauley-building-after.png"
-        width="1660"
-        height="1244"
+        poster={heroPosterUrl}
+        width="1280"
+        height="960"
         autoplay
         loop
         muted
         playsinline
         preload="metadata"
         class="hero-bg-video"
-      ></video>
+      >
+        <track kind="captions" src="/videos/before-after-video.vtt" srclang="en" label="English" />
+      </video>
       <div class="hero-scrim" aria-hidden="true"></div>
     </div>
 
@@ -365,8 +374,8 @@ const faqSchema = {
             <video
               src={exteriorShowcases[0].video}
               poster={exteriorShowcases[0].afterImage}
-              width="1660"
-              height="1244"
+              width="1280"
+              height="960"
               autoplay
               loop
               muted
@@ -374,7 +383,9 @@ const faqSchema = {
               preload="metadata"
               class="ba-video"
               data-showcase-video
-            ></video>
+            >
+              <track kind="captions" src="/videos/before-after-video.vtt" srclang="en" label="English" />
+            </video>
             <div class="ba-slider-layers" data-showcase-slider-layers hidden>
               <img
                 src={exteriorShowcases[0].afterImage}

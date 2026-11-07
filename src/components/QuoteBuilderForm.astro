@@ -1,13 +1,16 @@
 ---
 import { brand, flakePalettes } from '../data/siteData';
 import { quoteServices } from '../data/quoteOptions';
+import { optimizedImageUrl } from '../utils/optimizedImages';
+
+const backdropUrl = await optimizedImageUrl('/images/projects/warehouse-flake-epoxy-after.png');
 ---
 
 <section class="estimate-cta-section" id="quote-builder" aria-labelledby="quote-heading">
   <!-- Atmospheric Jobsite & Coating Backdrop with Dark Reading Scrim -->
   <div class="estimate-backdrop" aria-hidden="true">
     <img
-      src="/images/projects/warehouse-flake-epoxy-after.png"
+      src={backdropUrl}
       alt=""
       width="1600"
       height="1000"

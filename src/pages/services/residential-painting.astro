@@ -4,10 +4,17 @@ import BeforeAfterCard from '../../components/BeforeAfterCard.astro';
 import QuoteBuilderForm from '../../components/QuoteBuilderForm.astro';
 import ServiceOverview from '../../components/ServiceOverview.astro';
 import { brand, beforeAfterGallery, interiorCraftGallery } from '../../data/siteData';
+import { optimizedImageUrl, optimizedBeforeAfterPair } from '../../utils/optimizedImages';
 
 const residentialPairs = beforeAfterGallery.filter((item) => item.category === 'Residential');
+// Match the craft gallery against the original paths before resolving URLs.
 const residentialImages = new Set(residentialPairs.map((item) => item.afterImage));
 const residentialCraftGallery = interiorCraftGallery.filter((item) => residentialImages.has(item.image));
+const resolvedPairs = await Promise.all(residentialPairs.map(optimizedBeforeAfterPair));
+const resolvedCraftGallery = await Promise.all(
+  residentialCraftGallery.map(async (item) => ({ ...item, image: await optimizedImageUrl(item.image) })),
+);
+const heroImageUrl = await optimizedImageUrl('/images/projects/residential-garage-flake-epoxy-after.png');
 ---
 
 <BaseLayout
@@ -18,7 +25,7 @@ const residentialCraftGallery = interiorCraftGallery.filter((item) => residentia
   <section class="subpage-hero">
     <div class="subpage-hero-bg">
       <img
-        src="/images/projects/residential-garage-flake-epoxy-after.png"
+        src={heroImageUrl}
         alt="Residential garage with a decorative flake floor finish"
         width="1600"
         height="900"
@@ -73,7 +80,7 @@ const residentialCraftGallery = interiorCraftGallery.filter((item) => residentia
       <h2 class="section-heading">Garage Floors &amp; Wood Fences</h2>
 
       <div class="split-list">
-        {residentialPairs.map((pair) => (
+        {resolvedPairs.map((pair) => (
           <BeforeAfterCard item={pair} layout="split-row" />
         ))}
       </div>
@@ -90,7 +97,7 @@ const residentialCraftGallery = interiorCraftGallery.filter((item) => residentia
       <h2 class="section-heading">A Closer Look at Residential Finishes</h2>
 
       <div class="interior-grid">
-        {residentialCraftGallery.map((item) => (
+        {resolvedCraftGallery.map((item) => (
           <figure class="interior-figure">
             <img src={item.image} alt={item.alt} width="700" height="520" loading="lazy" decoding="async" />
             <figcaption>

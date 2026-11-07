@@ -5,6 +5,10 @@ import StoryChapters from '../components/StoryChapters.astro';
 import FieldReelsSection from '../components/FieldReelsSection.astro';
 import QuoteBuilderForm from '../components/QuoteBuilderForm.astro';
 import { brand, beforeAfterGallery } from '../data/siteData';
+import { optimizedImageUrl, optimizedBeforeAfterPair } from '../utils/optimizedImages';
+
+const gallery = await Promise.all(beforeAfterGallery.map(optimizedBeforeAfterPair));
+const heroImageUrl = await optimizedImageUrl('/images/projects/auto-shop-epoxy-floor-after.png');
 ---
 
 <BaseLayout
@@ -15,7 +19,7 @@ import { brand, beforeAfterGallery } from '../data/siteData';
   <section class="subpage-hero">
     <div class="subpage-hero-bg">
       <img
-        src="/images/projects/auto-shop-epoxy-floor-after.png"
+        src={heroImageUrl}
         alt="Completed commercial automotive shop floor by AAC Painters Inc."
         width="1600"
         height="900"
@@ -67,7 +71,7 @@ import { brand, beforeAfterGallery } from '../data/siteData';
       <h2 class="section-heading">All 7 Interactive Before &amp; After Transformations</h2>
 
       <div class="split-list">
-        {beforeAfterGallery.map((pair, idx) => (
+        {gallery.map((pair, idx) => (
           <BeforeAfterCard item={pair} priority={idx === 0} layout="split-row" />
         ))}
       </div>

@@ -1,7 +1,18 @@
 ---
-import { autoShopStory, commercialExteriorStory, brand } from '../data/siteData';
+import { autoShopStory as autoShopStoryRaw, commercialExteriorStory as commercialExteriorStoryRaw, brand } from '../data/siteData';
+import { optimizedImageUrl } from '../utils/optimizedImages';
 
 const stageColors = ['accent-red', 'accent-green', 'accent-blue-deep', 'accent-yellow'];
+
+async function resolveStory(story: typeof autoShopStoryRaw) {
+  const stages = await Promise.all(
+    story.stages.map(async (stage) => ({ ...stage, image: await optimizedImageUrl(stage.image) })),
+  );
+  return { ...story, stages };
+}
+
+const autoShopStory = await resolveStory(autoShopStoryRaw);
+const commercialExteriorStory = await resolveStory(commercialExteriorStoryRaw);
 ---
 
 <!-- PART 1: DARK SLATE "WHY CHOOSE US" BAND (Exact Mockup Layout) -->
@@ -148,6 +159,8 @@ const stageColors = ['accent-red', 'accent-green', 'accent-blue-deep', 'accent-y
             type="button"
             class:list={['process-step-col', { 'is-active': idx === 3 }]}
             data-stage-btn={idx}
+            data-stage-image={stage.image}
+            data-stage-alt={stage.alt}
             aria-pressed={idx === 3 ? 'true' : 'false'}
           >
             <div class="step-num-row">
@@ -200,6 +213,8 @@ const stageColors = ['accent-red', 'accent-green', 'accent-blue-deep', 'accent-y
             type="button"
             class:list={['process-step-col', { 'is-active': idx === 3 }]}
             data-stage-btn={idx}
+            data-stage-image={stage.image}
+            data-stage-alt={stage.alt}
             aria-pressed={idx === 3 ? 'true' : 'false'}
           >
             <div class="step-num-row">
@@ -455,6 +470,9 @@ const stageColors = ['accent-red', 'accent-green', 'accent-blue-deep', 'accent-y
   }
 
   /* High-contrast accessible spectrum shades on white process cards */
+  .step-phase-label.accent-red {
+    color: #c40e2b;
+  }
   .step-phase-label.accent-green {
     color: #217a23;
   }
@@ -651,9 +669,9 @@ const stageColors = ['accent-red', 'accent-green', 'accent-blue-deep', 'accent-y
             b.setAttribute('aria-pressed', String(active));
           });
 
-          if (mainImg) {
-            mainImg.src = stage.image;
-            mainImg.alt = stage.alt;
+          if (mainImg && btn.dataset.stageImage) {
+            mainImg.src = btn.dataset.stageImage;
+            mainImg.alt = btn.dataset.stageAlt || stage.alt;
           }
           if (mainPill) {
             mainPill.textContent = `${stage.stepLabel}: ${stage.title}`;
