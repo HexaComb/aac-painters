@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { brand, seoServiceAreas } from '../data/siteData';
+import { optimizedImageUrl } from '../utils/optimizedImages';
 
 export interface Props {
   title?: string;
@@ -19,10 +20,27 @@ const {
 } = Astro.props;
 
 const canonicalUrl = new URL(canonicalPath, brand.domain).toString();
-const ogImageUrl = new URL(ogImage, 'https://aac-painters.marcode-chavez-jr.workers.dev').toString();
+const ogImageResolved = await optimizedImageUrl(ogImage);
+const ogImageUrl = new URL(ogImageResolved, 'https://aac-painters.marcode-chavez-jr.workers.dev').toString();
 const isBrandCard = ogImage === '/images/brand/aac-og.png';
 const ogImageAlt = isBrandCard ? 'AAC Painters — Quality paint. Lasting results. Painting, epoxy and polish. (209) 485-5103.' : title;
 const currentPath = Astro.url.pathname;
+
+// Logo served at 224px wide (2x its largest 112px display size), WebP.
+const logoUrl = await optimizedImageUrl('/images/brand/aac-painters-logo.png', 224);
+
+const schemaImagePaths = [
+  '/images/projects/mcauley-building-after.png',
+  '/images/projects/auto-shop-epoxy-floor-after.png',
+  '/images/projects/residential-garage-flake-epoxy-after.png',
+  '/images/projects/warehouse-flake-epoxy-after.png',
+];
+const schemaImageUrls = [
+  new URL(logoUrl, brand.domain).toString(),
+  ...(await Promise.all(
+    schemaImagePaths.map(async (path) => new URL(await optimizedImageUrl(path), brand.domain).toString()),
+  )),
+];
 
 const localBusinessSchema = {
   '@context': 'https://schema.org',
@@ -35,16 +53,10 @@ const localBusinessSchema = {
       slogan: 'Quality Paint. Lasting Results.',
       description,
       url: brand.domain,
-      logo: new URL('/images/brand/aac-painters-logo.png', brand.domain).toString(),
+      logo: schemaImageUrls[0],
       telephone: brand.phoneE164,
       priceRange: '$$',
-      image: [
-        new URL('/images/brand/aac-painters-logo.png', brand.domain).toString(),
-        new URL('/images/projects/mcauley-building-after.png', brand.domain).toString(),
-        new URL('/images/projects/auto-shop-epoxy-floor-after.png', brand.domain).toString(),
-        new URL('/images/projects/residential-garage-flake-epoxy-after.png', brand.domain).toString(),
-        new URL('/images/projects/warehouse-flake-epoxy-after.png', brand.domain).toString()
-      ],
+      image: schemaImageUrls,
       founder: {
         '@type': 'Person',
         name: brand.president,
@@ -76,7 +88,28 @@ const extraSchemas = structuredData
       gtag('js', new Date());
       window.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
     </script>
-    <script is:inline async src="https://www.googletagmanager.com/gtm.js?id=GTM-N3ZWT8VH"></script>
+    <!-- Google Tag Manager loads deferred (after window load or idle, 2.5s
+         fallback) so it stays off the critical path. The dataLayer bootstrap
+         and gtag stub above queue events until gtm.js arrives. -->
+    <script is:inline>
+      (function () {
+        var loaded = false;
+        function loadGTM() {
+          if (loaded) return;
+          loaded = true;
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-N3ZWT8VH';
+          document.head.appendChild(s);
+        }
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(loadGTM, { timeout: 2500 });
+        } else {
+          window.addEventListener('load', loadGTM);
+          setTimeout(loadGTM, 2500);
+        }
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -122,6 +155,7 @@ const extraSchemas = structuredData
     {extraSchemas.map((schema) => (
       <script type="application/ld+json" set:html={JSON.stringify(schema)} />
     ))}
+    <slot name="head" />
   </head>
   <body>
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N3ZWT8VH" height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>
@@ -132,7 +166,7 @@ const extraSchemas = structuredData
       <div class="container header-inner">
         <a href="/" class="brand-logo" aria-label="AAC Painters Inc. Home">
           <img
-            src="/images/brand/aac-painters-logo.png"
+            src={logoUrl}
             alt="AAC Painters Inc. — Coloring Your Dream"
             class="aac-logo-img"
             width="86"
@@ -177,7 +211,7 @@ const extraSchemas = structuredData
         <div class="footer-top">
           <a href="/" class="brand-logo" aria-label="AAC Painters Inc. Home">
             <img
-              src="/images/brand/aac-painters-logo.png"
+              src={logoUrl}
               alt="AAC Painters Inc. — Coloring Your Dream"
               class="aac-logo-img aac-logo-footer"
               width="112"

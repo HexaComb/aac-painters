@@ -5,8 +5,12 @@ import StoryChapters from '../../components/StoryChapters.astro';
 import QuoteBuilderForm from '../../components/QuoteBuilderForm.astro';
 import ServiceOverview from '../../components/ServiceOverview.astro';
 import { brand, beforeAfterGallery } from '../../data/siteData';
+import { optimizedImageUrl, optimizedBeforeAfterPair } from '../../utils/optimizedImages';
 
-const commercialPairs = beforeAfterGallery.filter((item) => item.category === 'Commercial');
+const commercialPairs = await Promise.all(
+  beforeAfterGallery.filter((item) => item.category === 'Commercial').map(optimizedBeforeAfterPair),
+);
+const heroImageUrl = await optimizedImageUrl('/images/projects/mcauley-building-after.png');
 ---
 
 <BaseLayout
@@ -17,7 +21,7 @@ const commercialPairs = beforeAfterGallery.filter((item) => item.category === 'C
   <section class="subpage-hero">
     <div class="subpage-hero-bg">
       <img
-        src="/images/projects/mcauley-building-after.png"
+        src={heroImageUrl}
         alt="Painted commercial building exterior"
         width="1600"
         height="900"

@@ -10,7 +10,9 @@ test('hero uses the slogan as its heading and preserves header and footer brandi
     const logo = page.locator(selector);
     await expect(logo).toHaveAccessibleName('AAC Painters Inc. Home');
     await expect(logo.locator('img')).toBeVisible();
-    await expect(logo.locator('img')).toHaveAttribute('src', '/images/brand/aac-painters-logo.png');
+    // Build serves /_astro/aac-painters-logo.<hash>.webp; the dev server
+    // serves the same optimized image via /_image?...&f=webp.
+    await expect(logo.locator('img')).toHaveAttribute('src', /aac-painters-logo[^"]*(?:\.webp|f=webp)/);
   }
   await expect(page.locator('.hero-banner img')).toHaveCount(0);
   await expect(page.locator('#hero-heading')).toHaveText('Preserving the past, inspiring the future.');

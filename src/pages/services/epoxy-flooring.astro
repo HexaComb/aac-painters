@@ -4,10 +4,14 @@ import BeforeAfterCard from '../../components/BeforeAfterCard.astro';
 import QuoteBuilderForm from '../../components/QuoteBuilderForm.astro';
 import ServiceOverview from '../../components/ServiceOverview.astro';
 import { brand, beforeAfterGallery, dustBagsProof } from '../../data/siteData';
+import { optimizedImageUrl, optimizedBeforeAfterPair } from '../../utils/optimizedImages';
 
-const epoxyPairs = beforeAfterGallery.filter(
-  (item) => item.category === 'Epoxy Flooring' || item.id === 'residential-garage-masterpiece'
+const epoxyPairs = await Promise.all(
+  beforeAfterGallery
+    .filter((item) => item.category === 'Epoxy Flooring' || item.id === 'residential-garage-masterpiece')
+    .map(optimizedBeforeAfterPair),
 );
+const heroImageUrl = await optimizedImageUrl('/images/projects/residential-garage-flake-epoxy-after.png');
 ---
 
 <BaseLayout
@@ -19,7 +23,7 @@ const epoxyPairs = beforeAfterGallery.filter(
   <section class="subpage-hero">
     <div class="subpage-hero-bg">
       <img
-        src="/images/projects/residential-garage-flake-epoxy-after.png"
+        src={heroImageUrl}
         alt="Completed full-broadcast granite flake epoxy garage floor by AAC Painters Inc."
         width="1600"
         height="900"
