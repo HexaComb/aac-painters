@@ -21,7 +21,7 @@ const {
 
 const canonicalUrl = new URL(canonicalPath, brand.domain).toString();
 const ogImageResolved = await optimizedImageUrl(ogImage);
-const ogImageUrl = new URL(ogImageResolved, 'https://aac-painters.marcode-chavez-jr.workers.dev').toString();
+const ogImageUrl = new URL(ogImageResolved, brand.domain).toString();
 const isBrandCard = ogImage === '/images/brand/aac-og.png';
 const ogImageAlt = isBrandCard ? 'AAC Painters — Quality paint. Lasting results. Painting, epoxy and polish. (209) 485-5103.' : title;
 const currentPath = Astro.url.pathname;
@@ -223,10 +223,10 @@ const extraSchemas = structuredData
 
           <nav class="footer-nav" aria-label="Footer Navigation">
             <a href="/">Home</a>
-            <a href="/services/residential-painting">Residential</a>
-            <a href="/services/commercial-painting">Commercial</a>
-            <a href="/services/epoxy-flooring">Epoxy Floors</a>
-            <a href="/projects">Our Work</a>
+            <a href="/services/residential-painting/">Residential</a>
+            <a href="/services/commercial-painting/">Commercial</a>
+            <a href="/services/epoxy-flooring/">Epoxy Floors</a>
+            <a href="/projects/">Our Work</a>
             <a href="/#reviews">Project Videos</a>
             <a href="#quote-builder">Free Estimate</a>
           </nav>

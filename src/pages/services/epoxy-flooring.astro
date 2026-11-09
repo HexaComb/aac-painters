@@ -3,6 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import BeforeAfterCard from '../../components/BeforeAfterCard.astro';
 import QuoteBuilderForm from '../../components/QuoteBuilderForm.astro';
 import ServiceOverview from '../../components/ServiceOverview.astro';
+import ServiceLocalContext from '../../components/ServiceLocalContext.astro';
+import { makeServiceStructuredData } from '../../data/seo';
 import { brand, beforeAfterGallery, dustBagsProof } from '../../data/siteData';
 import { optimizedImageUrl, optimizedBeforeAfterPair } from '../../utils/optimizedImages';
 
@@ -15,8 +17,10 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/residential-garag
 ---
 
 <BaseLayout
-  title="Epoxy & Metallic Concrete Flooring | AAC Painters Inc. (CSLB #1039849)"
-  description="Explore epoxy and decorative flake floors, concrete preparation, and pool deck and patio coatings for Central Valley homes and commercial properties. Call (209) 485-5103."
+  title="Epoxy Flooring in Modesto & Turlock | AAC Painters"
+  description="Garage epoxy flooring, decorative flake and commercial concrete coatings in Modesto, Turlock and the Central Valley. See real projects and request an estimate."
+  canonicalPath="/services/epoxy-flooring/"
+  structuredData={makeServiceStructuredData({ path: "/services/epoxy-flooring/", name: "Epoxy Flooring & Concrete Coatings", description: "Garage epoxy floors, decorative flake systems, commercial concrete coatings, concrete preparation and grind-and-seal options in the Central Valley." })}
   ogImage="/images/projects/residential-garage-flake-epoxy-after.png"
 >
   <!-- Dark Hero Banner with 4-Color Spectrum Bar -->
@@ -42,12 +46,12 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/residential-garag
       </nav>
 
       <h1 class="subpage-title">
-        Concrete Transformed.<br />
-        <span class="accent-blue">Built to Last.</span>
+        Epoxy Flooring in<br />
+        <span class="accent-blue">Modesto &amp; Turlock.</span>
       </h1>
 
       <p class="subpage-lead">
-        Explore floor finishes for garages, auto service bays, and warehouses, along with coating options for pool decks and patios. The surface condition and intended use guide the proposed system.
+        Planning a garage epoxy floor or commercial concrete coating in the Central Valley? See real garage, auto-bay and warehouse results, then ask about surface preparation, finish options and cure time for your slab.
       </p>
 
       <div class="subpage-actions">
@@ -68,6 +72,16 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/residential-garag
 
   <ServiceOverview serviceId="epoxy-flooring" />
 
+  <ServiceLocalContext
+    id="epoxy-service-area"
+    eyebrow="EPOXY & CONCRETE COATINGS · CENTRAL VALLEY"
+    heading="Garage epoxy floors and concrete coatings in Modesto & Turlock"
+    summary="AAC Painters helps homeowners and commercial operators compare decorative flake, epoxy, metallic and grind-and-seal options. For garages, auto-service bays and warehouse floors in Modesto, Turlock and surrounding communities, the right finish depends on concrete condition, traffic, appearance and maintenance expectations."
+    projectNote="View real before-and-after work from a residential garage, auto-service bay and warehouse floor. Each project can require different grinding, repairs and coating materials."
+    considerations={["Floor size, existing coating, stains, cracks or moisture concerns", "Garage, vehicle, equipment or commercial traffic and desired appearance", "Surface preparation, cure time and when the floor must return to use"]}
+    related={[{ href: "/services/residential-painting/", label: "Residential painting" }, { href: "/services/commercial-painting/", label: "Commercial painting" }]}
+  />
+
   <!-- 6-Bag Dust Proof & Technical Spec Section -->
   <section class="prep-spec-section">
     <div class="container prep-spec-grid">
@@ -83,19 +97,19 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/residential-garag
 
         <dl class="spec-list">
           <div class="spec-row">
-            <dt>01. Surface Review</dt>
+            <dt>Surface Review</dt>
             <dd>Identify existing coatings, contamination, and areas needing preparation.</dd>
           </div>
           <div class="spec-row">
-            <dt>02. Preparation &amp; Repairs</dt>
+            <dt>Preparation &amp; Repairs</dt>
             <dd>Discuss grinding and repair needs before choosing the coating system.</dd>
           </div>
           <div class="spec-row">
-            <dt>03. Finish Selection</dt>
+            <dt>Finish Selection</dt>
             <dd>Compare decorative flake, solid-color, and metallic floor options.</dd>
           </div>
           <div class="spec-row">
-            <dt>04. Use &amp; Care</dt>
+            <dt>Use &amp; Care</dt>
             <dd>Confirm cure times, return-to-use timing, and maintenance for the selected finish.</dd>
           </div>
         </dl>
