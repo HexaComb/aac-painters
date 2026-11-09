@@ -4,6 +4,8 @@ import BeforeAfterCard from '../../components/BeforeAfterCard.astro';
 import StoryChapters from '../../components/StoryChapters.astro';
 import QuoteBuilderForm from '../../components/QuoteBuilderForm.astro';
 import ServiceOverview from '../../components/ServiceOverview.astro';
+import ServiceLocalContext from '../../components/ServiceLocalContext.astro';
+import { makeServiceStructuredData } from '../../data/seo';
 import { brand, beforeAfterGallery } from '../../data/siteData';
 import { optimizedImageUrl, optimizedBeforeAfterPair } from '../../utils/optimizedImages';
 
@@ -14,8 +16,10 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/mcauley-building-
 ---
 
 <BaseLayout
-  title="Commercial Painting & Industrial Coatings | AAC Painters Inc. (CSLB #1039849)"
-  description="Commercial interior and exterior painting for storefronts, warehouses, HOA communities, hotels, and apartment complexes in the Central Valley. Call (209) 485-5103."
+  title="Commercial Painting in Modesto & Turlock | AAC Painters"
+  description="Commercial exterior and interior painting for storefronts, warehouses and multi-unit properties in Modesto, Turlock and the Central Valley. Request a bid."
+  canonicalPath="/services/commercial-painting/"
+  structuredData={makeServiceStructuredData({ path: "/services/commercial-painting/", name: "Commercial Painting & Industrial Coatings", description: "Commercial interior and exterior painting for storefronts, warehouses, apartment communities and businesses in the Central Valley." })}
   ogImage="/images/projects/mcauley-building-after.png"
 >
   <section class="subpage-hero">
@@ -40,12 +44,12 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/mcauley-building-
       </nav>
 
       <h1 class="subpage-title">
-        Commercial Painting.<br />
-        <span class="accent-blue">Planned Around Your Property.</span>
+        Commercial Painting in<br />
+        <span class="accent-blue">Modesto &amp; Turlock.</span>
       </h1>
 
       <p class="subpage-lead">
-        Discuss surface preparation, building access, tenant needs, and scheduling for your commercial interior or exterior painting project.
+        From storefront exteriors to commercial interiors, AAC Painters helps property owners plan surface preparation, business access and scheduling in Modesto, Turlock and the Central Valley.
       </p>
 
       <div class="subpage-actions">
@@ -65,6 +69,16 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/mcauley-building-
   </section>
 
   <ServiceOverview serviceId="commercial-painting" />
+
+  <ServiceLocalContext
+    id="commercial-service-area"
+    eyebrow="COMMERCIAL PAINTING · CENTRAL VALLEY"
+    heading="Commercial painters for active businesses and properties"
+    summary="AAC Painters offers commercial interior and exterior repaints for storefronts, warehouses, apartment properties, HOA communities and other facilities across Modesto, Turlock and surrounding Central Valley cities. A site-specific bid can account for tenant access, surface repairs, coatings and project phasing."
+    projectNote="Our portfolio documents a real corner storefront repaint, exterior surface preparation and canopy work so property teams can inspect the process before requesting a bid."
+    considerations={["Building type, elevations, doors, trim or interior spaces included", "Business hours, tenant access, safety and staging requirements", "Existing surfaces, repair needs, color selections and target dates"]}
+    related={[{ href: "/services/residential-painting/", label: "Residential painting" }, { href: "/services/epoxy-flooring/", label: "Commercial floor coatings" }]}
+  />
 
   <section class="comm-showcase-section">
     <div class="container">

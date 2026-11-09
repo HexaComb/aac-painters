@@ -3,6 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import BeforeAfterCard from '../../components/BeforeAfterCard.astro';
 import QuoteBuilderForm from '../../components/QuoteBuilderForm.astro';
 import ServiceOverview from '../../components/ServiceOverview.astro';
+import ServiceLocalContext from '../../components/ServiceLocalContext.astro';
+import { makeServiceStructuredData } from '../../data/seo';
 import { brand, beforeAfterGallery, interiorCraftGallery } from '../../data/siteData';
 import { optimizedImageUrl, optimizedBeforeAfterPair } from '../../utils/optimizedImages';
 
@@ -14,19 +16,21 @@ const resolvedPairs = await Promise.all(residentialPairs.map(optimizedBeforeAfte
 const resolvedCraftGallery = await Promise.all(
   residentialCraftGallery.map(async (item) => ({ ...item, image: await optimizedImageUrl(item.image) })),
 );
-const heroImageUrl = await optimizedImageUrl('/images/projects/residential-garage-flake-epoxy-after.png');
+const heroImageUrl = await optimizedImageUrl('/images/projects/wood-fence-stained-after.png');
 ---
 
 <BaseLayout
-  title="Residential Interior & Exterior Painting | AAC Painters Inc. (CSLB #1039849)"
-  description="Residential painting, cabinets, stairwells, popcorn ceiling removal, pressure washing, and fence and deck staining in California's Central Valley. Call (209) 485-5103."
-  ogImage="/images/projects/residential-garage-flake-epoxy-after.png"
+  title="House Painters in Modesto & Turlock | AAC Painters Inc."
+  description="Interior and exterior house painting in Modesto, Turlock and the Central Valley. Cabinets, trim, fences and more. Request a free estimate."
+  canonicalPath="/services/residential-painting/"
+  structuredData={makeServiceStructuredData({ path: "/services/residential-painting/", name: "Residential Interior & Exterior Painting", description: "Interior and exterior house painting, cabinet painting, trim, wood fence staining and surface preparation for Central Valley homes." })}
+  ogImage="/images/projects/wood-fence-stained-after.png"
 >
   <section class="subpage-hero">
     <div class="subpage-hero-bg">
       <img
         src={heroImageUrl}
-        alt="Residential garage with a decorative flake floor finish"
+        alt="Actual AAC Painters project showing a freshly stained residential wood fence"
         width="1600"
         height="900"
         loading="eager"
@@ -45,11 +49,11 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/residential-garag
 
       <h1 class="subpage-title">
         Interior &amp; Exterior<br />
-        <span class="accent-blue">Painting for Your Home.</span>
+        <span class="accent-blue">House Painters in Modesto &amp; Turlock.</span>
       </h1>
 
       <p class="subpage-lead">
-        Plan interior and exterior painting, cabinet and trim updates, ceiling re-texturing, pressure washing, or wood staining for your home.
+        Planning an interior repaint, exterior refresh, cabinet update or wood fence staining? AAC Painters serves Modesto, Turlock and nearby Central Valley homes. Tell us what needs work for a free estimate.
       </p>
 
       <div class="subpage-actions">
@@ -69,6 +73,16 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/residential-garag
   </section>
 
   <ServiceOverview serviceId="residential-painting" />
+
+  <ServiceLocalContext
+    id="residential-service-area"
+    eyebrow="RESIDENTIAL PAINTING · CENTRAL VALLEY"
+    heading="House painting for Modesto, Turlock and nearby communities"
+    summary="From walls and ceilings to exterior siding, stucco, trim, cabinets and fences, AAC Painters plans residential work around the surface condition, finish and access your home requires. Ask about a home painting estimate in Modesto, Turlock, Ceres, Oakdale, Merced or surrounding service areas."
+    projectNote="See an actual residential wood-fence staining transformation in the project gallery, along with before-and-after documentation from other AAC jobsites."
+    considerations={["Rooms, exterior surfaces or woodwork included in the project", "Existing paint, peeling, repairs or staining concerns", "Color preferences, access requirements and intended timing"]}
+    related={[{ href: "/services/commercial-painting/", label: "Commercial painting" }, { href: "/services/epoxy-flooring/", label: "Garage epoxy flooring" }]}
+  />
 
   <!-- Featured Residential Before & After Split Rows -->
   <section class="res-ba-section">

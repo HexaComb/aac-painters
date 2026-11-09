@@ -12,13 +12,14 @@ async function fillContact(page: Page) {
 
 test('services are an equal, text-only list and route to a neutral estimate choice', async ({ page }) => {
   const services = [
-    ['Interior & exterior painting', '/services/residential-painting'],
-    ['Cabinet, stairwell & railing painting', '/services/residential-painting'],
-    ['Fence & deck staining', '/services/residential-painting'],
-    ['Epoxy flooring', '/services/epoxy-flooring'],
-    ['Grind & seal concrete', '/services/epoxy-flooring'],
-    ['Popcorn removal & texture', '/services/residential-painting'],
-    ['Pressure washing', '/services/residential-painting'],
+    ['Interior & exterior painting', '/services/residential-painting/'],
+    ['Commercial & industrial painting', '/services/commercial-painting/'],
+    ['Cabinet, stairwell & railing painting', '/services/residential-painting/'],
+    ['Fence & deck staining', '/services/residential-painting/'],
+    ['Epoxy flooring', '/services/epoxy-flooring/'],
+    ['Grind & seal concrete', '/services/epoxy-flooring/'],
+    ['Popcorn removal & texture', '/services/residential-painting/'],
+    ['Pressure washing', '/services/residential-painting/'],
   ] as const;
   await page.goto('/');
   const list = page.locator('#our-services .services-list');
@@ -41,14 +42,14 @@ test('services are an equal, text-only list and route to a neutral estimate choi
   }
   await list.getByRole('link', { name: 'Grind & seal concrete' }).focus();
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(/\/services\/epoxy-flooring$/);
+  await expect(page).toHaveURL(/\/services\/epoxy-flooring\/?$/);
   await expect(page.locator('#serviceType')).toHaveValue('');
   await expect(page.locator('#serviceType')).toContainText('Grind & Seal Concrete');
   await page.goBack();
   await expect(page.locator('#serviceType')).toHaveValue('');
   await page.goForward();
   await expect(page.locator('#serviceType')).toHaveValue('');
-  await page.goto('/services/residential-painting');
+  await page.goto('/services/residential-painting/');
   await expect(page.locator('#serviceType')).toHaveValue('');
   await expect(page.locator('.estimate-credentials')).toContainText('Painting, floor coatings, staining & surface work');
   await expect(page.locator('.estimate-credentials')).not.toContainText('Fully Insured');
@@ -121,9 +122,9 @@ async function fulfillApi(route: Route, deliveryStatus?: number) {
 
 test('service pages expose the shared lineup with correct project categories', async ({ page }) => {
   const pages = [
-    { path: '/services/residential-painting', terms: ['Cabinet Painting', 'Stairwell', 'Popcorn', 'Pressure Washing'], count: 2 },
+    { path: '/services/residential-painting/', terms: ['Cabinet Painting', 'Stairwell', 'Popcorn', 'Pressure Washing'], count: 2 },
     { path: '/services/commercial-painting', terms: ['HOA', 'Hotel', 'Apartment'], count: 3 },
-    { path: '/services/epoxy-flooring', terms: ['Pool Deck', 'Patio', 'Wood Deck'], count: 3 },
+    { path: '/services/epoxy-flooring/', terms: ['Pool Deck', 'Patio', 'Wood Deck'], count: 3 },
   ];
   for (const service of pages) {
     await page.goto(service.path);

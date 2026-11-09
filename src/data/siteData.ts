@@ -468,7 +468,7 @@ export const FLAKE_PRESETS: FlakeSystemPreset[] = [
 export const SERVICES_LIST = [
   {
     id: 'epoxy-flooring',
-    slug: '/services/epoxy-flooring',
+    slug: '/services/epoxy-flooring/',
     badge: 'SIGNATURE SPECIALTY',
     title: 'Epoxy, Polyaspartic & Decorative Flake Floors',
     shortDesc:
@@ -487,7 +487,7 @@ export const SERVICES_LIST = [
   },
   {
     id: 'commercial-painting',
-    slug: '/services/commercial-painting',
+    slug: '/services/commercial-painting/',
     badge: 'COMMERCIAL & INDUSTRIAL',
     title: 'Commercial, Franchise & Industrial Painting',
     shortDesc:
@@ -506,7 +506,7 @@ export const SERVICES_LIST = [
   },
   {
     id: 'residential-painting',
-    slug: '/services/residential-painting',
+    slug: '/services/residential-painting/',
     badge: 'HOMEOWNERS & ESTATES',
     title: 'Residential Interior, Exterior & Wood Staining',
     shortDesc:
