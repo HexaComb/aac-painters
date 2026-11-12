@@ -5,6 +5,11 @@ export interface BeforeAfterItem {
   category: 'epoxy' | 'commercial' | 'residential';
   categoryLabel: string;
   location: string;
+  projectScope: string;
+  documentedResult: string;
+  processEvidence?: string;
+  serviceHref: string;
+  serviceLabel: string;
   beforeImage: string;
   beforeAlt: string;
   beforeWidth: number;
@@ -103,6 +108,11 @@ export const BEFORE_AFTER_GALLERY: BeforeAfterItem[] = [
     category: 'epoxy',
     categoryLabel: 'Industrial Epoxy & Polish',
     location: 'Central Valley, CA (209)',
+    projectScope: 'Auto-service bay concrete floor',
+    documentedResult: 'The worn shop floor is shown next to its smooth, light-colored coated finish.',
+    processEvidence: 'Separate photos document floor grinding and patched areas before the finished view.',
+    serviceHref: '/services/epoxy-flooring/',
+    serviceLabel: 'Explore epoxy flooring',
     beforeImage: '/images/projects/auto-shop-floor-before.png',
     beforeAlt: 'Before: Auto service shop floor before transformation',
     beforeWidth: 450,
@@ -128,6 +138,10 @@ export const BEFORE_AFTER_GALLERY: BeforeAfterItem[] = [
     category: 'epoxy',
     categoryLabel: 'Warehouse Flake System',
     location: '209 Industrial Corridor, CA',
+    projectScope: 'Commercial warehouse concrete floor',
+    documentedResult: 'Before-and-after images show the existing slab and a decorative flake finish.',
+    serviceHref: '/services/epoxy-flooring/',
+    serviceLabel: 'Explore epoxy flooring',
     beforeImage: '/images/projects/warehouse-floor-before.jpeg',
     beforeAlt: 'Before: Commercial warehouse floor before transformation',
     beforeWidth: 450,
@@ -153,6 +167,11 @@ export const BEFORE_AFTER_GALLERY: BeforeAfterItem[] = [
     category: 'commercial',
     categoryLabel: 'Commercial Exterior Overhaul',
     location: 'Merced / Central Valley, CA',
+    projectScope: 'Corner storefront exterior painting',
+    documentedResult: 'A deeper neutral facade and dark storefront framing replace the earlier light-color exterior.',
+    processEvidence: 'Additional jobsite photos show the awning area and facade preparation.',
+    serviceHref: '/services/commercial-painting/',
+    serviceLabel: 'Explore commercial painting',
     beforeImage: '/images/projects/mcauley-building-before.png',
     beforeAlt: 'Before: Commercial building before painting',
     beforeWidth: 600,
@@ -178,6 +197,10 @@ export const BEFORE_AFTER_GALLERY: BeforeAfterItem[] = [
     category: 'residential',
     categoryLabel: 'Residential Garage Epoxy',
     location: 'Central Valley Homeowner',
+    projectScope: 'Two-car residential garage floor coating',
+    documentedResult: 'The completed view shows decorative flake flooring and finished stem-wall edges.',
+    serviceHref: '/services/epoxy-flooring/',
+    serviceLabel: 'Explore garage coatings',
     beforeImage: '/images/projects/residential-garage-before.png',
     beforeAlt: 'Before: Residential garage floor before transformation',
     beforeWidth: 600,
@@ -203,6 +226,10 @@ export const BEFORE_AFTER_GALLERY: BeforeAfterItem[] = [
     category: 'commercial',
     categoryLabel: 'Storefront Repaint',
     location: 'Central Valley, CA',
+    projectScope: 'Commercial storefront canopy repaint',
+    documentedResult: 'Paired images document the canopy and its yellow-painted finish.',
+    serviceHref: '/services/commercial-painting/',
+    serviceLabel: 'Explore commercial painting',
     beforeImage: '/images/projects/mcdonalds-696-awning-before.png',
     beforeAlt: 'Before: Commercial canopy before painting',
     beforeWidth: 600,
@@ -228,6 +255,10 @@ export const BEFORE_AFTER_GALLERY: BeforeAfterItem[] = [
     category: 'commercial',
     categoryLabel: 'Facility Painting',
     location: 'Central Valley, CA',
+    projectScope: 'Commercial building exterior walls and trim',
+    documentedResult: 'The photos compare the existing building exterior with its repainted walls and trim.',
+    serviceHref: '/services/commercial-painting/',
+    serviceLabel: 'Explore commercial painting',
     beforeImage: '/images/projects/catalyst-commercial-before.png',
     beforeAlt: 'Before: Commercial building exterior before painting',
     beforeWidth: 600,
@@ -253,6 +284,10 @@ export const BEFORE_AFTER_GALLERY: BeforeAfterItem[] = [
     category: 'residential',
     categoryLabel: 'Staining & Wood Restoration',
     location: 'Central Valley Residence',
+    projectScope: 'Exterior wood privacy fence staining',
+    documentedResult: 'Weathered gray fence boards appear with a warm-toned stained finish afterward.',
+    serviceHref: '/services/residential-painting/',
+    serviceLabel: 'Explore residential painting',
     beforeImage: '/images/projects/wood-fence-before.png',
     beforeAlt: 'Before: Wooden privacy fence before staining',
     beforeWidth: 450,
@@ -578,6 +613,11 @@ export interface BeforeAfterPair {
   subtitle: string;
   category: string;
   duration: string;
+  projectScope: string;
+  documentedResult: string;
+  processEvidence?: string;
+  serviceHref: string;
+  serviceLabel: string;
   beforeImage: string;
   beforeAlt: string;
   afterImage: string;
@@ -612,6 +652,11 @@ export const beforeAfterGallery: BeforeAfterPair[] = BEFORE_AFTER_GALLERY.map((i
         ? 'Commercial'
         : 'Residential',
   duration: item.turnaround,
+  projectScope: item.projectScope,
+  documentedResult: item.documentedResult,
+  processEvidence: item.processEvidence,
+  serviceHref: item.serviceHref,
+  serviceLabel: item.serviceLabel,
   beforeImage: item.beforeImage,
   beforeAlt: item.beforeAlt,
   afterImage: item.afterImage,

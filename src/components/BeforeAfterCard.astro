@@ -5,9 +5,10 @@ export interface Props {
   item: BeforeAfterPair;
   priority?: boolean;
   layout?: 'split-row' | 'card';
+  showServiceLink?: boolean;
 }
 
-const { item, priority = false, layout = 'card' } = Astro.props;
+const { item, priority = false, layout = 'card', showServiceLink = false } = Astro.props;
 ---
 
 <article
@@ -138,14 +139,35 @@ const { item, priority = false, layout = 'card' } = Astro.props;
     <p class="ba-subtitle">{item.subtitle}</p>
     <p class="ba-story">{item.story}</p>
 
+    <!-- Photo-supported project details without unverified city or turnaround claims. -->
+    <dl class="ba-project-evidence" data-project-evidence>
+      <div class="ba-evidence-row">
+        <dt>Work shown</dt>
+        <dd>{item.projectScope}</dd>
+      </div>
+      <div class="ba-evidence-row">
+        <dt>Finished result</dt>
+        <dd>{item.documentedResult}</dd>
+      </div>
+      {item.processEvidence && (
+        <div class="ba-evidence-row">
+          <dt>Process photos</dt>
+          <dd>{item.processEvidence}</dd>
+        </div>
+      )}
+    </dl>
+
     <div class="ba-footer-row">
       <span class="ba-finish-spec">
         <strong>System:</strong> {item.finishSystem}
       </span>
-      <a href="#quote-builder" class="arrow-link">
-        <span>Request Similar Spec</span>
-        <span aria-hidden="true">&rarr;</span>
-      </a>
+      <div class="ba-footer-actions">
+        {showServiceLink && <a class="ba-service-link" href={item.serviceHref}>{item.serviceLabel}</a>}
+        <a href="#quote-builder" class="arrow-link">
+          <span>Request a Similar Project</span>
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
     </div>
   </div>
 </article>
@@ -419,6 +441,52 @@ const { item, priority = false, layout = 'card' } = Astro.props;
     line-height: 1.65;
     color: var(--text-dark-secondary);
     margin-bottom: 1.25rem;
+  }
+
+  .ba-project-evidence {
+    display: grid;
+    gap: 0.65rem;
+    margin: 0 0 1.35rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .ba-evidence-row {
+    display: grid;
+    grid-template-columns: 7.75rem minmax(0, 1fr);
+    gap: 0.8rem;
+  }
+
+  .ba-evidence-row dt {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-dark-muted);
+  }
+
+  .ba-evidence-row dd {
+    margin: 0;
+    font-size: 0.91rem;
+    line-height: 1.5;
+    color: var(--text-dark-secondary);
+  }
+
+  .ba-footer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.8rem 1.2rem;
+  }
+
+  .ba-service-link {
+    color: var(--aac-blue-deep);
+    font-weight: 700;
+    font-size: 0.89rem;
+    text-underline-offset: 4px;
+  }
+
+  @media (max-width: 520px) {
+    .ba-evidence-row { grid-template-columns: 1fr; gap: 0.12rem; }
   }
 
   .ba-footer-row {

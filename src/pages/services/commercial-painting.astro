@@ -75,7 +75,7 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/mcauley-building-
     eyebrow="COMMERCIAL PAINTING · CENTRAL VALLEY"
     heading="Commercial painters for active businesses and properties"
     summary="AAC Painters offers commercial interior and exterior repaints for storefronts, warehouses, apartment properties, HOA communities and other facilities across Modesto, Turlock and surrounding Central Valley cities. A site-specific bid can account for tenant access, surface repairs, coatings and project phasing."
-    projectNote="Our portfolio documents a real corner storefront repaint, exterior surface preparation and canopy work so property teams can inspect the process before requesting a bid."
+    projectNote="AAC's actual photos document a corner storefront repaint, a commercial canopy, and facility exterior walls and trim. The storefront documentary also shows awning-area and wall preparation."
     considerations={["Building type, elevations, doors, trim or interior spaces included", "Business hours, tenant access, safety and staging requirements", "Existing surfaces, repair needs, color selections and target dates"]}
     related={[{ href: "/services/residential-painting/", label: "Residential painting" }, { href: "/services/epoxy-flooring/", label: "Commercial floor coatings" }]}
   />
@@ -86,7 +86,8 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/mcauley-building-
         <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <span class="kicker-text">Commercial Before &amp; After</span>
       </div>
-      <h2 class="section-heading">Commercial Exteriors &amp; Storefronts</h2>
+      <h2 class="section-heading">Storefront, Canopy &amp; Facility Exterior Projects</h2>
+      <p class="proof-intro">Compare AAC's commercial before-and-after photos, including the corner storefront, canopy and facility exterior. Additional storefront preparation photos document the work beyond the finished facade.</p>
       <div class="split-wrap">
         {commercialPairs.map((pair) => (
           <BeforeAfterCard item={pair} layout="split-row" />
@@ -169,6 +170,8 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/mcauley-building-
     color: var(--text-dark);
     margin-bottom: 2.5rem;
   }
+
+  .proof-intro { max-width: 68ch; margin: -0.2rem 0 2rem; color: var(--text-dark-secondary); line-height: 1.7; }
 
   .split-wrap {
     display: flex;
