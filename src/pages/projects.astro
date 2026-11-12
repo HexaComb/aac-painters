@@ -44,7 +44,7 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/auto-shop-epoxy-f
       </h1>
 
       <p class="subpage-lead">
-        Zero stock photography. Drag through all 7 interactive before-and-after transformations and step through our 4-stage commercial &amp; auto shop documentaries.
+        See actual AAC jobsite photos across seven before-and-after projects. Explore the work performed, documented finishes, and services behind each result.
       </p>
 
       <div class="subpage-actions">
@@ -73,7 +73,7 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/auto-shop-epoxy-f
 
       <div class="split-list">
         {gallery.map((pair, idx) => (
-          <BeforeAfterCard item={pair} priority={idx === 0} layout="split-row" />
+          <BeforeAfterCard item={pair} priority={idx === 0} layout="split-row" showServiceLink />
         ))}
       </div>
     </div>
