@@ -1,6 +1,6 @@
 # AAC Painters Inc. — Astro + Cloudflare Workers Website
 
-Official story-driven, high-SEO website for **AAC Painters Inc.** (*"Coloring Your Dream" — CSLB License #1039849*), featuring interactive Before & After comparison sliders, 4-stage jobsite documentaries, an interactive Flake & Coating System Lab, and a Cloudflare Workers Quote Builder API (`/api/quote`).
+Official story-driven, painting-focused website for **AAC Painters Inc.** (*"Coloring Your Dream" — CSLB License #1039849*), featuring interactive Before & After comparison sliders, exterior painting jobsite documentaries, and a Cloudflare Workers Quote Builder API (`/api/quote`).
 
 ## Quick Start
 
@@ -77,3 +77,6 @@ npm run test:browser     # desktop/mobile browser flows, mocked API delivery
 ```
 
 `npm run validate` runs all four checks. Browser tests can use an existing Chromium binary by setting `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`. Node 22.6+ is required for the TypeScript API tests (CI uses Node 22).
+
+## Service scope (November 16, 2026)
+Patterson is the primary service market, with the Bay Area and Central Valley also served. Flooring, epoxy, concrete grinding/sealing and deck/patio coating offerings are withdrawn, including quote choices and floor galleries. The retired `/services/epoxy-flooring/` endpoint returns HTTP 410 and noindex. Surface services refer to painting preparation, cleaning, texture work and wood staining, not a relabeled flooring offering. Historical media remains in version control but is not promoted as an available service.

@@ -2,7 +2,7 @@ export interface BeforeAfterItem {
   id: string;
   title: string;
   subtitle: string;
-  category: 'epoxy' | 'commercial' | 'residential';
+  category: 'commercial' | 'residential';
   categoryLabel: string;
   location: string;
   projectScope: string;
@@ -71,7 +71,7 @@ export const BUSINESS_INFO = {
   name: 'AAC Painters Inc.',
   legalName: 'AAC Painters Inc.',
   slogan: 'Coloring Your Dream',
-  secondarySlogan: 'Transform Your Concrete Into a Masterpiece',
+  secondarySlogan: 'Fresh Paint. Thoughtful Surface Preparation.',
   president: 'Alex Delgadillo',
   license: '1039849',
   licenseDisplay: 'CSLB Lic #1039849',
@@ -83,83 +83,11 @@ export const BUSINESS_INFO = {
   instagramUrl: 'https://www.instagram.com/aac_painters_inc/',
   facebookName: 'AAC PAINTERS INC',
   facebookUrl: 'https://www.facebook.com/search/top?q=AAC%20PAINTERS%20INC',
-  serviceAreas: [
-    'Merced',
-    'Modesto',
-    'Turlock',
-    'Atwater',
-    'Stockton',
-    'Manteca',
-    'Tracy',
-    'Los Banos',
-    'Ceres',
-    'Oakdale',
-    'Livingston',
-    'Chowchilla',
-  ],
+  serviceAreas: ['Patterson', 'Bay Area', 'Central Valley'],
   counties: ['Merced County', 'Stanislaus County', 'San Joaquin County', 'Madera County'],
 };
 
 export const BEFORE_AFTER_GALLERY: BeforeAfterItem[] = [
-  {
-    id: 'auto-service-bay',
-    title: 'Rotary Lift Auto Service Bay',
-    subtitle: 'A closer look at an auto shop floor before and after coating',
-    category: 'epoxy',
-    categoryLabel: 'Industrial Epoxy & Polish',
-    location: 'Central Valley, CA (209)',
-    projectScope: 'Auto-service bay concrete floor',
-    documentedResult: 'The worn shop floor is shown next to its smooth, light-colored coated finish.',
-    processEvidence: 'Separate photos document floor grinding and patched areas before the finished view.',
-    serviceHref: '/services/epoxy-flooring/',
-    serviceLabel: 'Explore epoxy flooring',
-    beforeImage: '/images/projects/auto-shop-floor-before.png',
-    beforeAlt: 'Before: Auto service shop floor before transformation',
-    beforeWidth: 450,
-    beforeHeight: 600,
-    beforeLabel: 'Before Transformation',
-    afterImage: '/images/projects/auto-shop-epoxy-floor-after.png',
-    afterAlt: 'After: Finished auto service shop floor',
-    afterWidth: 600,
-    afterHeight: 340,
-    afterLabel: 'After Transformation',
-    prepSpec: 'Review the slab, surface preparation and repair needs',
-    coatingSpec: 'Smooth, light-colored floor coating',
-    turnaround: '',
-    storyHook: 'The paired views show an auto service bay with a worn floor and a light-colored finished surface.',
-    storyBody:
-      'For a similar space, discuss vehicle traffic, existing contamination, surface repairs and return-to-service requirements during the estimate.',
-    defaultSliderPos: 48,
-  },
-  {
-    id: 'commercial-warehouse-flake',
-    title: 'Distribution Warehouse Facility',
-    subtitle: 'Warehouse concrete and a decorative flake finish',
-    category: 'epoxy',
-    categoryLabel: 'Warehouse Flake System',
-    location: '209 Industrial Corridor, CA',
-    projectScope: 'Commercial warehouse concrete floor',
-    documentedResult: 'Before-and-after images show the existing slab and a decorative flake finish.',
-    serviceHref: '/services/epoxy-flooring/',
-    serviceLabel: 'Explore epoxy flooring',
-    beforeImage: '/images/projects/warehouse-floor-before.jpeg',
-    beforeAlt: 'Before: Commercial warehouse floor before transformation',
-    beforeWidth: 450,
-    beforeHeight: 600,
-    beforeLabel: 'Before Transformation',
-    afterImage: '/images/projects/warehouse-flake-epoxy-after.png',
-    afterAlt: 'After: Finished commercial warehouse floor',
-    afterWidth: 450,
-    afterHeight: 600,
-    afterLabel: 'After Transformation',
-    prepSpec: 'Assess existing concrete and plan surface preparation',
-    coatingSpec: 'Decorative flake floor coating',
-    turnaround: '',
-    storyHook: 'Compare the warehouse slab with the speckled floor finish shown in the completed view.',
-    storyBody:
-      'The appropriate coating and work schedule depend on floor condition, moisture, traffic and the way the facility is used.',
-    defaultSliderPos: 52,
-  },
   {
     id: 'mcauley-landmark-restoration',
     title: 'Commercial Landmark Building',
@@ -189,35 +117,6 @@ export const BEFORE_AFTER_GALLERY: BeforeAfterItem[] = [
     storyBody:
       'An exterior estimate can address surface condition, repairs, color choices and access around doors and walkways.',
     defaultSliderPos: 50,
-  },
-  {
-    id: 'residential-garage-masterpiece',
-    title: '2-Car Residential Garage',
-    subtitle: 'Residential garage concrete with a decorative flake finish',
-    category: 'residential',
-    categoryLabel: 'Residential Garage Epoxy',
-    location: 'Central Valley Homeowner',
-    projectScope: 'Two-car residential garage floor coating',
-    documentedResult: 'The completed view shows decorative flake flooring and finished stem-wall edges.',
-    serviceHref: '/services/epoxy-flooring/',
-    serviceLabel: 'Explore garage coatings',
-    beforeImage: '/images/projects/residential-garage-before.png',
-    beforeAlt: 'Before: Residential garage floor before transformation',
-    beforeWidth: 600,
-    beforeHeight: 450,
-    beforeLabel: 'Before Transformation',
-    afterImage: '/images/projects/residential-garage-flake-epoxy-after.png',
-    afterAlt: 'After: Finished residential garage floor',
-    afterWidth: 450,
-    afterHeight: 600,
-    afterLabel: 'After Transformation',
-    prepSpec: 'Assess the slab and any repair or preparation needs',
-    coatingSpec: 'Decorative flake garage floor coating',
-    turnaround: '',
-    storyHook: 'These garage views show the concrete surface before coating and the textured-looking flake finish afterward.',
-    storyBody:
-      'Ask about suitable coating options, surface preparation and cure time before moving vehicles or stored items back into the garage.',
-    defaultSliderPos: 46,
   },
   {
     id: 'mcdonalds-696-refresh',
@@ -310,63 +209,6 @@ export const BEFORE_AFTER_GALLERY: BeforeAfterItem[] = [
 
 export const STORY_CHAPTERS: StoryChapter[] = [
   {
-    id: 'auto-shop-odyssey',
-    chapterNumber: 'CHAPTER 01',
-    badge: '4-STAGE FLOOR PROCESS',
-    title: 'From Existing Slab to Finished Floor',
-    kicker: 'An overview of floor preparation and coating.',
-    narrative:
-      'Explore the existing slab, grinding, patching and finished floor shown in these images. The preparation method and coating system for your project should be selected after a site assessment.',
-    proTip:
-      'Ask which repairs, preparation steps and cure times are included in your written estimate.',
-    steps: [
-      {
-        stepNumber: '01',
-        label: 'PHASE 01',
-        title: 'Review the Existing Floor',
-        description:
-          'Start with the condition of the concrete, any existing coatings and how the space will be used.',
-        image: '/images/projects/auto-shop-floor-before.png',
-        alt: 'Auto service bay concrete floor before preparation',
-        width: 450,
-        height: 600,
-      },
-      {
-        stepNumber: '02',
-        label: 'PHASE 02',
-        title: 'Prepare the Surface',
-        description:
-          'Mechanical preparation is shown here. The required surface profile depends on the selected coating and the slab condition.',
-        image: '/images/projects/auto-shop-floor-grinding.png',
-        alt: 'Floor grinding equipment preparing the concrete surface',
-        width: 450,
-        height: 600,
-      },
-      {
-        stepNumber: '03',
-        label: 'PHASE 03',
-        title: 'Patch and Detail',
-        description:
-          'Review cracks, joints and damaged areas before coating. Repair materials and methods should suit the specific floor.',
-        image: '/images/projects/auto-shop-floor-patched.png',
-        alt: 'Prepared floor with patched areas visible',
-        width: 450,
-        height: 600,
-      },
-      {
-        stepNumber: '04',
-        label: 'PHASE 04',
-        title: 'Review the Finished Surface',
-        description:
-          'The final view shows a smooth, light-colored floor. Confirm cure time, cleaning and return-to-service guidance for the selected system.',
-        image: '/images/projects/auto-shop-epoxy-floor-after.png',
-        alt: 'Finished light-colored auto service bay floor',
-        width: 600,
-        height: 340,
-      },
-    ],
-  },
-  {
     id: 'landmark-exterior-odyssey',
     chapterNumber: 'CHAPTER 02',
     badge: '4-STAGE EXTERIOR PROCESS',
@@ -427,60 +269,6 @@ export const STORY_CHAPTERS: StoryChapter[] = [
 
 export const FLAKE_PRESETS: FlakeSystemPreset[] = [
   {
-    id: 'granite-showroom',
-    name: 'Tuxedo Granite Flake',
-    tagline: 'A Gray, Black & White Flake Color Direction',
-    sector: 'Residential & Showroom',
-    swatches: ['#1F242B', '#7D848D', '#D9DDE2', '#F5F7FA'],
-    gradientCss:
-      'radial-gradient(circle at 20% 30%, #ffffff 0 3px, transparent 4px), radial-gradient(circle at 75% 25%, #11151c 0 4px, transparent 5px), radial-gradient(circle at 40% 70%, #9ca3af 0 5px, transparent 6px), radial-gradient(circle at 80% 80%, #e5e7eb 0 3px, transparent 4px), radial-gradient(circle at 15% 85%, #1f2937 0 4px, transparent 5px), linear-gradient(135deg, #4b5563 0%, #374151 50%, #1f2937 100%)',
-    textureType: 'flake',
-    specs: {
-      prep: 'Discuss Slab Preparation, Repairs & Edge Details',
-      baseCoat: 'Confirm the Base Coat for Your Slab',
-      topCoat: 'Discuss a Suitable Protective Topcoat',
-      lifespan: 'Garage & Home Gym Color Inspiration',
-    },
-    previewImage: '/images/projects/residential-garage-flake-epoxy-after.png',
-    previewAlt: 'Tuxedo Granite decorative flake epoxy garage floor installed by AAC Painters Inc.',
-  },
-  {
-    id: 'warehouse-cobalt',
-    name: 'Industrial Cobalt & Slate Flake',
-    tagline: 'A Blue & Slate Flake Color Direction',
-    sector: 'Heavy Commercial & Warehouse',
-    swatches: ['#1E3A8A', '#475569', '#94A3B8', '#E2E8F0'],
-    gradientCss:
-      'radial-gradient(circle at 25% 25%, #3b82f6 0 4px, transparent 5px), radial-gradient(circle at 65% 35%, #cbd5e1 0 3px, transparent 4px), radial-gradient(circle at 45% 75%, #1e3a8a 0 5px, transparent 6px), radial-gradient(circle at 85% 65%, #64748b 0 4px, transparent 5px), linear-gradient(135deg, #334155 0%, #1e293b 55%, #0f172a 100%)',
-    textureType: 'flake',
-    specs: {
-      prep: 'Assess Concrete, Joints & Existing Coatings',
-      baseCoat: 'Confirm a Coating for the Intended Traffic',
-      topCoat: 'Discuss Chemical Exposure & Topcoat Options',
-      lifespan: 'Commercial Floor Color Inspiration',
-    },
-    previewImage: '/images/projects/warehouse-flake-epoxy-after.png',
-    previewAlt: 'Industrial Cobalt and Slate decorative flake epoxy floor in commercial warehouse',
-  },
-  {
-    id: 'champagne-liquid-glass',
-    name: 'Liquid-Glass Champagne Polish',
-    tagline: 'A Light, Warm-Toned Floor Color Direction',
-    sector: 'Auto Bay & High-Gloss',
-    swatches: ['#D6C5B3', '#B8A38E', '#EFE6DD', '#8C7A6B'],
-    gradientCss:
-      'linear-gradient(125deg, #cbb8a3 0%, #e6d8c8 28%, #b8a28b 54%, #f3ece4 76%, #a38d76 100%)',
-    textureType: 'liquid-glass',
-    specs: {
-      prep: 'Review Surface Preparation & Repair Needs',
-      baseCoat: 'Discuss Solid-Color Floor Coating Options',
-      topCoat: 'Confirm Sheen & Protective Topcoat',
-      lifespan: 'Auto Shop & Showroom Color Inspiration',
-    },
-    previewImage: '/images/projects/auto-shop-epoxy-floor-after.png',
-    previewAlt: 'High-gloss champagne epoxy floor in auto service shop with Rotary Lifts',
-  },
-  {
     id: 'architectural-bronze-shield',
     name: 'Commercial Bronze & Espresso Shield',
     tagline: 'A Bronze & Espresso Exterior Color Direction',
@@ -501,25 +289,6 @@ export const FLAKE_PRESETS: FlakeSystemPreset[] = [
 ];
 
 export const SERVICES_LIST = [
-  {
-    id: 'epoxy-flooring',
-    slug: '/services/epoxy-flooring/',
-    badge: 'SIGNATURE SPECIALTY',
-    title: 'Epoxy, Polyaspartic & Decorative Flake Floors',
-    shortDesc:
-      'Floor coating options for residential garages, pool decks, patios, auto service bays and commercial spaces, with preparation and materials selected for the surface.',
-    icon: 'epoxy',
-    accentColor: '#E63946',
-    features: [
-      'Full-Broadcast Decorative Vinyl Flake Systems',
-      'Polyaspartic Topcoat Options',
-      'Metallic & Solid-Color Epoxy Finishes',
-      'Concrete Grinding, Crack Chasing & Grind-and-Seal',
-      'Pool Deck, Patio & Wood Deck Floor Coatings',
-    ],
-    image: '/images/projects/residential-garage-flake-epoxy-after.png',
-    imageAlt: 'Showroom decorative flake epoxy garage floor by AAC Painters Inc.',
-  },
   {
     id: 'commercial-painting',
     slug: '/services/commercial-painting/',
@@ -552,7 +321,6 @@ export const SERVICES_LIST = [
       'Complete Exterior Stucco, Siding & Fascia Repaints',
       'Interior Walls, Ceilings, Baseboards & Doors',
       'Cedar & Redwood Fence Restoration & Penetrating Stains',
-      'Patio Concrete Staining, Sealing & Garage Makeovers',
       'Cabinet Painting & Fine-Finish Trim Enamels',
       'Stairwell, Railing & Banister Painting',
       'Popcorn Ceiling Removal & Re-Texturing',
@@ -590,11 +358,6 @@ export const FAQ_ITEMS = [
       'AAC Painters lists popcorn removal and texture work. Share the approximate ceiling area and any known leaks, damage or prior coatings. Ask how material assessment, containment, the new texture and cleanup will be handled before scheduling.',
   },
   {
-    question: 'How do I choose between epoxy flooring and grind-and-seal?',
-    answer:
-      'Epoxy adds a coating; grind-and-seal grinds the concrete surface and applies a sealer. The slab condition, desired appearance and intended use matter. Ask what preparation, repairs, finish and care each option would require for your space.',
-  },
-  {
     question: 'When can I use the room, deck or garage again?',
     answer:
       'Drying and cure time vary by material, weather and site conditions. Preparation may also limit access. Ask for a project-specific return-to-use plan before work begins rather than relying on a general time estimate.',
@@ -602,7 +365,7 @@ export const FAQ_ITEMS = [
   {
     question: 'Where does AAC Painters work, and how do I get started?',
     answer:
-      'AAC Painters lists Central Valley and Bay Area service, including Modesto, Turlock, Patterson and surrounding communities. Share your city and service through the quote form or call or text (209) 485-5103 to discuss the next step.',
+      'AAC Painters focuses on Patterson and serves the Bay Area and Central Valley. Share your city and service through the quote form or call or text (209) 485-5103 to discuss the next step.',
   },
 ];
 
@@ -646,9 +409,7 @@ export const beforeAfterGallery: BeforeAfterPair[] = BEFORE_AFTER_GALLERY.map((i
   title: item.title,
   subtitle: item.subtitle,
   category:
-    item.category === 'epoxy'
-      ? 'Epoxy Flooring'
-      : item.category === 'commercial'
+    item.category === 'commercial'
         ? 'Commercial'
         : 'Residential',
   duration: item.turnaround,
@@ -665,24 +426,12 @@ export const beforeAfterGallery: BeforeAfterPair[] = BEFORE_AFTER_GALLERY.map((i
   finishSystem: item.coatingSpec
 }));
 
-export const autoShopStory = {
-  title: STORY_CHAPTERS[0].title,
-  Tagline: 'FLOOR PROCESS',
-  summary: STORY_CHAPTERS[0].narrative,
-  stages: STORY_CHAPTERS[0].steps.map((s) => ({
-    stepLabel: s.label,
-    title: s.title,
-    caption: s.description,
-    image: s.image,
-    alt: s.alt
-  }))
-};
 
 export const commercialExteriorStory = {
-  title: STORY_CHAPTERS[1].title,
+  title: STORY_CHAPTERS[0].title,
   Tagline: 'EXTERIOR PROCESS',
-  summary: STORY_CHAPTERS[1].narrative,
-  stages: STORY_CHAPTERS[1].steps.map((s) => ({
+  summary: STORY_CHAPTERS[0].narrative,
+  stages: STORY_CHAPTERS[0].steps.map((s) => ({
     stepLabel: s.label.replace('8-BAY ', ''),
     title: s.title.replace('8 ', 'Multi-Bay '),
     caption: s.description,
@@ -691,13 +440,6 @@ export const commercialExteriorStory = {
   }))
 };
 
-export const dustBagsProof = {
-  image: '/images/projects/warehouse-floor-grinding-dust.png',
-  alt: 'Six full bags of diamond-ground concrete dust extracted from a commercial floor before epoxy application',
-  headline: '6 Heavy Bags of Diamond-Ground Concrete Dust Extracted Before Drop One',
-  caption:
-    'Look closely at our warehouse floor prep photo: six full bags of concrete laitance and ground dust pulled from the slab before any epoxy primer is mixed.'
-};
 
 export const flakePalettes = FLAKE_PRESETS.map((p) => ({
   id: p.id,
@@ -711,14 +453,6 @@ export const flakePalettes = FLAKE_PRESETS.map((p) => ({
 }));
 
 export const interiorCraftGallery = [
-  {
-    tag: 'RESIDENTIAL GARAGE SHOWROOM',
-    title: 'Full-Broadcast Tuxedo Granite Garage Floor',
-    description:
-      'Decorative flake finish across the garage floor and surrounding stem walls.',
-    image: '/images/projects/residential-garage-flake-epoxy-after.png',
-    alt: 'Finished residential garage floor with granite flake epoxy by AAC Painters Inc.'
-  },
   {
     tag: 'EXTERIOR WOOD RESTORATION',
     title: 'Warm-Tone Wood Fence Staining',

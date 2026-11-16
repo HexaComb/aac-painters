@@ -279,9 +279,10 @@ test('service catalog includes every newly advertised service and appropriate se
   assert.ok(getQuoteService('Pressure Washing')?.propertyTypes.includes('Outdoor — Driveway / Patio / Walkway'));
   assert.equal(getQuoteService('Popcorn Ceiling Removal & Re-Texturing')?.finishType, 'none');
   assert.equal(getQuoteService('Fence & Deck Staining')?.finishType, 'stain');
-  assert.equal(getQuoteService('Grind & Seal Concrete')?.finishType, 'none');
+  assert.equal(getQuoteService('Grind & Seal Concrete'), undefined);
   assert.equal(getQuoteService('Stairwell & Railing Painting')?.finishType, 'paint');
-  assert.ok(getQuoteService('Pool Deck & Patio Coatings'));
+  assert.equal(getQuoteService('Pool Deck & Patio Coatings'), undefined);
+  assert.equal(getQuoteService('Metallic Epoxy'), undefined);
   assert.equal(getQuoteService('Not a service'), undefined);
 });
 

@@ -16,8 +16,6 @@ test('services are an equal, text-only list and route to a neutral estimate choi
     ['Commercial & industrial painting', '/services/commercial-painting/'],
     ['Cabinet, stairwell & railing painting', '/services/residential-painting/'],
     ['Fence & deck staining', '/services/residential-painting/'],
-    ['Epoxy flooring', '/services/epoxy-flooring/'],
-    ['Grind & seal concrete', '/services/epoxy-flooring/'],
     ['Popcorn removal & texture', '/services/residential-painting/'],
     ['Pressure washing', '/services/residential-painting/'],
   ] as const;
@@ -40,18 +38,18 @@ test('services are an equal, text-only list and route to a neutral estimate choi
     const link = list.getByRole('link', { name: label });
     await expect(link).toHaveAttribute('href', path);
   }
-  await list.getByRole('link', { name: 'Grind & seal concrete' }).focus();
+  await list.getByRole('link', { name: 'Commercial & industrial painting' }).focus();
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(/\/services\/epoxy-flooring\/?$/);
+  await expect(page).toHaveURL(/\/services\/commercial-painting\/?$/);
   await expect(page.locator('#serviceType')).toHaveValue('');
-  await expect(page.locator('#serviceType')).toContainText('Grind & Seal Concrete');
+  await expect(page.locator('#serviceType')).not.toContainText('Grind & Seal Concrete');
   await page.goBack();
   await expect(page.locator('#serviceType')).toHaveValue('');
   await page.goForward();
   await expect(page.locator('#serviceType')).toHaveValue('');
   await page.goto('/services/residential-painting/');
   await expect(page.locator('#serviceType')).toHaveValue('');
-  await expect(page.locator('.estimate-credentials')).toContainText('Painting, floor coatings, staining & surface work');
+  await expect(page.locator('.estimate-credentials')).toContainText('Painting, staining & surface preparation');
   await expect(page.locator('.estimate-credentials')).not.toContainText('Fully Insured');
   await page.locator('#serviceType').selectOption('Stairwell & Railing Painting');
   await expect(page.locator('#propertyScope')).toContainText('Home Interior');
@@ -61,12 +59,12 @@ test('FAQ covers the service range, matches JSON-LD, and toggles by keyboard and
   await page.goto('/');
   const faq = page.locator('#faq');
   const items = faq.locator('details.faq-item');
-  await expect(items).toHaveCount(8);
+  await expect(items).toHaveCount(7);
   await expect(faq).toContainText('cabinet');
   await expect(faq).toContainText('staining');
   await expect(faq).toContainText('pressure washing');
   await expect(faq).toContainText('popcorn removal');
-  await expect(faq).toContainText('grind-and-seal');
+  await expect(faq).not.toContainText('grind-and-seal');
   const visible = await items.evaluateAll((details) => details.map((detail) => ({
     question: detail.querySelector('summary span')?.textContent?.trim(),
     answer: detail.querySelector('.faq-answer p')?.textContent?.trim(),
@@ -122,9 +120,8 @@ async function fulfillApi(route: Route, deliveryStatus?: number) {
 
 test('service pages expose the shared lineup with correct project categories', async ({ page }) => {
   const pages = [
-    { path: '/services/residential-painting/', terms: ['Cabinet Painting', 'Stairwell', 'Popcorn', 'Pressure Washing'], count: 2 },
+    { path: '/services/residential-painting/', terms: ['Cabinet Painting', 'Stairwell', 'Popcorn', 'Pressure Washing'], count: 1 },
     { path: '/services/commercial-painting', terms: ['HOA', 'Hotel', 'Apartment'], count: 3 },
-    { path: '/services/epoxy-flooring/', terms: ['Pool Deck', 'Patio', 'Wood Deck'], count: 3 },
   ];
   for (const service of pages) {
     await page.goto(service.path);
@@ -146,7 +143,7 @@ test('pressure washing and ceiling removal do not request a coating; choices ada
   await page.locator('#serviceType').selectOption('Fence & Deck Staining');
   await expect(page.locator('#finish-field')).toBeVisible();
   await expect(page.locator('#preferredFinish')).toContainText('Natural Wood Tone');
-  await expect(page.locator('#preferredFinish')).not.toContainText('Tuxedo');
+  await expect(page.locator('#preferredFinish')).not.toContainText('Exterior Architectural');
   await page.locator('#serviceType').selectOption('Interior & Exterior Residential Painting');
   await expect(page.locator('#propertyScope')).toContainText('Home Interior');
   await expect(page.locator('#preferredFinish')).toContainText('Custom Paint');
@@ -239,7 +236,7 @@ test('pending duplicate submission is blocked and newer edits survive success', 
 
 test('finish choices stay compatible and stale selections clear when changing services', async ({ page }) => {
   await page.goto('/');
-  await page.locator('#serviceType').selectOption('Full-Broadcast Flake Epoxy Floor');
+  await page.locator('#serviceType').selectOption('Commercial Painting & Stucco Restoration');
   await page.locator('#preferredFinish').selectOption({ index: 1 });
   await expect(page.locator('#preferredFinish')).not.toHaveValue('');
   await page.locator('#serviceType').selectOption('Cabinets, Trim & Interior Repaint');
@@ -250,8 +247,8 @@ test('finish choices stay compatible and stale selections clear when changing se
   await page.locator('#serviceType').selectOption('Pressure Washing');
   await expect(page.locator('#preferredFinish')).toBeDisabled();
   await expect(page.locator('#preferredFinish')).toHaveValue('');
-  await page.locator('#serviceType').selectOption('Full-Broadcast Flake Epoxy Floor');
+  await page.locator('#serviceType').selectOption('Commercial Painting & Stucco Restoration');
   await expect(page.locator('#preferredFinish')).toBeEnabled();
   await expect(page.locator('#preferredFinish')).toHaveValue('');
-  await expect(page.locator('#preferredFinish')).toContainText('Tuxedo');
+  await expect(page.locator('#preferredFinish')).toContainText('Exterior Architectural');
 });

@@ -3,23 +3,22 @@ import { test, expect } from './fixtures';
 const cases = [
   { path: '/services/residential-painting/', keyword: 'House Painters', schemaName: 'Residential Interior & Exterior Painting' },
   { path: '/services/commercial-painting/', keyword: 'Commercial Painting', schemaName: 'Commercial Painting & Industrial Coatings' },
-  { path: '/services/epoxy-flooring/', keyword: 'Epoxy Flooring', schemaName: 'Epoxy Flooring & Concrete Coatings' },
 ];
 
 for (const { path, keyword, schemaName } of cases) {
   test(`service SEO: ${path} uses canonical URL, local title and real project links`, async ({ page }) => {
     await page.goto(path);
     await expect(page).toHaveTitle(new RegExp(keyword));
-    await expect(page).toHaveTitle(/Modesto.*Turlock/);
+    await expect(page).toHaveTitle(/Patterson/);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://www.aacpaintersinc.com${path}`);
-    await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /Modesto, Turlock/);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /Patterson/);
     await expect(page.getByRole('link', { name: /Explore before-and-after projects/ })).toHaveAttribute('href', '/projects/');
     const schemas = await page.locator('script[type="application/ld+json"]').allTextContents();
     const structured = schemas.map((json) => JSON.parse(json));
     const service = structured.find((item) => item['@type'] === 'Service');
     expect(service.name).toBe(schemaName);
     expect(service.provider['@id']).toBe('https://www.aacpaintersinc.com/#organization');
-    expect(service.areaServed.some((area: { name: string }) => area.name === 'Modesto, CA')).toBe(true);
+    expect(service.areaServed.some((area: { name: string }) => area.name === 'Patterson, CA')).toBe(true);
     const breadcrumb = structured.find((item) => item['@type'] === 'BreadcrumbList');
     expect(breadcrumb.itemListElement[1].item).toBe(`https://www.aacpaintersinc.com${path}`);
   });
@@ -34,7 +33,6 @@ test('homepage links to commercial painting and uses the canonical host', async 
 const documentedCases = [
   { path: '/services/residential-painting/', id: 'residential-cedar-fence', scope: 'Exterior wood privacy fence staining' },
   { path: '/services/commercial-painting/', id: 'mcauley-landmark-restoration', scope: 'Corner storefront exterior painting' },
-  { path: '/services/epoxy-flooring/', id: 'auto-service-bay', scope: 'Auto-service bay concrete floor' },
 ];
 
 for (const { path, id, scope } of documentedCases) {
@@ -54,8 +52,24 @@ test('project archive links verified examples to their matching service pages', 
     .toHaveAttribute('href', '/services/residential-painting/');
   await expect(page.locator('#ba-mcauley-landmark-restoration a.ba-service-link'))
     .toHaveAttribute('href', '/services/commercial-painting/');
-  await expect(page.locator('#ba-auto-service-bay a.ba-service-link'))
-    .toHaveAttribute('href', '/services/epoxy-flooring/');
-  await expect(page.locator('#ba-residential-garage-masterpiece a.ba-service-link'))
-    .toHaveAttribute('href', '/services/epoxy-flooring/');
+  await expect(page.locator('#ba-auto-service-bay, #ba-residential-garage-masterpiece')).toHaveCount(0);
 });
+
+ test('retired flooring service returns 410 and is absent from homepage', async ({ page, request }) => {
+ const response = await request.get('/services/epoxy-flooring/');
+ expect(response.status()).toBe(410);
+ await page.goto('/');
+ await expect(page.locator('body')).not.toContainText(/epoxy|flooring|grind.and.seal/i);
+ await expect(page).toHaveTitle(/Patterson/);
+ });
+
+ test('Google reviews are visible and attributed without self-serving rating markup', async ({ page }) => {
+ await page.goto('/');
+ await expect(page.locator('#reviews .review-card')).toHaveCount(3);
+ await expect(page.locator('#reviews')).toContainText('Nena Ayala');
+ await expect(page.locator('#reviews a')).toHaveAttribute('href', /cid=2604929101649362691/);
+ const schemas = await page.locator('script[type="application/ld+json"]').allTextContents();
+ const serialized = schemas.join('');
+ expect(serialized).toContain('2604929101649362691');
+ expect(serialized).not.toContain('aggregateRating');
+ });
