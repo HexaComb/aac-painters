@@ -210,7 +210,7 @@ export const BEFORE_AFTER_GALLERY: BeforeAfterItem[] = [
 export const STORY_CHAPTERS: StoryChapter[] = [
   {
     id: 'landmark-exterior-odyssey',
-    chapterNumber: 'CHAPTER 02',
+    chapterNumber: 'EXTERIOR PAINTING',
     badge: '4-STAGE EXTERIOR PROCESS',
     title: 'Preparing and Painting a Storefront Exterior',
     kicker: 'Exterior views from the existing facade to the finished paintwork.',
@@ -220,8 +220,8 @@ export const STORY_CHAPTERS: StoryChapter[] = [
       'Discuss entrances, pedestrian routes and operating hours when planning exterior work.',
     steps: [
       {
-        stepNumber: '01',
-        label: 'PHASE 01',
+        stepNumber: 'ASSESS',
+        label: 'ASSESS',
         title: 'Review the Existing Exterior',
         description:
           'Identify the wall, trim and storefront surfaces included in the project before work begins.',
@@ -231,8 +231,8 @@ export const STORY_CHAPTERS: StoryChapter[] = [
         height: 450,
       },
       {
-        stepNumber: '02',
-        label: 'PHASE 02',
+        stepNumber: 'PROTECT',
+        label: 'PROTECT',
         title: 'Plan Access and Protection',
         description:
           'Coordinate work around awnings, windows and entrances, and determine which areas need protection.',
@@ -242,8 +242,8 @@ export const STORY_CHAPTERS: StoryChapter[] = [
         height: 450,
       },
       {
-        stepNumber: '03',
-        label: 'PHASE 03',
+        stepNumber: 'PREPARE',
+        label: 'PREPARE',
         title: 'Prepare the Wall Surfaces',
         description:
           'Surface condition determines the cleaning, repairs and priming included in the repaint scope.',
@@ -253,8 +253,8 @@ export const STORY_CHAPTERS: StoryChapter[] = [
         height: 450,
       },
       {
-        stepNumber: '04',
-        label: 'PHASE 04',
+        stepNumber: 'FINISH',
+        label: 'FINISH',
         title: 'Review the Finished Facade',
         description:
           'The finished view shows the wall color and contrasting storefront framing. Review the agreed scope and care guidance at completion.',
