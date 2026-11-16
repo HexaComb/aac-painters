@@ -295,6 +295,7 @@ const commercialExteriorStory = await resolveStory(commercialExteriorStoryRaw);
      PART 2: LIGHT "OUR PROCESS" SECTION (01 -> 02 -> 03 -> 04 + REAL PHOTOS)
      ========================================================================== */
   .process-section {
+    scroll-margin-top: 7.5rem;
     padding: 5.5rem 1.5rem;
     background-color: var(--bg-light);
     border-top: 1px solid var(--border-light);
@@ -421,14 +422,14 @@ const commercialExteriorStory = await resolveStory(commercialExteriorStoryRaw);
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
-    overflow:;
+    overflow: hidden;
   }
 
   .step-thumb-strip {
     position: relative;
     margin-top: auto;
     border-radius: 2px;
-    overflow:;
+    overflow: hidden;
     aspect-ratio: 16 / 10;
   }
 
@@ -466,7 +467,7 @@ const commercialExteriorStory = await resolveStory(commercialExteriorStoryRaw);
     position: relative;
     aspect-ratio: 16 / 10;
     border-radius: 3px;
-    overflow:;
+    overflow: hidden;
     background: var(--bg-dark);
   }
 
