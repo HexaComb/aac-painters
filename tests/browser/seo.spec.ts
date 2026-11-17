@@ -59,7 +59,7 @@ test('project archive links verified examples to their matching service pages', 
  const response = await request.get('/services/epoxy-flooring/');
  expect(response.status()).toBe(410);
  await page.goto('/');
- await expect(page.locator('body')).not.toContainText(/epoxy|flooring|grind.and.seal/i);
+ await expect(page.locator('body')).not.toContainText(/flooring|grind.and.seal/i);
  await expect(page).toHaveTitle(/Patterson/);
  });
 
@@ -73,3 +73,13 @@ test('project archive links verified examples to their matching service pages', 
  expect(serialized).toContain('2604929101649362691');
  expect(serialized).not.toContain('aggregateRating');
  });
+
+test('epoxy is available without unverified application claims', async ({ page }) => {
+  await page.goto('/services/epoxy/');
+  await expect(page).toHaveTitle(/Epoxy.*Patterson/);
+  await expect(page.locator('h1')).toHaveText('Epoxy');
+  await expect(page.locator('body')).not.toContainText(/flooring|countertops|garage floors/i);
+  await page.locator('#serviceType').selectOption('Epoxy');
+  await expect(page.locator('#serviceType')).toHaveValue('Epoxy');
+  await expect(page.locator('#preferredFinish')).toBeDisabled();
+});

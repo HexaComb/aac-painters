@@ -10,6 +10,7 @@ export interface QuoteService {
 const homeProperties = ['Residential — Home Interior', 'Residential — Home Exterior', 'Residential — Interior & Exterior', 'Residential — Other'];
 
 export const quoteServices: QuoteService[] = [
+  { value: 'Epoxy', label: 'Epoxy', finishType: 'none', propertyTypes: ['Discuss application with estimator'] },
   { value: 'Interior & Exterior Residential Painting', label: 'Interior & Exterior Home Painting', finishType: 'paint', propertyTypes: homeProperties },
   { value: 'Commercial Painting & Stucco Restoration', label: 'Commercial Building / Facade Painting', finishType: 'paint', propertyTypes: ['Commercial — Office / Storefront', 'Commercial — Warehouse', 'Commercial — HOA / Hotel / Apartments', 'Commercial — Other'] },
   { value: 'Cabinets, Trim & Interior Repaint', label: 'Cabinets, Trim & Interior Repaint', finishType: 'paint', propertyTypes: ['Residential — Home Interior', 'Commercial — Interior', 'Other'] },

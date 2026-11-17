@@ -12,6 +12,7 @@ async function fillContact(page: Page) {
 
 test('services are an equal, text-only list and route to a neutral estimate choice', async ({ page }) => {
   const services = [
+    ['Epoxy', '/services/epoxy/'],
     ['Interior & exterior painting', '/services/residential-painting/'],
     ['Commercial & industrial painting', '/services/commercial-painting/'],
     ['Cabinet, stairwell & railing painting', '/services/residential-painting/'],

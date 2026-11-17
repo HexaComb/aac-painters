@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import QuoteBuilderForm from '../../components/QuoteBuilderForm.astro';
+import { makeServiceStructuredData } from '../../data/seo';
+const description = 'Discuss epoxy with AAC Painters in Patterson. Serving the Bay Area and Central Valley. Confirm the application, preparation and project scope with our team.';
+---
+<BaseLayout title="Epoxy in Patterson | AAC Painters Inc." description={description} structuredData={makeServiceStructuredData({path:'/services/epoxy/',name:'Epoxy',description})}>
+  <section class="epoxy-intro">
+    <div class="container">
+      <p class="eyebrow">AAC Painters · Patterson</p>
+      <h1>Epoxy</h1>
+      <p class="lead">A considered finish starts with a clear conversation.</p>
+      <p>Tell us about your epoxy project. We'll discuss the intended application, existing surface and preparation before confirming the scope of work.</p>
+      <a class="action" href="#quote-builder">Discuss your project <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+  <section class="epoxy-details">
+    <div class="container">
+      <h2>Let's find the right approach.</h2>
+      <div class="details-grid">
+        <div><h3>Share your vision</h3><p>Bring your finish ideas and photos of the area you have in mind.</p></div>
+        <div><h3>Confirm the scope</h3><p>Our team will review the application and confirm which work can be included in your estimate.</p></div>
+        <div><h3>Plan the next step</h3><p>Discuss preparation, scheduling and care requirements before work begins.</p></div>
+      </div>
+      <p class="coverage">Based around Patterson, also serving the Bay Area and Central Valley.</p>
+      <a href="/#our-services">Explore all services</a>
+    </div>
+  </section>
+  <QuoteBuilderForm />
+</BaseLayout>
+<style>
+.epoxy-intro {padding:clamp(4rem,9vw,8rem) 1.5rem;background:var(--bg-dark);color:var(--text-light);}
+.eyebrow {text-transform:uppercase;letter-spacing:.12em;color:var(--aac-blue);font-weight:700;}
+h1 {font-size:clamp(3.5rem,9vw,7rem);line-height:1.05;margin:1rem 0;}
+.lead {font-size:clamp(1.3rem,3vw,2rem);font-weight:600;margin-bottom:1.2rem;}
+.epoxy-intro p:not(.eyebrow) {max-width:44rem;line-height:1.7;}
+.action {display:inline-flex;gap:1.5rem;padding:1rem 1.5rem;margin-top:2rem;background:white;color:#142c40;border-radius:3rem;font-weight:700;}
+.epoxy-details {padding:4rem 1.5rem;background:var(--bg-light);}
+h2 {font-size:clamp(2rem,4vw,3rem);margin-bottom:2rem;}
+.details-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2rem;}
+.details-grid p {line-height:1.7;margin-top:.7rem;}
+.coverage {margin:2.5rem 0 1rem;}
+@media(max-width:700px){.details-grid{grid-template-columns:1fr;}}
+</style>
