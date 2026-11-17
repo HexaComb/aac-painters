@@ -1,7 +1,8 @@
 # Patterson service scope and Google reviews
 
 - Requested focus: Patterson, with Bay Area and Central Valley coverage.
-- Withdrawn: epoxy, floor coating, grind-and-seal and pool/patio coating offers. Removed their service page, quote selections, galleries and process story. Surface services means existing painting preparation, pressure washing and wood staining, not disguised flooring.
+- Updated 2026-11-17 after Marco clarified that Epoxy should remain a service: restored the Epoxy homepage listing, estimate option and `/services/epoxy/` page. Copy does not promise specific substrates, floor installation or insurance coverage; the application and scope are discussed during an estimate.
+- Flooring-specific, grind-and-seal and pool/patio coating offers remain withdrawn. Surface services is not used to disguise flooring. Former floor-project media remains archived because relabeling those images would still imply floor work.
 - Retired `/services/epoxy-flooring/` returns 410 + noindex, rather than redirecting searchers to a different service. It is absent from the generated sitemap.
 - Existing floor media files remain archived but are not featured or linked in the site. The old OG card is no longer used because its baked-in flooring message is outdated.
 
