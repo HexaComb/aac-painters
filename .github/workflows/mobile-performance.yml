@@ -1,0 +1,50 @@
+name: Mobile performance comparison (informational)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    if: startsWith(github.head_ref, 'perf/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    # Benchmark failures are visible as logs/artifacts but are not a release gate.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies and locate Chrome
+        run: |
+          npm ci
+          if command -v google-chrome-stable >/dev/null 2>&1; then
+            echo "CHROME_PATH=$(command -v google-chrome-stable)" >> "$GITHUB_ENV"
+          elif command -v google-chrome >/dev/null 2>&1; then
+            echo "CHROME_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
+          else
+            npx playwright install chromium
+            browser="$(find "$HOME/.cache/ms-playwright" -type f -name chrome -print -quit)"
+            test -n "$browser"
+            echo "CHROME_PATH=$browser" >> "$GITHUB_ENV"
+          fi
+      - name: Compare baseline (base SHA) with PR (head SHA)
+        run: bash scripts/run-mobile-perf-comparison.sh "$BASE_SHA" "$HEAD_SHA"
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          ASTRO_TELEMETRY_DISABLED: '1'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mobile-lighthouse-before-after
+          path: /tmp/aac-perf/
+          if-no-files-found: ignore
+          retention-days: 30
