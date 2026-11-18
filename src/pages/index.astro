@@ -72,7 +72,7 @@ const faqSchema = {
   <section class="hero-banner" aria-labelledby="hero-heading" data-hero-banner>
     <div class="hero-bg-stage">
       <video
-        src="/videos/before-after-video.mp4"
+        data-video-src="/videos/before-after-video.mp4"
         poster={heroPosterUrl}
         width="1280"
         height="960"
@@ -80,7 +80,7 @@ const faqSchema = {
         loop
         muted
         playsinline
-        preload="metadata"
+        preload="none"
         class="hero-bg-video"
       >
         <track kind="captions" src="/videos/before-after-video.vtt" srclang="en" label="English" />
@@ -239,7 +239,7 @@ const faqSchema = {
         <article class="ba-split-row" data-ba-showcase="exteriors">
           <div class="ba-viewport" data-ba-slider>
             <video
-              src={exteriorShowcases[0].video}
+              data-video-src={exteriorShowcases[0].video}
               poster={exteriorShowcases[0].afterImage}
               width="1280"
               height="960"
@@ -247,7 +247,7 @@ const faqSchema = {
               loop
               muted
               playsinline
-              preload="metadata"
+              preload="none"
               class="ba-video"
               data-showcase-video
             >
@@ -1267,7 +1267,59 @@ const faqSchema = {
       syncReducedMotion(event.matches);
     });
 
+    // These videos are decorative. The poster remains visible immediately,
+    // without competing with page text and styling on a slow mobile connection.
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    const canAutoplay = () => !reducedMotionQuery.matches && !connection?.saveData;
+    const loadAutoplayVideo = (video: HTMLVideoElement) => {
+      if (!canAutoplay() || video.hidden) return;
+      if (video.dataset.videoSrc) {
+        video.src = video.dataset.videoSrc;
+        delete video.dataset.videoSrc;
+      }
+      video.play().catch(() => {});
+    };
 
+    // Hero starts shortly after page load (later on mobile). Until then the
+    // optimized, preloaded poster provides the same cinematic first frame.
+    const heroVideo = document.querySelector<HTMLVideoElement>('.hero-bg-video[data-video-src]');
+    if (heroVideo) {
+      const scheduleHeroVideo = () => {
+        const delay = window.matchMedia('(max-width: 640px)').matches ? 1400 : 300;
+        window.setTimeout(() => {
+          if (document.visibilityState === 'visible') {
+            loadAutoplayVideo(heroVideo);
+          } else {
+            const onVisible = () => {
+              if (document.visibilityState !== 'visible') return;
+              document.removeEventListener('visibilitychange', onVisible);
+              loadAutoplayVideo(heroVideo);
+            };
+            document.addEventListener('visibilitychange', onVisible);
+          }
+        }, delay);
+      };
+      if (document.readyState === 'complete') scheduleHeroVideo();
+      else window.addEventListener('load', scheduleHeroVideo, { once: true });
+    }
+
+    // The project video is below the fold: load it only as visitors approach.
+    const showcaseVideos = document.querySelectorAll<HTMLVideoElement>('[data-showcase-video][data-video-src]');
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            observer.unobserve(entry.target);
+            loadAutoplayVideo(entry.target as HTMLVideoElement);
+          });
+        },
+        { rootMargin: '250px 0px', threshold: 0.01 },
+      );
+      showcaseVideos.forEach((video) => observer.observe(video));
+    } else {
+      window.addEventListener('load', () => showcaseVideos.forEach(loadAutoplayVideo), { once: true });
+    }
 
     // 3. Before & After Paintbrush Sliders (Shared Controller)
     initBeforeAfterSliders();
@@ -1294,6 +1346,8 @@ const faqSchema = {
 
           const pillVideo = pill.dataset.video;
           if (pillVideo && videoEl) {
+            // Explicit selection wins over a pending lazy-load observer.
+            delete videoEl.dataset.videoSrc;
             if (videoEl.getAttribute('src') !== pillVideo) {
               videoEl.src = pillVideo;
             }
