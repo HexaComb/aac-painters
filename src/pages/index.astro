@@ -564,6 +564,16 @@ const faqSchema = {
     row-gap: 0.12em;
   }
 
+  /* On narrow screens each deliberate headline line often wraps into two
+     visual rows. Reserve that space before font-swap so the description and
+     estimate buttons don't jump when the display typeface arrives. */
+  @media (max-width: 640px) {
+    .hero-title-line {
+      min-height: 2.6em;
+      align-content: flex-start;
+    }
+  }
+
   /* Individual Word Stage Painted in AAC Logo Colors */
   .paint-word {
     --stroke-duration: 0.6s;
