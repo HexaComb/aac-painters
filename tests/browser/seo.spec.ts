@@ -83,3 +83,17 @@ test('epoxy is available without unverified application claims', async ({ page }
   await expect(page.locator('#serviceType')).toHaveValue('Epoxy');
   await expect(page.locator('#preferredFinish')).toBeDisabled();
 });
+
+
+test('Patterson service discovery links to current work without inventing Patterson project locations', async ({ page }) => {
+  await page.goto('/');
+  const local = page.locator('#patterson-painting');
+  await expect(local).toBeVisible();
+  await expect(local.getByRole('heading', { name: 'Painting for Patterson homes and businesses.' })).toBeVisible();
+  await expect(local.getByRole('link', { name: /Interior & exterior house painting/i })).toHaveAttribute('href', '/services/residential-painting/');
+  await expect(local.getByRole('link', { name: /Commercial & industrial painting/i })).toHaveAttribute('href', '/services/commercial-painting/');
+  await expect(local.getByRole('link', { name: /Epoxy project inquiries/i })).toHaveAttribute('href', '/services/epoxy/');
+  await expect(local.getByRole('link', { name: /Real before-and-after projects/i })).toHaveAttribute('href', '/projects/');
+  await expect(local.getByRole('link', { name: /Request a Free Estimate/i })).toHaveAttribute('href', '#quote-builder');
+  await expect(local).toContainText('individual locations are identified where known');
+});
