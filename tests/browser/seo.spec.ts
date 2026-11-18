@@ -97,3 +97,16 @@ test('Patterson service discovery links to current work without inventing Patter
   await expect(local.getByRole('link', { name: /Request a Free Estimate/i })).toHaveAttribute('href', '#quote-builder');
   await expect(local).toContainText('individual locations are identified where known');
 });
+
+
+test('Patterson homepage project archive link avoids a temporary redirect and commercial metadata is concise', async ({ page }) => {
+  await page.goto('/');
+  const archive = page.getByRole('link', { name: /View More Projects/i });
+  await expect(archive).toHaveAttribute('href', '/projects/');
+  const response = await page.request.get('/projects/', { maxRedirects: 0 });
+  expect(response.status()).toBe(200);
+  await page.goto('/services/commercial-painting/');
+  const description = await page.locator('meta[name="description"]').getAttribute('content');
+  expect(description).toContain('Patterson');
+  expect(description?.length).toBeLessThanOrEqual(160);
+});
