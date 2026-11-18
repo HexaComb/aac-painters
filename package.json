@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "private": true,
-  "description": "AAC Painters Inc. \u2014 Coloring Your Dream. Residential & Commercial Painting, Industrial Epoxy Flooring, Polyaspartic Flake Systems, and Concrete Polishing in California's 209 Central Valley.",
+  "description": "Residential and commercial painting, staining and surface preparation in Patterson, the Bay Area and Central Valley.",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

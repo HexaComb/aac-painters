@@ -8,20 +8,20 @@ import { brand, beforeAfterGallery } from '../data/siteData';
 import { optimizedImageUrl, optimizedBeforeAfterPair } from '../utils/optimizedImages';
 
 const gallery = await Promise.all(beforeAfterGallery.map(optimizedBeforeAfterPair));
-const heroImageUrl = await optimizedImageUrl('/images/projects/auto-shop-epoxy-floor-after.png');
+const heroImageUrl = await optimizedImageUrl('/images/projects/mcauley-building-after.png');
 ---
 
 <BaseLayout
-  title="Painting & Epoxy Projects | AAC Painters Inc."
-  description="See real residential and commercial painting, garage epoxy floors and concrete coating projects from AAC Painters. Explore before-and-after photos."
+  title="Painting & Surface Preparation Projects | AAC Painters Inc."
+  description="See real residential and commercial painting, wood staining and surface preparation projects from AAC Painters. Explore before-and-after photos."
   canonicalPath="/projects/"
-  ogImage="/images/projects/auto-shop-epoxy-floor-after.png"
+  ogImage="/images/projects/mcauley-building-after.png"
 >
   <section class="subpage-hero">
     <div class="subpage-hero-bg">
       <img
         src={heroImageUrl}
-        alt="Completed commercial automotive shop floor by AAC Painters Inc."
+        alt="Completed commercial building exterior by AAC Painters Inc."
         width="1600"
         height="900"
         loading="eager"
@@ -44,7 +44,7 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/auto-shop-epoxy-f
       </h1>
 
       <p class="subpage-lead">
-        See actual AAC jobsite photos across seven before-and-after projects. Explore the work performed, documented finishes, and services behind each result.
+        See actual AAC jobsite photos across painting and staining projects. Explore the work performed, documented finishes, and services behind each result.
       </p>
 
       <div class="subpage-actions">
@@ -69,7 +69,7 @@ const heroImageUrl = await optimizedImageUrl('/images/projects/auto-shop-epoxy-f
         <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <span class="kicker-text">Complete Before &amp; After Portfolio</span>
       </div>
-      <h2 class="section-heading">All 7 Interactive Before &amp; After Transformations</h2>
+      <h2 class="section-heading">Painting &amp; Staining Transformations</h2>
 
       <div class="split-list">
         {gallery.map((pair, idx) => (

@@ -12,10 +12,10 @@ export interface Props {
 }
 
 const {
-  title = 'AAC Painters Inc. | Quality Paint, Epoxy Flooring & Commercial Finishes',
-  description = 'Quality Paint. Lasting Results. Licensed California painting and epoxy flooring contractor (CSLB #1039849). View 7 real before-and-after transformations, 4-stage jobsite documentaries, and request a free estimate with Alex Delgadillo at (209) 485-5103.',
+  title = 'Painters in Patterson | AAC Painters Inc.',
+  description = 'Quality Paint. Lasting Results. Painting and surface preparation in Patterson, the Bay Area and Central Valley. View real painting and staining projects, and request a free estimate with Alex Delgadillo at (209) 485-5103.',
   canonicalPath = Astro.url.pathname,
-  ogImage = '/images/brand/aac-og.png',
+  ogImage = '/images/projects/mcauley-building-after.png',
   structuredData
 } = Astro.props;
 
@@ -23,7 +23,7 @@ const canonicalUrl = new URL(canonicalPath, brand.domain).toString();
 const ogImageResolved = await optimizedImageUrl(ogImage);
 const ogImageUrl = new URL(ogImageResolved, brand.domain).toString();
 const isBrandCard = ogImage === '/images/brand/aac-og.png';
-const ogImageAlt = isBrandCard ? 'AAC Painters — Quality paint. Lasting results. Painting, epoxy and polish. (209) 485-5103.' : title;
+const ogImageAlt = isBrandCard ? 'AAC Painters — Quality paint. Lasting results. Painting and surface preparation. (209) 485-5103.' : title;
 const currentPath = Astro.url.pathname;
 
 // Logo served at 224px wide (2x its largest 112px display size), WebP.
@@ -31,9 +31,6 @@ const logoUrl = await optimizedImageUrl('/images/brand/aac-painters-logo.png', 2
 
 const schemaImagePaths = [
   '/images/projects/mcauley-building-after.png',
-  '/images/projects/auto-shop-epoxy-floor-after.png',
-  '/images/projects/residential-garage-flake-epoxy-after.png',
-  '/images/projects/warehouse-flake-epoxy-after.png',
 ];
 const schemaImageUrls = [
   new URL(logoUrl, brand.domain).toString(),
@@ -63,10 +60,10 @@ const localBusinessSchema = {
         jobTitle: brand.presidentTitle
       },
       areaServed: seoServiceAreas.map((city) => ({
-        '@type': 'City',
+        '@type': city === 'Patterson' ? 'City' : 'AdministrativeArea',
         name: `${city}, CA`
       })),
-      sameAs: [brand.instagramUrl, brand.facebookSearchUrl]
+      sameAs: [brand.instagramUrl, brand.facebookSearchUrl, 'https://www.google.com/maps?cid=2604929101649362691&hl=en&gl=US']
     }
   ]
 };
@@ -181,7 +178,7 @@ const extraSchemas = structuredData
           <a href="/#our-work" class:list={['nav-link', { 'is-active': currentPath.startsWith('/projects') }]}>Our Work</a>
           <a href="/#why-choose-us" class="nav-link">About &amp; Proof</a>
           <a href="/#our-process" class="nav-link">Process</a>
-          <a href="/#reviews" class="nav-link">Project Videos</a>
+          <a href="/#reviews" class="nav-link">Google Reviews</a>
         </nav>
 
         <div class="header-actions">
@@ -225,9 +222,8 @@ const extraSchemas = structuredData
             <a href="/">Home</a>
             <a href="/services/residential-painting/">Residential</a>
             <a href="/services/commercial-painting/">Commercial</a>
-            <a href="/services/epoxy-flooring/">Epoxy Floors</a>
             <a href="/projects/">Our Work</a>
-            <a href="/#reviews">Project Videos</a>
+            <a href="/#reviews">Google Reviews</a>
             <a href="#quote-builder">Free Estimate</a>
           </nav>
 
@@ -255,7 +251,7 @@ const extraSchemas = structuredData
 
         <div class="footer-bottom">
           <p class="footer-seo-line">
-            Residential Painting &bull; Interior Painting &bull; Exterior Painting &bull; Full-Broadcast &amp; Metallic Epoxy Flooring &bull; Commercial &amp; Auto Shop Coatings &bull; CA License #{brand.license.replace('CSLB #', '')}
+            Residential Painting &bull; Interior Painting &bull; Exterior Painting &bull; Surface Preparation &bull; Wood Staining &bull; Patterson, Bay Area &amp; Central Valley &bull; CA License #{brand.license.replace('CSLB #', '')}
           </p>
           <p class="footer-cities">
             Serving {seoServiceAreas.slice(0, 10).join(' • ')} &amp; Northern California

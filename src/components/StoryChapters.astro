@@ -1,17 +1,16 @@
 ---
-import { autoShopStory as autoShopStoryRaw, commercialExteriorStory as commercialExteriorStoryRaw, brand } from '../data/siteData';
+import { commercialExteriorStory as commercialExteriorStoryRaw, brand } from '../data/siteData';
 import { optimizedImageUrl } from '../utils/optimizedImages';
 
 const stageColors = ['accent-red', 'accent-green', 'accent-blue-deep', 'accent-yellow'];
 
-async function resolveStory(story: typeof autoShopStoryRaw) {
+async function resolveStory(story: typeof commercialExteriorStoryRaw) {
   const stages = await Promise.all(
     story.stages.map(async (stage) => ({ ...stage, image: await optimizedImageUrl(stage.image) })),
   );
   return { ...story, stages };
 }
 
-const autoShopStory = await resolveStory(autoShopStoryRaw);
 const commercialExteriorStory = await resolveStory(commercialExteriorStoryRaw);
 ---
 
@@ -32,7 +31,7 @@ const commercialExteriorStory = await resolveStory(commercialExteriorStoryRaw);
         </h2>
 
         <p class="why-lead">
-          We're not just painters — we're craftsmen. Our team shows up on time, communicates clearly, and takes pride in every detail, from heavy diamond-grinding prep to the final UV-clear topcoat.
+          We're not just painters — we're craftsmen. Our team shows up on time, communicates clearly, and takes pride in every detail, from surface preparation to the final coat of paint.
         </p>
       </div>
 
@@ -64,7 +63,7 @@ const commercialExteriorStory = await resolveStory(commercialExteriorStoryRaw);
             <span class="accent-yellow">High-Quality</span> Materials
           </h3>
           <p class="why-feature-desc">
-            Industrial 100% solids epoxy primers, UV-stable polyaspartic topcoats, and elastomeric architectural coatings that resist peeling.
+            Paints and architectural coatings selected for the surface and the project scope.
           </p>
         </div>
 
@@ -121,92 +120,15 @@ const commercialExteriorStory = await resolveStory(commercialExteriorStoryRaw);
 
       <div class="process-intro-col">
         <p class="process-intro-text">
-          Explore the floor and exterior photo sequences below. Select a stage to inspect the surface, preparation or finished view, then discuss the steps your property will need during an estimate.
+          Explore the exterior painting photo sequence below. Select a stage to inspect the surface, preparation or finished view, then discuss the steps your property will need during an estimate.
         </p>
         <!-- Toggle between the Real Project Documentaries -->
-        <div class="case-study-tabs" role="tablist" aria-label="Select a project documentary">
-          <button
-            type="button"
-            role="tab"
-            aria-selected="true"
-            aria-controls="doc-panel-autoshop"
-            id="doc-tab-autoshop"
-            class="case-tab is-active"
-            data-doc-tab="autoshop"
-          >
-            Auto Shop Epoxy Floor
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected="false"
-            aria-controls="doc-panel-exterior"
-            id="doc-tab-exterior"
-            class="case-tab"
-            data-doc-tab="exterior"
-          >
-            Storefront Building Exterior
-          </button>
-        </div>
-      </div>
-    </div>
 
-    <!-- Auto Shop Epoxy Process + Photo Viewer -->
-    <div id="doc-panel-autoshop" role="tabpanel" aria-labelledby="doc-tab-autoshop" class="doc-panel" data-doc-panel="autoshop">
-      <div class="process-steps-row" data-stage-switcher>
-        {autoShopStory.stages.map((stage, idx) => (
-          <button
-            type="button"
-            class:list={['process-step-col', { 'is-active': idx === 3 }]}
-            data-stage-btn={idx}
-            data-stage-image={stage.image}
-            data-stage-alt={stage.alt}
-            aria-pressed={idx === 3 ? 'true' : 'false'}
-          >
-            <div class="step-num-row">
-              <span class:list={['step-phase-label', stageColors[idx]]}>{stage.stepLabel}</span>
-              {idx < 3 && <span class="step-arrow" aria-hidden="true">&rarr;</span>}
-            </div>
-            <h3 class="step-col-title">{stage.title}</h3>
-            <p class="step-col-caption">{stage.caption}</p>
-            <div class="step-thumb-strip">
-              <img src={stage.image} alt={stage.alt} width="320" height="200" loading="lazy" decoding="async" />
-            </div>
-          </button>
-        ))}
-      </div>
-
-      <!-- Large Active Documentary Stage Frame -->
-      <div class="active-stage-showcase">
-        <div class="active-stage-media">
-          <img
-            src={autoShopStory.stages[3].image}
-            alt={autoShopStory.stages[3].alt}
-            width="1200"
-            height="800"
-            loading="lazy"
-            decoding="async"
-            data-stage-main-img
-          />
-          <span class="active-stage-pill" data-stage-main-pill>
-            {autoShopStory.stages[3].stepLabel} &bull; {autoShopStory.stages[3].title}
-          </span>
-        </div>
-        <div class="active-stage-info">
-          <span class="active-case-label">DOCUMENTED CASE STUDY &bull; {autoShopStory.Tagline}</span>
-          <h3 class="active-case-title" data-stage-main-title>{autoShopStory.stages[3].title}</h3>
-          <p class="active-case-desc" data-stage-main-desc>{autoShopStory.stages[3].caption}</p>
-          <p class="active-case-summary">{autoShopStory.summary}</p>
-          <a href="#quote-builder" class="arrow-link">
-            <span>Get a Free Estimate for Your Garage or Shop</span>
-            <span aria-hidden="true">&rarr;</span>
-          </a>
-        </div>
       </div>
     </div>
 
     <!-- Commercial Exterior Landmark Process + Photo Viewer -->
-    <div id="doc-panel-exterior" role="tabpanel" aria-labelledby="doc-tab-exterior" class="doc-panel" data-doc-panel="exterior" hidden>
+    <div id="doc-panel-exterior" role="region" aria-label="Storefront exterior painting process" class="doc-panel" data-doc-panel="exterior">
       <div class="process-steps-row" data-stage-switcher>
         {commercialExteriorStory.stages.map((stage, idx) => (
           <button
@@ -373,6 +295,7 @@ const commercialExteriorStory = await resolveStory(commercialExteriorStoryRaw);
      PART 2: LIGHT "OUR PROCESS" SECTION (01 -> 02 -> 03 -> 04 + REAL PHOTOS)
      ========================================================================== */
   .process-section {
+    scroll-margin-top: 7.5rem;
     padding: 5.5rem 1.5rem;
     background-color: var(--bg-light);
     border-top: 1px solid var(--border-light);
@@ -619,10 +542,9 @@ const commercialExteriorStory = await resolveStory(commercialExteriorStoryRaw);
 </style>
 
 <script>
-  import { autoShopStory, commercialExteriorStory } from '../data/siteData';
+  import { commercialExteriorStory } from '../data/siteData';
 
-  const stories: Record<string, typeof autoShopStory> = {
-    autoshop: autoShopStory,
+  const stories: Record<string, typeof commercialExteriorStory> = {
     exterior: commercialExteriorStory
   };
 
@@ -647,7 +569,7 @@ const commercialExteriorStory = await resolveStory(commercialExteriorStoryRaw);
 
     // Stage clicking inside each documentary panel
     panels.forEach((panel) => {
-      const key = panel.dataset.docPanel || 'autoshop';
+      const key = panel.dataset.docPanel || 'exterior';
       const storyData = stories[key];
       if (!storyData) return;
 

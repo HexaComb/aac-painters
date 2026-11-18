@@ -3,7 +3,7 @@ import { brand, flakePalettes } from '../data/siteData';
 import { quoteServices } from '../data/quoteOptions';
 import { optimizedImageUrl } from '../utils/optimizedImages';
 
-const backdropUrl = await optimizedImageUrl('/images/projects/warehouse-flake-epoxy-after.png');
+const backdropUrl = await optimizedImageUrl('/images/projects/mcauley-building-after.png');
 ---
 
 <section class="estimate-cta-section" id="quote-builder" aria-labelledby="quote-heading">
@@ -50,7 +50,7 @@ const backdropUrl = await optimizedImageUrl('/images/projects/warehouse-flake-ep
           </div>
           <div class="cred-item">
             <dt>Project Scopes</dt>
-            <dd>Painting, floor coatings, staining &amp; surface work</dd>
+            <dd>Painting, staining &amp; surface preparation</dd>
           </div>
         </dl>
       </div>
@@ -123,7 +123,7 @@ const backdropUrl = await optimizedImageUrl('/images/projects/warehouse-flake-ep
               <label for="city" class="field-label">
                 City / Location <span class="req-star" aria-hidden="true">*</span>
               </label>
-              <p class="field-hint" id="city-hint">e.g., Modesto, Turlock, Stockton, Tracy</p>
+              <p class="field-hint" id="city-hint">Patterson, Bay Area or Central Valley</p>
               <input
                 type="text"
                 id="city"
@@ -169,7 +169,7 @@ const backdropUrl = await optimizedImageUrl('/images/projects/warehouse-flake-ep
             <select id="preferredFinish" name="selectedFinish" class="field-input" disabled>
               <option value="">Undecided — discuss options with estimator</option>
               {flakePalettes.map((p) => (
-                <option value={p.name} data-finish-type={p.category === 'Exterior Architectural' ? 'paint' : 'floor'} data-commercial-only={p.category === 'Exterior Architectural' ? 'true' : undefined}>{p.name} ({p.category})</option>
+                <option value={p.name} data-finish-type={'paint'} data-commercial-only={p.category === 'Exterior Architectural' ? 'true' : undefined}>{p.name} ({p.category})</option>
               ))}
               <option value="Custom Architectural Paint Color Match" data-finish-type="paint">Custom Paint / Coating Color Match</option>
               <option value="Natural Wood Tone" data-finish-type="stain">Natural Wood Tone</option>
@@ -518,10 +518,7 @@ const backdropUrl = await optimizedImageUrl('/images/projects/warehouse-flake-ep
     form.addEventListener('change', updateTextLink);
     serviceSelect.addEventListener('change', syncServiceOptions);
     document.addEventListener('aac:finish-selected', ((event: CustomEvent<{ finish: string; category: string }>) => {
-      serviceSelect.value = event.detail.category === 'Exterior Architectural'
-        ? 'Commercial Painting & Stucco Restoration'
-        : event.detail.category === 'Auto Bay & High-Gloss'
-          ? 'Metallic & Solid-Color Epoxy Floor' : 'Full-Broadcast Flake Epoxy Floor';
+      serviceSelect.value = 'Commercial Painting & Stucco Restoration';
       syncServiceOptions();
       if (Array.from(finishSelect.options).some((option) => option.value === event.detail.finish)) {
         finishSelect.value = event.detail.finish;

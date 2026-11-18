@@ -25,7 +25,7 @@ test('navigation and CTA clicks include readable names and placement without SMS
   await page.goto('/');
   await page.locator('.footer-nav a[href="/#reviews"]').click();
   await expect.poll(() => events(page, 'navigation_click')).toEqual([
-    { send_to: 'G-EX8HXMVRGP', page_path: '/', link_name: 'Project Videos', link_url: 'http://127.0.0.1:4321/#reviews', link_location: 'footer' },
+    { send_to: 'G-EX8HXMVRGP', page_path: '/', link_name: 'Google Reviews', link_url: 'http://127.0.0.1:4321/#reviews', link_location: 'footer' },
   ]);
   await page.locator('.header-estimate-pill').click();
   await expect.poll(() => events(page, 'cta_click')).toContainEqual({

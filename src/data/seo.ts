@@ -19,7 +19,7 @@ export function makeServiceStructuredData({ path, name, description }: ServiceSe
       description,
       url,
       provider: { '@id': `${brand.domain}/#organization` },
-      areaServed: seoServiceAreas.map((city) => ({ '@type': 'City', name: `${city}, CA` })),
+      areaServed: seoServiceAreas.map((city) => ({ '@type': city === 'Patterson' ? 'City' : 'AdministrativeArea', name: `${city}, CA` })),
     },
     {
       '@context': 'https://schema.org',

@@ -1,0 +1,40 @@
+---
+const googleUrl = 'https://www.google.com/maps?cid=2604929101649362691&hl=en&gl=US';
+const reviews = [
+  { author: 'Nena Ayala', date: '2025-04-15', displayDate: 'April 2025', text: 'The whole process from start to finish was exceptional. Our 20 year old home looks brand new!', excerpt: false },
+  { author: 'Sonya Paz', date: '2024-11-01', displayDate: 'November 2024', text: 'Great communication and was on time for each day there were here.', excerpt: true },
+  { author: 'Croff Baker', date: '2024-04-19', displayDate: 'April 2024', text: "It's nice to find people who are enthusiastic & professional.", excerpt: true }
+];
+// Verified against the Google profile on 2026-11-16. Do not synthesize reviews or
+// import third-party ratings into LocalBusiness review/aggregateRating markup.
+---
+<section id="reviews" class="google-reviews" aria-labelledby="google-reviews-title">
+  <div class="container">
+    <p class="eyebrow">From our customers</p>
+    <h2 id="google-reviews-title">Good work. In their words.</h2>
+    <p class="intro">A few experiences shared by AAC customers on Google.</p>
+    <div class="review-grid">
+      {reviews.map(review => <figure class="review-card">
+        <p class="stars" aria-label="5 out of 5 stars">★★★★★</p>
+        <blockquote><p>{review.text}</p></blockquote>
+        <figcaption><strong>{review.author}</strong><span><time datetime={review.date}>{review.displayDate}</time> · Google review{review.excerpt ? ' excerpt' : ''}</span></figcaption>
+      </figure>)}
+    </div>
+    <a class="review-link" href={googleUrl} target="_blank" rel="noopener noreferrer">Read reviews on Google <span aria-hidden="true">↗</span></a>
+  </div>
+</section>
+<style>
+  .google-reviews { padding: clamp(3rem, 7vw, 6rem) 0; background: #f4f7fa; color: #142c40; }
+  .eyebrow { text-transform: uppercase; letter-spacing: .14em; font-weight: 700; font-size: .8rem; color: #175e8a; }
+  h2 { font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.1; margin: .7rem 0; }
+  .intro { color: #465e70; margin-bottom: 2rem; }
+  .review-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+  .review-card { margin: 0; background: white; border: 1px solid #dce5ed; border-radius: 1rem; padding: 1.7rem; display: flex; flex-direction: column; }
+  .stars { color: #8a6000; letter-spacing: .13em; margin: 0 0 1rem; }
+  blockquote { margin: 0 0 1.5rem; font-size: 1.1rem; line-height: 1.65; flex: 1; }
+  blockquote p { margin: 0; }
+  figcaption { display: grid; gap: .3rem; }
+  figcaption span { color: #526878; font-size: .85rem; }
+  .review-link { display: inline-block; margin-top: 1.75rem; color: #14597f; font-weight: 700; text-underline-offset: .25em; }
+  @media (max-width: 760px) { .review-grid { grid-template-columns: 1fr; } }
+</style>
