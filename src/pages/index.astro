@@ -1305,7 +1305,7 @@ const faqSchema = {
 
     // The project video is below the fold: load it only as visitors approach.
     const showcaseVideos = document.querySelectorAll<HTMLVideoElement>('[data-showcase-video][data-video-src]');
-    if ('IntersectionObserver' in window) {
+    if (typeof IntersectionObserver !== 'undefined') {
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
