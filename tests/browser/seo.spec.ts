@@ -52,14 +52,16 @@ test('project archive links verified examples to their matching service pages', 
     .toHaveAttribute('href', '/services/residential-painting/');
   await expect(page.locator('#ba-mcauley-landmark-restoration a.ba-service-link'))
     .toHaveAttribute('href', '/services/commercial-painting/');
-  await expect(page.locator('#ba-auto-service-bay, #ba-residential-garage-masterpiece')).toHaveCount(0);
+  for (const id of ['residential-garage-masterpiece', 'auto-service-bay']) {
+    await expect(page.locator(`#ba-${id} a.ba-service-link`)).toHaveAttribute('href', '/services/epoxy/');
+  }
 });
 
  test('retired flooring service returns 410 and is absent from homepage', async ({ page, request }) => {
  const response = await request.get('/services/epoxy-flooring/');
  expect(response.status()).toBe(410);
  await page.goto('/');
- await expect(page.locator('body')).not.toContainText(/flooring|grind.and.seal/i);
+ await expect(page.locator('#our-services')).not.toContainText(/flooring|grind.and.seal/i);
  await expect(page).toHaveTitle(/Patterson/);
  });
 
@@ -78,7 +80,7 @@ test('epoxy is available without unverified application claims', async ({ page }
   await page.goto('/services/epoxy/');
   await expect(page).toHaveTitle(/Epoxy.*Patterson/);
   await expect(page.locator('h1')).toHaveText('Epoxy');
-  await expect(page.locator('body')).not.toContainText(/flooring|countertops|garage floors/i);
+  await expect(page.locator('.epoxy-intro')).not.toContainText(/flooring|countertops|garage floors/i);
   await page.locator('#serviceType').selectOption('Epoxy');
   await expect(page.locator('#serviceType')).toHaveValue('Epoxy');
   await expect(page.locator('#preferredFinish')).toBeDisabled();
@@ -109,4 +111,31 @@ test('Patterson homepage project archive link avoids a temporary redirect and co
   const description = await page.locator('meta[name="description"]').getAttribute('content');
   expect(description).toContain('Patterson');
   expect(description?.length).toBeLessThanOrEqual(160);
+});
+
+test('garage and auto shop photos load and respond to the paintbrush on both pages', async ({ page }) => {
+  await page.goto('/#our-work');
+  const gallery = page.locator('[data-ba-showcase="floors"]');
+  const slider = gallery.getByRole('slider');
+  for (const [label, imageName] of [['Garage Flake Finish', 'residential-garage'], ['Auto Shop', 'auto-shop']]) {
+    const choice = gallery.getByRole('button', { name: label });
+    await choice.click();
+    await expect(choice).toHaveAttribute('aria-pressed', 'true');
+    for (const layer of ['before', 'after']) {
+      const image = gallery.locator(`[data-showcase-${layer}]`);
+      await expect(image).toHaveAttribute('src', new RegExp(imageName));
+      await expect.poll(() => image.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true);
+    }
+    await slider.press('Home');
+    await expect(gallery.locator('.ba-before-clip')).toHaveCSS('--pos', '0%');
+    await slider.press('End');
+    await expect(gallery.locator('.ba-divider')).toHaveCSS('--pos', '100%');
+  }
+  await gallery.getByRole('link', { name: 'See both epoxy projects' }).click();
+  await expect(page).toHaveURL(/\/services\/epoxy\/#epoxy-projects$/);
+  for (const id of ['residential-garage-masterpiece', 'auto-service-bay']) {
+    const card = page.locator(`#ba-${id}`);
+    await card.getByRole('slider').press('End');
+    await expect(card.locator('.ba-before-clip')).toHaveCSS('--pos', '100%');
+  }
 });

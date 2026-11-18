@@ -2,9 +2,9 @@
 
 - Requested focus: Patterson, with Bay Area and Central Valley coverage.
 - Updated 2026-11-17 after Marco clarified that Epoxy should remain a service: restored the Epoxy homepage listing, estimate option and `/services/epoxy/` page. Copy does not promise specific substrates, floor installation or insurance coverage; the application and scope are discussed during an estimate.
-- Flooring-specific, grind-and-seal and pool/patio coating offers remain withdrawn. Surface services is not used to disguise flooring. Former floor-project media remains archived because relabeling those images would still imply floor work.
+- Flooring-specific, grind-and-seal and pool/patio coating offers remain withdrawn. Surface services is not used to disguise flooring.
 - Retired `/services/epoxy-flooring/` returns 410 + noindex, rather than redirecting searchers to a different service. It is absent from the generated sitemap.
-- Existing floor media files remain archived but are not featured or linked in the site. The old OG card is no longer used because its baked-in flooring message is outdated.
+- Alex requested the original garage and auto shop epoxy comparisons. Both documented projects are featured on the homepage, the Epoxy page and in the portfolio. The old OG card is no longer used because its baked-in flooring message is outdated.
 
 ## Review sources
 Verified 2026-11-16 through OpenSEO's Google review source (no other review sources included), matching the business domain and phone:

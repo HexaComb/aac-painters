@@ -2,7 +2,7 @@ export interface BeforeAfterItem {
   id: string;
   title: string;
   subtitle: string;
-  category: 'commercial' | 'residential';
+  category: 'commercial' | 'residential' | 'epoxy';
   categoryLabel: string;
   location: string;
   projectScope: string;
@@ -204,6 +204,65 @@ export const BEFORE_AFTER_GALLERY: BeforeAfterItem[] = [
     storyBody:
       'Wood species, existing finishes and surface condition help determine the preparation and stain options for a fence or deck.',
     defaultSliderPos: 50,
+  },
+  {
+    id: 'residential-garage-masterpiece',
+    title: '2-Car Residential Garage',
+    subtitle: 'Residential garage concrete with a decorative flake finish',
+    category: 'epoxy',
+    categoryLabel: 'Residential Garage Epoxy',
+    location: 'Central Valley Homeowner',
+    projectScope: 'Two-car residential garage floor coating',
+    documentedResult: 'The completed view shows decorative flake flooring and finished stem-wall edges.',
+    serviceHref: '/services/epoxy/',
+    serviceLabel: 'Explore epoxy projects',
+    beforeImage: '/images/projects/residential-garage-before.png',
+    beforeAlt: 'Before: Residential garage floor before transformation',
+    beforeWidth: 600,
+    beforeHeight: 450,
+    beforeLabel: 'Before Transformation',
+    afterImage: '/images/projects/residential-garage-flake-epoxy-after.png',
+    afterAlt: 'After: Finished residential garage floor',
+    afterWidth: 450,
+    afterHeight: 600,
+    afterLabel: 'After Transformation',
+    prepSpec: 'Assess the slab and any repair or preparation needs',
+    coatingSpec: 'Decorative flake garage floor coating',
+    turnaround: '',
+    storyHook: 'These garage views show the concrete surface before coating and the textured-looking flake finish afterward.',
+    storyBody:
+      'Ask about suitable coating options, surface preparation and cure time before moving vehicles or stored items back into the garage.',
+    defaultSliderPos: 46,
+  },
+  {
+    id: 'auto-service-bay',
+    title: 'Auto Shop Service Bay',
+    subtitle: 'A closer look at an auto shop floor before and after coating',
+    category: 'epoxy',
+    categoryLabel: 'Auto Shop Epoxy',
+    location: 'Central Valley, CA (209)',
+    projectScope: 'Auto-service bay concrete floor',
+    documentedResult: 'The worn shop floor is shown next to its smooth, light-colored coated finish.',
+    processEvidence: 'Separate photos document floor grinding and patched areas before the finished view.',
+    serviceHref: '/services/epoxy/',
+    serviceLabel: 'Explore epoxy projects',
+    beforeImage: '/images/projects/auto-shop-floor-before.png',
+    beforeAlt: 'Before: Auto service shop floor before transformation',
+    beforeWidth: 450,
+    beforeHeight: 600,
+    beforeLabel: 'Before Transformation',
+    afterImage: '/images/projects/auto-shop-epoxy-floor-after.png',
+    afterAlt: 'After: Finished auto service shop floor',
+    afterWidth: 600,
+    afterHeight: 340,
+    afterLabel: 'After Transformation',
+    prepSpec: 'Review the slab, surface preparation and repair needs',
+    coatingSpec: 'Smooth, light-colored floor coating',
+    turnaround: '',
+    storyHook: 'The paired views show an auto service bay with a worn floor and a light-colored finished surface.',
+    storyBody:
+      'For a similar space, discuss vehicle traffic, existing contamination, surface repairs and return-to-service requirements during the estimate.',
+    defaultSliderPos: 48,
   },
 ];
 
@@ -408,10 +467,7 @@ export const beforeAfterGallery: BeforeAfterPair[] = BEFORE_AFTER_GALLERY.map((i
   id: item.id,
   title: item.title,
   subtitle: item.subtitle,
-  category:
-    item.category === 'commercial'
-        ? 'Commercial'
-        : 'Residential',
+  category: { commercial: 'Commercial', residential: 'Residential', epoxy: 'Epoxy' }[item.category],
   duration: item.turnaround,
   projectScope: item.projectScope,
   documentedResult: item.documentedResult,
