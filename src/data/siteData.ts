@@ -10,6 +10,7 @@ export interface BeforeAfterItem {
   processEvidence?: string;
   serviceHref: string;
   serviceLabel: string;
+  caseStudyHref?: string;
   beforeImage: string;
   beforeAlt: string;
   beforeWidth: number;
@@ -116,6 +117,37 @@ export const BEFORE_AFTER_GALLERY: BeforeAfterItem[] = [
     storyHook: 'The exterior views show a change from a light facade to a deeper neutral wall color with dark storefront framing.',
     storyBody:
       'An exterior estimate can address surface condition, repairs, color choices and access around doors and walkways.',
+    defaultSliderPos: 50,
+  },
+  {
+    id: 'taco-bell-exterior-repaint',
+    title: 'Taco Bell Exterior Repaint',
+    subtitle: 'A franchise restaurant exterior repainted to new brand colors',
+    category: 'commercial',
+    categoryLabel: 'Franchise Exterior Repaint',
+    location: 'California',
+    projectScope: 'Franchise restaurant exterior repaint: stucco walls, parapet caps and trim',
+    documentedResult: 'Tan stucco and faded red trim replaced by white walls and purple brand trim around the new Taco Bell signage.',
+    processEvidence: 'Jobsite photos show the original facade, masked signage and glass, and the crew painting from ladders.',
+    serviceHref: '/services/commercial-painting/',
+    serviceLabel: 'Explore commercial painting',
+    caseStudyHref: '/projects/taco-bell-exterior-repaint/',
+    beforeImage: '/images/projects/taco-bell-exterior-before-aerial.jpg',
+    beforeAlt: 'Before: Aerial view of the restaurant building with tan stucco walls and faded red parapet trim',
+    beforeWidth: 1600,
+    beforeHeight: 1200,
+    beforeLabel: 'Before Transformation',
+    afterImage: '/images/projects/taco-bell-exterior-after-aerial.jpg',
+    afterAlt: 'After: Aerial view of the repainted Taco Bell exterior with white walls and purple brand trim',
+    afterWidth: 1600,
+    afterHeight: 1200,
+    afterLabel: 'After Transformation',
+    prepSpec: 'Mask signage, storefront glass and fixtures before painting',
+    coatingSpec: 'Exterior stucco wall and trim paint',
+    turnaround: '',
+    storyHook: 'The exterior views show tan stucco and faded red trim updated to bright white walls with purple brand trim. Signage and storefront glass stayed masked throughout the job.',
+    storyBody:
+      'For a franchise or occupied commercial site, discuss brand colors, signage protection, customer access and work hours before the scope is finalized.',
     defaultSliderPos: 50,
   },
   {
@@ -324,6 +356,63 @@ export const STORY_CHAPTERS: StoryChapter[] = [
       },
     ],
   },
+  {
+    id: 'taco-bell-exterior-repaint',
+    chapterNumber: 'FRANCHISE REPAINT',
+    badge: '4-STAGE FRANCHISE REPAINT',
+    title: 'Repainting a Taco Bell Restaurant Exterior',
+    kicker: 'From the original red-and-tan facade to white walls and purple brand trim.',
+    narrative:
+      'Follow the Taco Bell repaint from the original facade to the finished brand colors. Franchise work adds brand color standards, signage protection and an open business to plan around.',
+    proTip:
+      'Share your brand color standards and signage details early so they can be included in the estimate.',
+    steps: [
+      {
+        stepNumber: 'ASSESS',
+        label: 'ASSESS',
+        title: 'Assess the Original Facade',
+        description:
+          'The building started with tan stucco walls and faded, peeling red trim along the parapet.',
+        image: '/images/projects/taco-bell-storefront-before.jpg',
+        alt: 'Restaurant storefront with tan stucco walls and faded red parapet trim before repainting',
+        width: 1600,
+        height: 1068,
+      },
+      {
+        stepNumber: 'PROTECT',
+        label: 'PROTECT',
+        title: 'Protect Signage and Glass',
+        description:
+          'Signs, storefront glass and fixtures were masked off and the walkway was covered before spraying.',
+        image: '/images/projects/taco-bell-storefront-masking.jpg',
+        alt: 'Painters spraying the storefront wall with signage, glass and the walkway masked off',
+        width: 1600,
+        height: 1200,
+      },
+      {
+        stepNumber: 'PAINT',
+        label: 'PAINT',
+        title: 'Paint the Walls and Trim',
+        description:
+          'The crew worked the side wall from ladders and a lift while the purple parapet trim went on above.',
+        image: '/images/projects/taco-bell-side-wall-painting.jpg',
+        alt: 'Painters on ladders working the restaurant side wall below new purple parapet trim',
+        width: 1600,
+        height: 1200,
+      },
+      {
+        stepNumber: 'FINISH',
+        label: 'FINISH',
+        title: 'Review the Finished Exterior',
+        description:
+          'The finished building shows white walls, purple brand trim and the new Taco Bell signage in place.',
+        image: '/images/projects/taco-bell-exterior-after-aerial.jpg',
+        alt: 'Aerial view of the finished Taco Bell exterior with white walls and purple brand trim',
+        width: 1600,
+        height: 1200,
+      },
+    ],
+  },
 ];
 
 export const FLAKE_PRESETS: FlakeSystemPreset[] = [
@@ -440,6 +529,7 @@ export interface BeforeAfterPair {
   processEvidence?: string;
   serviceHref: string;
   serviceLabel: string;
+  caseStudyHref?: string;
   beforeImage: string;
   beforeAlt: string;
   afterImage: string;
@@ -474,6 +564,7 @@ export const beforeAfterGallery: BeforeAfterPair[] = BEFORE_AFTER_GALLERY.map((i
   processEvidence: item.processEvidence,
   serviceHref: item.serviceHref,
   serviceLabel: item.serviceLabel,
+  caseStudyHref: item.caseStudyHref,
   beforeImage: item.beforeImage,
   beforeAlt: item.beforeAlt,
   afterImage: item.afterImage,

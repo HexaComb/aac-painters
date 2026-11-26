@@ -6,9 +6,10 @@ export interface Props {
   priority?: boolean;
   layout?: 'split-row' | 'card';
   showServiceLink?: boolean;
+  showCaseStudyLink?: boolean;
 }
 
-const { item, priority = false, layout = 'card', showServiceLink = false } = Astro.props;
+const { item, priority = false, layout = 'card', showServiceLink = false, showCaseStudyLink = true } = Astro.props;
 ---
 
 <article
@@ -163,6 +164,7 @@ const { item, priority = false, layout = 'card', showServiceLink = false } = Ast
       </span>
       <div class="ba-footer-actions">
         {showServiceLink && <a class="ba-service-link" href={item.serviceHref}>{item.serviceLabel}</a>}
+        {showCaseStudyLink && item.caseStudyHref && <a class="ba-service-link ba-case-study-link" href={item.caseStudyHref}>Read the full case study</a>}
         <a href="#quote-builder" class="arrow-link">
           <span>Request a Similar Project</span>
           <span aria-hidden="true">&rarr;</span>

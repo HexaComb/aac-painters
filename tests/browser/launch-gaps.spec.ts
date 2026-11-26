@@ -122,7 +122,7 @@ async function fulfillApi(route: Route, deliveryStatus?: number) {
 test('service pages expose the shared lineup with correct project categories', async ({ page }) => {
   const pages = [
     { path: '/services/residential-painting/', terms: ['Cabinet Painting', 'Stairwell', 'Popcorn', 'Pressure Washing'], count: 1 },
-    { path: '/services/commercial-painting', terms: ['HOA', 'Hotel', 'Apartment'], count: 3 },
+    { path: '/services/commercial-painting', terms: ['HOA', 'Hotel', 'Apartment'], count: 4 },
   ];
   for (const service of pages) {
     await page.goto(service.path);

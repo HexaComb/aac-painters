@@ -1,4 +1,4 @@
-// Optimized image URLs for the eight PNGs that moved from public/ into
+// Optimized image URLs for the project photos that moved from public/ into
 // src/assets/. Astro generates an optimized WebP for each at build time
 // (Sharp via the Cloudflare adapter's compile image service), and every
 // consumer below resolves its public path to the generated URL in its
@@ -19,6 +19,11 @@ import residentialGarageBefore from '../assets/projects/residential-garage-befor
 import residentialGarageFlakeEpoxyAfter from '../assets/projects/residential-garage-flake-epoxy-after.png';
 import warehouseFlakeEpoxyAfter from '../assets/projects/warehouse-flake-epoxy-after.png';
 import woodFenceStainedAfter from '../assets/projects/wood-fence-stained-after.png';
+import tacoBellExteriorBeforeAerial from '../assets/projects/taco-bell-exterior-before-aerial.jpg';
+import tacoBellExteriorAfterAerial from '../assets/projects/taco-bell-exterior-after-aerial.jpg';
+import tacoBellStorefrontBefore from '../assets/projects/taco-bell-storefront-before.jpg';
+import tacoBellStorefrontMasking from '../assets/projects/taco-bell-storefront-masking.jpg';
+import tacoBellSideWallPainting from '../assets/projects/taco-bell-side-wall-painting.jpg';
 import aacPaintersLogo from '../assets/brand/aac-painters-logo.png';
 
 const OPTIMIZED_ASSETS: Record<string, ImageMetadata> = {
@@ -30,6 +35,11 @@ const OPTIMIZED_ASSETS: Record<string, ImageMetadata> = {
   '/images/projects/warehouse-flake-epoxy-after.png': warehouseFlakeEpoxyAfter,
   '/images/projects/wood-fence-stained-after.png': woodFenceStainedAfter,
   '/images/brand/aac-painters-logo.png': aacPaintersLogo,
+  '/images/projects/taco-bell-exterior-before-aerial.jpg': tacoBellExteriorBeforeAerial,
+  '/images/projects/taco-bell-exterior-after-aerial.jpg': tacoBellExteriorAfterAerial,
+  '/images/projects/taco-bell-storefront-before.jpg': tacoBellStorefrontBefore,
+  '/images/projects/taco-bell-storefront-masking.jpg': tacoBellStorefrontMasking,
+  '/images/projects/taco-bell-side-wall-painting.jpg': tacoBellSideWallPainting,
 };
 
 /**

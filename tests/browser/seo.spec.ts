@@ -139,3 +139,31 @@ test('garage and auto shop photos load and respond to the paintbrush on both pag
     await expect(card.locator('.ba-before-clip')).toHaveCSS('--pos', '100%');
   }
 });
+
+test('Taco Bell case study is indexable, linked and keeps the before/after slider', async ({ page }) => {
+  const path = '/projects/taco-bell-exterior-repaint/';
+  await page.goto(path);
+  await expect(page).toHaveTitle(/Taco Bell Exterior Repaint/);
+  await expect(page.locator('h1#case-title')).toContainText('Taco Bell');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://www.aacpaintersinc.com${path}`);
+  await expect(page.locator('#ba-taco-bell-exterior-repaint [data-ba-slider]')).toBeVisible();
+  await expect(page.locator('#ba-taco-bell-exterior-repaint .ba-img-before')).toHaveAttribute('alt', /Before:/);
+  await expect(page.locator('.case-step img')).toHaveCount(4);
+  const structured = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((json) => JSON.parse(json));
+  const article = structured.find((item) => item['@type'] === 'Article');
+  expect(article.publisher['@id']).toBe('https://www.aacpaintersinc.com/#organization');
+  expect(article.about['@id']).toBe('https://www.aacpaintersinc.com/services/commercial-painting/#service');
+  expect(article.image.length).toBeGreaterThanOrEqual(4);
+  const breadcrumb = structured.find((item) => item['@type'] === 'BreadcrumbList');
+  expect(breadcrumb.itemListElement.at(-1).item).toBe(`https://www.aacpaintersinc.com${path}`);
+
+  for (const source of ['/projects/', '/services/commercial-painting/']) {
+    await page.goto(source);
+    await expect(page.locator('#ba-taco-bell-exterior-repaint a.ba-case-study-link')).toHaveAttribute('href', path);
+  }
+});
+
+test('homepage links to the Taco Bell case study', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('#our-work .ba-case-study-callout a')).toHaveAttribute('href', '/projects/taco-bell-exterior-repaint/');
+});

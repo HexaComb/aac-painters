@@ -1,0 +1,475 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BeforeAfterCard from '../../components/BeforeAfterCard.astro';
+import QuoteBuilderForm from '../../components/QuoteBuilderForm.astro';
+import { brand, beforeAfterGallery, BEFORE_AFTER_GALLERY, STORY_CHAPTERS } from '../../data/siteData';
+import { optimizedImageUrl, optimizedBeforeAfterPair } from '../../utils/optimizedImages';
+
+const PROJECT_ID = 'taco-bell-exterior-repaint';
+const PAGE_PATH = '/projects/taco-bell-exterior-repaint/';
+const PUBLISHED = '2026-11-26';
+
+const pairRaw = beforeAfterGallery.find((item) => item.id === PROJECT_ID);
+const chapter = STORY_CHAPTERS.find((item) => item.id === PROJECT_ID);
+const source = BEFORE_AFTER_GALLERY.find((item) => item.id === PROJECT_ID);
+if (!pairRaw || !chapter || !source) throw new Error(`Missing case study data: ${PROJECT_ID}`);
+
+const pair = await optimizedBeforeAfterPair(pairRaw);
+const steps = await Promise.all(
+  chapter.steps.map(async (step) => ({ ...step, src: await optimizedImageUrl(step.image) })),
+);
+const heroImageUrl = pair.afterImage;
+
+const title = 'Taco Bell Exterior Repaint | Commercial Painting Case Study | AAC Painters';
+const description =
+  'How AAC Painters repainted a Taco Bell restaurant exterior to new brand colors: before-and-after photos, masking and protection, and the finished white-and-purple facade.';
+
+const pageUrl = new URL(PAGE_PATH, brand.domain).toString();
+const absolute = (path: string) => new URL(path, brand.domain).toString();
+
+const facts = [
+  { term: 'Property', detail: 'Franchise quick-service restaurant in a shared commercial building' },
+  { term: 'Work performed', detail: pairRaw.projectScope },
+  { term: 'Color change', detail: 'Tan stucco and red trim to white walls with purple brand trim' },
+  { term: 'Protection', detail: 'Signage, storefront glass, fixtures and walkways masked and covered' },
+  { term: 'Access', detail: 'Ladders and a boom lift around an open, occupied site' },
+  { term: 'Location', detail: source.location },
+];
+
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    '@id': `${pageUrl}#article`,
+    headline: 'Taco Bell Exterior Repaint: Commercial Franchise Painting Case Study',
+    description,
+    url: pageUrl,
+    mainEntityOfPage: pageUrl,
+    datePublished: PUBLISHED,
+    dateModified: PUBLISHED,
+    image: [absolute(pair.afterImage), absolute(pair.beforeImage), ...steps.map((step) => absolute(step.src))],
+    author: { '@id': `${brand.domain}/#organization` },
+    publisher: { '@id': `${brand.domain}/#organization` },
+    about: { '@id': `${brand.domain}/services/commercial-painting/#service` },
+    keywords: [
+      'commercial exterior painting',
+      'franchise restaurant painting',
+      'Taco Bell repaint',
+      'stucco painting',
+      'brand color repaint',
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${brand.domain}/` },
+      { '@type': 'ListItem', position: 2, name: 'Projects', item: `${brand.domain}/projects/` },
+      { '@type': 'ListItem', position: 3, name: 'Taco Bell Exterior Repaint', item: pageUrl },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath={PAGE_PATH}
+  ogImage={pairRaw.afterImage}
+  structuredData={structuredData}
+>
+  <article class="case-study" aria-labelledby="case-title">
+    <section class="subpage-hero">
+      <div class="subpage-hero-bg">
+        <img
+          src={heroImageUrl}
+          alt={pair.afterAlt}
+          width="1600"
+          height="1200"
+          loading="eager"
+          fetchpriority="high"
+          decoding="sync"
+        />
+        <div class="subpage-scrim" aria-hidden="true"></div>
+      </div>
+
+      <div class="container subpage-hero-inner">
+        <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+          <a href="/">Home</a>
+          <span aria-hidden="true">/</span>
+          <a href="/projects/">Projects</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">Taco Bell Exterior Repaint</span>
+        </nav>
+
+        <p class="case-eyebrow">Commercial Case Study &bull; Franchise Exterior</p>
+        <h1 id="case-title" class="subpage-title">
+          Taco Bell <span class="accent-blue">Exterior Repaint</span>
+        </h1>
+
+        <p class="subpage-lead">
+          AAC Painters repainted this Taco Bell restaurant from tan stucco and faded red trim to bright white walls with purple brand trim, keeping signage, glass and the open storefront protected throughout the job.
+        </p>
+
+        <div class="subpage-actions">
+          <a href="#quote-builder" class="btn btn-white">
+            <span>Get a Commercial Estimate</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+          <a href={brand.phoneHref} class="btn btn-outline-light">
+            <span>Call {brand.phoneDisplay}</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="spectrum-bar" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </section>
+
+    <section class="case-section case-compare" aria-labelledby="compare-heading">
+      <div class="container">
+        <div class="section-kicker">
+          <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="kicker-text">Before &amp; After</span>
+        </div>
+        <h2 id="compare-heading" class="section-heading">Drag the Brush to Repaint the Building</h2>
+        <BeforeAfterCard item={pair} priority layout="split-row" showServiceLink showCaseStudyLink={false} />
+      </div>
+    </section>
+
+    <section class="case-section case-facts-section" aria-labelledby="facts-heading">
+      <div class="container case-facts-grid">
+        <div>
+          <div class="section-kicker">
+            <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <span class="kicker-text">Project Overview</span>
+          </div>
+          <h2 id="facts-heading" class="section-heading">A Full Brand-Color Change on an Open Restaurant</h2>
+          <p class="case-copy">
+            Rebranding a franchise location means the finished colors have to match the brand standard and the business keeps serving customers while the crew works. This job covered the stucco walls, parapet caps and trim around the building, with the new Taco Bell signage going up against fresh white walls and purple trim.
+          </p>
+          <p class="case-copy">
+            The photos below are from the actual jobsite: the original facade, the masking around signs and storefront glass, the crew working from ladders and a lift, and the finished building from the air.
+          </p>
+        </div>
+        <dl class="case-facts">
+          {facts.map((fact) => (
+            <div class="case-fact-row">
+              <dt>{fact.term}</dt>
+              <dd>{fact.detail}</dd>
+            </div>
+          ))}
+          <div class="case-fact-row">
+            <dt>System</dt>
+            <dd>{pair.finishSystem}</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="case-section case-process" aria-labelledby="process-steps-heading">
+      <div class="container">
+        <div class="section-kicker">
+          <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="kicker-text">How This Job Came Together</span>
+        </div>
+        <h2 id="process-steps-heading" class="section-heading">Assess, Protect, Paint, Finish</h2>
+        <ol class="case-steps">
+          {steps.map((step) => (
+            <li class="case-step">
+              <figure>
+                <img src={step.src} alt={step.alt} width={step.width} height={step.height} loading="lazy" decoding="async" />
+                <figcaption>
+                  <span class="case-step-label">{step.label}</span>
+                  <h3>{step.title}</h3>
+                  <p>{step.description}</p>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="case-section case-lessons" aria-labelledby="lessons-heading">
+      <div class="container">
+        <div class="section-kicker">
+          <span class="kicker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="kicker-text">Planning a Franchise Repaint</span>
+        </div>
+        <h2 id="lessons-heading" class="section-heading">What to Plan For on a Commercial Rebrand</h2>
+        <div class="case-lesson-grid">
+          <div class="case-lesson">
+            <h3>Brand color standards</h3>
+            <p>Share the franchise's color specifications up front so wall, trim and accent colors are matched before work starts.</p>
+          </div>
+          <div class="case-lesson">
+            <h3>Signage and glass protection</h3>
+            <p>Signs, storefront glass, lights and equipment near the walls need to be masked and the walkways covered before spraying.</p>
+          </div>
+          <div class="case-lesson">
+            <h3>An open business</h3>
+            <p>Plan customer access, parking and work zones so the restaurant and neighboring tenants can keep operating during the repaint.</p>
+          </div>
+        </div>
+        <div class="case-links">
+          <a href="/services/commercial-painting/" class="arrow-link">
+            <span>Explore commercial painting services</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+          <a href="/projects/" class="arrow-link">
+            <span>See more before-and-after projects</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <QuoteBuilderForm />
+</BaseLayout>
+
+<style>
+  .subpage-hero {
+    position: relative;
+    background: var(--bg-dark-deep);
+    color: var(--text-light);
+    overflow: hidden;
+  }
+
+  .subpage-hero-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .subpage-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .subpage-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(9, 13, 18, 0.92) 0%, rgba(11, 16, 23, 0.78) 55%, rgba(11, 16, 23, 0.4) 100%);
+  }
+
+  .subpage-hero-inner {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 1.5rem;
+    max-width: 720px;
+    margin-left: max(var(--gutter), calc((100% - var(--container-max)) / 2));
+  }
+
+  .breadcrumb-nav {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-light-secondary);
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumb-nav a {
+    color: inherit;
+  }
+
+  .case-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-light-secondary);
+    margin-bottom: 0.75rem;
+  }
+
+  .subpage-title {
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    margin-bottom: 1.15rem;
+  }
+
+  .subpage-lead {
+    font-size: 1.05rem;
+    color: var(--text-light-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .subpage-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .case-section {
+    padding: 5rem 1.5rem;
+    background: var(--bg-white);
+  }
+
+  .case-facts-section,
+  .case-lessons {
+    background: var(--bg-light, #f4f6f8);
+  }
+
+  .section-heading {
+    font-size: clamp(2rem, 3.5vw, 2.9rem);
+    color: var(--text-dark);
+    margin-bottom: 2.5rem;
+  }
+
+  .case-facts-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .case-copy {
+    color: var(--text-dark-secondary, #3b4654);
+    font-size: 1.02rem;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .case-facts {
+    margin: 0;
+    background: var(--bg-white);
+    border: 1px solid #e3e8ee;
+    border-radius: 4px;
+  }
+
+  .case-fact-row {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 1rem;
+    padding: 0.95rem 1.25rem;
+    border-bottom: 1px solid #e3e8ee;
+  }
+
+  .case-fact-row:last-child {
+    border-bottom: 0;
+  }
+
+  .case-fact-row dt {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-dark-secondary, #3b4654);
+  }
+
+  .case-fact-row dd {
+    margin: 0;
+    color: var(--text-dark);
+    font-weight: 600;
+  }
+
+  .case-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .case-step figure {
+    margin: 0;
+  }
+
+  .case-step img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+  }
+
+  .case-step figcaption {
+    padding-top: 0.9rem;
+  }
+
+  .case-step-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--aac-blue-deep);
+  }
+
+  .case-step h3 {
+    font-size: 1.15rem;
+    margin: 0.35rem 0 0.4rem;
+    color: var(--text-dark);
+  }
+
+  .case-step p {
+    margin: 0;
+    color: var(--text-dark-secondary, #3b4654);
+    line-height: 1.6;
+  }
+
+  .case-lesson-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .case-lesson {
+    background: var(--bg-white);
+    border: 1px solid #e3e8ee;
+    border-radius: 4px;
+    padding: 1.5rem;
+  }
+
+  .case-lesson h3 {
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem;
+    color: var(--text-dark);
+  }
+
+  .case-lesson p {
+    margin: 0;
+    color: var(--text-dark-secondary, #3b4654);
+    line-height: 1.6;
+  }
+
+  .case-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem 2.5rem;
+  }
+
+  @media (max-width: 960px) {
+    .case-facts-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .case-steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .case-lesson-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .case-section {
+      padding: 3.5rem 1rem;
+    }
+
+    .case-steps {
+      grid-template-columns: 1fr;
+    }
+
+    .case-fact-row {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+  }
+</style>

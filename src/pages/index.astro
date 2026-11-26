@@ -47,6 +47,7 @@ const floorShowcases = [
 
 const exteriorShowcases = [
   showcase('mcauley-landmark-restoration', 'Storefront Exterior', 'EXTERIOR & COMMERCIAL PAINTING', '/videos/before-after-video.mp4'),
+  showcase('taco-bell-exterior-repaint', 'Taco Bell Repaint', 'EXTERIOR & COMMERCIAL PAINTING'),
   showcase('mcdonalds-696-refresh', 'Storefront Canopy', 'COMMERCIAL STOREFRONT EXTERIOR'),
   showcase('residential-cedar-fence', 'Wood Fence Staining', 'RESIDENTIAL WOOD STAINING')
 ];
@@ -516,6 +517,10 @@ const faqSchema = {
                 </button>
               ))}
             </div>
+
+            <p class="ba-case-study-callout">
+              New case study: <a href="/projects/taco-bell-exterior-repaint/">Taco Bell exterior repaint, from masking to brand colors</a>
+            </p>
 
             <a href="/projects/" class="arrow-link">
               <span>View More Projects</span>
@@ -1230,6 +1235,18 @@ const faqSchema = {
     line-height: 1.65;
     color: var(--text-dark-secondary);
     margin-bottom: 0.85rem;
+  }
+
+  .ba-case-study-callout {
+    font-size: 0.92rem;
+    color: var(--text-dark-secondary);
+    margin: 0 0 1rem;
+  }
+
+  .ba-case-study-callout a {
+    color: var(--aac-blue-deep);
+    font-weight: 700;
+    text-underline-offset: 4px;
   }
 
   .ba-row-spec {
