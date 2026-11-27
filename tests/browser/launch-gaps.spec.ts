@@ -101,7 +101,10 @@ test('FAQ covers the service range, matches JSON-LD, and toggles by keyboard and
 async function fulfillApi(route: Route, deliveryStatus?: number) {
   const original = globalThis.fetch;
   let record: Record<string, unknown> | undefined;
-  globalThis.fetch = async (_url, init) => {
+  globalThis.fetch = async (url, init) => {
+    if (String(url) === 'https://challenges.cloudflare.com/turnstile/v0/siteverify') {
+      return Response.json({ success: true, action: 'quote_estimate', hostname: 'www.aacpaintersinc.com' });
+    }
     record = JSON.parse(String(init?.body));
     return Response.json({ id: 'test-email-id' }, { status: deliveryStatus ?? 200 });
   };
@@ -110,7 +113,13 @@ async function fulfillApi(route: Route, deliveryStatus?: number) {
       request: new Request('http://localhost/api/quote', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: route.request().postData()!,
       }),
-      locals: { runtime: { env: deliveryStatus ? { RESEND_API_KEY: 'test-only-resend-key' } : {} } },
+      locals: {
+        runtime: {
+          env: deliveryStatus
+            ? { RESEND_API_KEY: 'test-only-resend-key', TURNSTILE_SECRET_KEY: 'test-only-turnstile-secret' }
+            : {},
+        },
+      },
     } as unknown as Parameters<typeof POST>[0]);
     await route.fulfill({ status: response.status, contentType: 'application/json', body: await response.text() });
     return record;
@@ -252,4 +261,35 @@ test('finish choices stay compatible and stale selections clear when changing se
   await expect(page.locator('#preferredFinish')).toBeEnabled();
   await expect(page.locator('#preferredFinish')).toHaveValue('');
   await expect(page.locator('#preferredFinish')).toContainText('Exterior Architectural');
+});
+
+test('Turnstile blocks unverified submissions, forwards the token, and resets after submit', async ({ page }) => {
+  await page.addInitScript(() => {
+    (window as unknown as { __AAC_TURNSTILE_HOLD__?: boolean }).__AAC_TURNSTILE_HOLD__ = true;
+  });
+  let receivedToken = '';
+  let requests = 0;
+  await page.route('**/api/quote', async (route) => {
+    requests++;
+    const payload = JSON.parse(route.request().postData() || '{}');
+    receivedToken = payload['cf-turnstile-response'] || '';
+    await fulfillApi(route, 200);
+  });
+  await page.goto('/');
+  await fillContact(page);
+  await page.locator('#quote-submit-btn').click();
+  expect(requests).toBe(0);
+  await expect(page.locator('#turnstile-error')).toBeVisible();
+  await expect(page.locator('#turnstile-error')).toContainText(/security verification/i);
+
+  await page.evaluate(() => {
+    (window as unknown as { __AAC_TURNSTILE_COMPLETE__?: () => void }).__AAC_TURNSTILE_COMPLETE__?.();
+  });
+  await expect(page.locator('#turnstile-error')).toBeHidden();
+  await page.locator('#quote-submit-btn').click();
+  await expect(page.locator('#quote-feedback')).toHaveClass(/is-success/);
+  expect(requests).toBe(1);
+  expect(receivedToken).toMatch(/^mock-turnstile-token-/);
+  const resets = await page.evaluate(() => (window as unknown as { __AAC_TURNSTILE_RESETS__?: number }).__AAC_TURNSTILE_RESETS__ || 0);
+  expect(resets).toBe(1);
 });

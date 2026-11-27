@@ -4,6 +4,9 @@ import { getQuoteService, isValidPhone } from '../../data/quoteOptions.ts';
 export const prerender = false;
 
 const fallback = 'Please call or text (209) 485-5103 directly.';
+const EXPECTED_TURNSTILE_ACTION = 'quote_estimate';
+const PROD_TURNSTILE_HOSTNAMES = 'www.aacpaintersinc.com,aacpaintersinc.com';
+const DEV_TURNSTILE_HOSTNAMES = 'localhost,127.0.0.1,example.com,www.aacpaintersinc.com,aacpaintersinc.com';
 const json = (body: Record<string, unknown>, status = 200) => new Response(JSON.stringify(body), {
   status,
   headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
@@ -36,6 +39,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const propertyType = text(data.propertyType ?? data.propertyScope);
   const selectedFinish = text(data.selectedFinish ?? data.preferredFinish);
   const projectDetails = text(data.projectDetails);
+  const turnstileToken = text(data['cf-turnstile-response']);
 
   if (text(data.companyWebsite)) return json({ ok: false, error: 'Unable to process this request.' }, 400);
   if (name.length < 2 || name.length > 120 || !isValidPhone(phone) || phone.length > 30) {
@@ -71,13 +75,62 @@ export const POST: APIRoute = async ({ request, locals }) => {
     (projectDetails ? `Details: ${projectDetails}` : '')
   );
   const smsLink = `sms:+12094855103?&body=${smsBody}`;
-  const runtime = (locals as { runtime?: { env?: { RESEND_API_KEY?: string } } }).runtime;
+  const runtime = (locals as {
+    runtime?: { env?: { RESEND_API_KEY?: string; TURNSTILE_SECRET_KEY?: string; TURNSTILE_HOSTNAMES?: string } };
+  }).runtime;
   const apiKey = runtime?.env?.RESEND_API_KEY?.trim();
+  const turnstileSecret = runtime?.env?.TURNSTILE_SECRET_KEY?.trim();
+  const isDev = Boolean((import.meta as { env?: { DEV?: boolean } }).env?.DEV);
+  const expectedHostnames = new Set(
+    (runtime?.env?.TURNSTILE_HOSTNAMES?.trim() || (isDev ? DEV_TURNSTILE_HOSTNAMES : PROD_TURNSTILE_HOSTNAMES))
+      .split(',')
+      .map((hostname) => hostname.trim().toLowerCase())
+      .filter(Boolean),
+  );
 
-  // There is no database here: only acknowledge receipt after the configured
-  // destination accepts the request. Never silently discard an estimate lead.
-  if (!apiKey) {
+  // There is no database here: only acknowledge receipt after Turnstile verifies
+  // the request and the configured destination accepts it. Never silently discard a lead.
+  if (!apiKey || !turnstileSecret || expectedHostnames.size === 0) {
     return json({ ok: false, error: `Online requests are not available right now. Your request has not been sent. ${fallback}`, smsLink }, 503);
+  }
+  if (!turnstileToken || turnstileToken.length > 2048) {
+    return json({ ok: false, error: 'Please complete the security verification and try again.', smsLink }, 400);
+  }
+
+  const remoteip = request.headers.get('CF-Connecting-IP')?.trim();
+  const verifyForm = new URLSearchParams({
+    secret: turnstileSecret,
+    response: turnstileToken,
+    idempotency_key: crypto.randomUUID(),
+  });
+  if (remoteip) verifyForm.set('remoteip', remoteip);
+
+  let turnstileVerified = false;
+  try {
+    const verification = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: verifyForm,
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!verification.ok) throw new Error('Turnstile verification unavailable');
+    const result: unknown = await verification.json();
+    if (!result || typeof result !== 'object' || typeof (result as { success?: unknown }).success !== 'boolean') {
+      throw new Error('Malformed Turnstile verification response');
+    }
+    const { success, action, hostname } = result as {
+      success: boolean;
+      action?: unknown;
+      hostname?: unknown;
+    };
+    const validHostname = typeof hostname === 'string' && expectedHostnames.has(hostname.trim().toLowerCase());
+    const validAction = action === EXPECTED_TURNSTILE_ACTION || (isDev && hostname === 'example.com');
+    turnstileVerified = success && validHostname && validAction;
+  } catch {
+    return json({ ok: false, error: `We could not verify your request right now. ${fallback}`, smsLink }, 502);
+  }
+  if (!turnstileVerified) {
+    return json({ ok: false, error: 'Security verification failed or expired. Please complete the check and try again.', smsLink }, 403);
   }
   try {
     const delivery = await fetch('https://api.resend.com/emails', {

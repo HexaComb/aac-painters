@@ -4,6 +4,9 @@ import { quoteServices } from '../data/quoteOptions';
 import { optimizedImageUrl } from '../utils/optimizedImages';
 
 const backdropUrl = await optimizedImageUrl('/images/projects/mcauley-building-after.png');
+const turnstileSiteKey =
+  import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() ||
+  (import.meta.env.DEV ? '1x00000000000000000000AA' : '0x4AAAAAAGWVF4uwEIytYDUv');
 ---
 
 <section class="estimate-cta-section" id="quote-builder" aria-labelledby="quote-heading">
@@ -196,6 +199,20 @@ const backdropUrl = await optimizedImageUrl('/images/projects/mcauley-building-a
             <label for="companyWebsite">Leave empty</label>
             <input type="text" id="companyWebsite" name="companyWebsite" tabindex="-1" autocomplete="off" />
           </div>
+
+          {turnstileSiteKey && (
+            <div class="turnstile-group">
+              <div
+                id="quote-turnstile"
+                class="turnstile-slot"
+                data-sitekey={turnstileSiteKey}
+                data-action="quote_estimate"
+              ></div>
+              <p class="field-error turnstile-error" id="turnstile-error" role="alert" hidden>
+                Please complete the security verification before submitting.
+              </p>
+            </div>
+          )}
 
           <button type="submit" class="btn btn-dark submit-estimate-btn" id="quote-submit-btn">
             <span>Request My Free Estimate</span>
@@ -414,6 +431,23 @@ const backdropUrl = await optimizedImageUrl('/images/projects/mcauley-building-a
     display: block;
   }
 
+  .turnstile-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+  }
+
+  .turnstile-slot {
+    width: 100%;
+    max-width: 100%;
+    min-height: 65px;
+  }
+
+  .turnstile-error:not([hidden]) {
+    display: block;
+  }
+
   .submit-estimate-btn {
     width: 100%;
     padding-block: 1.05rem;
@@ -455,6 +489,10 @@ const backdropUrl = await optimizedImageUrl('/images/projects/mcauley-building-a
   }
 
   @media (max-width: 640px) {
+    .estimate-white-card {
+      padding: 1.75rem 1.25rem;
+    }
+
     .form-row-2 {
       grid-template-columns: 1fr;
     }
@@ -464,6 +502,32 @@ const backdropUrl = await optimizedImageUrl('/images/projects/mcauley-building-a
 <script>
   import { getQuoteService, isValidPhone } from '../data/quoteOptions';
   import { trackEvent } from '../scripts/analytics';
+
+  interface TurnstileRenderOptions {
+    sitekey: string;
+    action?: string;
+    theme?: 'light' | 'dark' | 'auto';
+    size?: 'normal' | 'compact' | 'flexible';
+    'refresh-expired'?: 'auto' | 'manual' | 'never';
+    callback?: (token: string) => void;
+    'expired-callback'?: () => void;
+    'timeout-callback'?: () => void;
+    'error-callback'?: (errorCode?: string) => void;
+  }
+
+  interface TurnstileApi {
+    render(container: string | HTMLElement, options: TurnstileRenderOptions): string;
+    reset(widgetId?: string): void;
+    getResponse(widgetId?: string): string | undefined;
+  }
+
+  declare global {
+    interface Window {
+      turnstile?: TurnstileApi;
+    }
+  }
+
+  const TURNSTILE_SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 
   const form = document.querySelector<HTMLFormElement>('#aac-quote-form');
   const feedback = document.querySelector<HTMLElement>('#quote-feedback');
@@ -477,8 +541,116 @@ const backdropUrl = await optimizedImageUrl('/images/projects/mcauley-building-a
     const finishSelect = form.querySelector<HTMLSelectElement>('#preferredFinish')!;
     const finishField = form.querySelector<HTMLElement>('#finish-field')!;
     const phone = form.querySelector<HTMLInputElement>('#phone')!;
+    const turnstileEl = form.querySelector<HTMLElement>('#quote-turnstile');
+    const turnstileErrorEl = form.querySelector<HTMLElement>('#turnstile-error');
     const finishOptions = Array.from(finishSelect.options).map((option) => option.cloneNode(true) as HTMLOptionElement);
     let submitting = false;
+    let turnstileWidgetId: string | null = null;
+    let turnstileToken = '';
+    let turnstileScriptLoading = false;
+
+    const showTurnstileError = (message: string) => {
+      if (!turnstileErrorEl) return;
+      turnstileErrorEl.textContent = message;
+      turnstileErrorEl.hidden = false;
+    };
+
+    const clearTurnstileError = () => {
+      if (!turnstileErrorEl) return;
+      turnstileErrorEl.hidden = true;
+    };
+
+    const resetTurnstile = () => {
+      turnstileToken = '';
+      if (turnstileWidgetId && window.turnstile) {
+        try {
+          window.turnstile.reset(turnstileWidgetId);
+        } catch {
+          // Ignore reset errors if widget was not yet mounted.
+        }
+      }
+    };
+
+    const renderTurnstile = () => {
+      if (!turnstileEl || turnstileWidgetId || !window.turnstile) return;
+      const sitekey = turnstileEl.dataset.sitekey?.trim();
+      if (!sitekey) return;
+      const size = turnstileEl.clientWidth > 0 && turnstileEl.clientWidth < 300 ? 'compact' : 'flexible';
+      turnstileWidgetId = window.turnstile.render(turnstileEl, {
+        sitekey,
+        action: turnstileEl.dataset.action || 'quote_estimate',
+        theme: 'light',
+        size,
+        'refresh-expired': 'auto',
+        callback: (token: string) => {
+          turnstileToken = token;
+          clearTurnstileError();
+        },
+        'expired-callback': () => {
+          turnstileToken = '';
+          resetTurnstile();
+        },
+        'timeout-callback': () => {
+          turnstileToken = '';
+          showTurnstileError('Security verification timed out. Please try again.');
+          resetTurnstile();
+        },
+        'error-callback': () => {
+          turnstileToken = '';
+          showTurnstileError('Security verification could not load. Please retry or call/text (209) 485-5103.');
+        },
+      });
+    };
+
+    const ensureTurnstile = () => {
+      if (!turnstileEl || turnstileWidgetId) return;
+      if (window.turnstile) {
+        renderTurnstile();
+        return;
+      }
+      if (turnstileScriptLoading) return;
+      turnstileScriptLoading = true;
+      const existing = document.querySelector<HTMLScriptElement>(`script[src="${TURNSTILE_SCRIPT_SRC}"]`);
+      if (existing) {
+        existing.addEventListener('load', renderTurnstile, { once: true });
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = TURNSTILE_SCRIPT_SRC;
+      script.async = true;
+      script.defer = true;
+      script.addEventListener('load', renderTurnstile, { once: true });
+      script.addEventListener('error', () => {
+        turnstileScriptLoading = false;
+        showTurnstileError('Security verification could not load. Please retry or call/text (209) 485-5103.');
+      }, { once: true });
+      document.head.appendChild(script);
+    };
+
+    if (turnstileEl) {
+      form.addEventListener('focusin', ensureTurnstile, { once: true });
+      const section = form.closest('#quote-builder') || form;
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            if (entries.some((entry) => entry.isIntersecting)) {
+              ensureTurnstile();
+              io.disconnect();
+            }
+          },
+          { rootMargin: '300px 0px' },
+        );
+        io.observe(section);
+      } else {
+        ensureTurnstile();
+      }
+    }
+
+    const getFormSnapshot = () => {
+      const entries = Object.fromEntries(new FormData(form).entries());
+      delete entries['cf-turnstile-response'];
+      return JSON.stringify(entries);
+    };
 
     const syncServiceOptions = () => {
       const service = getQuoteService(serviceSelect.value);
@@ -555,6 +727,22 @@ const backdropUrl = await optimizedImageUrl('/images/projects/mcauley-building-a
         return;
       }
 
+      let currentTurnstileToken = '';
+      if (turnstileEl) {
+        ensureTurnstile();
+        const formToken = new FormData(form).get('cf-turnstile-response');
+        currentTurnstileToken = (
+          turnstileToken ||
+          (turnstileWidgetId ? window.turnstile?.getResponse(turnstileWidgetId) : '') ||
+          (typeof formToken === 'string' ? formToken : '')
+        ).trim();
+        if (!currentTurnstileToken) {
+          showTurnstileError('Please complete the security verification before submitting.');
+          return;
+        }
+        clearTurnstileError();
+      }
+
       submitting = true;
       if (submitBtn) {
         submitBtn.disabled = true;
@@ -564,7 +752,12 @@ const backdropUrl = await optimizedImageUrl('/images/projects/mcauley-building-a
         feedback.hidden = true;
         feedback.className = 'form-feedback';
       }
-      const submittedPayload = JSON.stringify(Object.fromEntries(new FormData(form).entries()));
+      const submittedSnapshot = getFormSnapshot();
+      const payloadEntries = Object.fromEntries(new FormData(form).entries());
+      if (turnstileEl && currentTurnstileToken) {
+        payloadEntries['cf-turnstile-response'] = currentTurnstileToken;
+      }
+      const submittedPayload = JSON.stringify(payloadEntries);
       try {
         const response = await fetch('/api/quote', {
           method: 'POST',
@@ -582,7 +775,7 @@ const backdropUrl = await optimizedImageUrl('/images/projects/mcauley-building-a
             feedback.classList.add('is-success');
             feedback.textContent = `Estimate request sent (Ref ${result.quoteId}). ${result.message}`;
           }
-          if (JSON.stringify(Object.fromEntries(new FormData(form).entries())) === submittedPayload) {
+          if (getFormSnapshot() === submittedSnapshot) {
             form.reset();
             syncServiceOptions();
           } else if (feedback) {
@@ -607,6 +800,7 @@ const backdropUrl = await optimizedImageUrl('/images/projects/mcauley-building-a
           feedback.textContent = error instanceof Error ? error.message : 'Could not confirm delivery. Please call or text (209) 485-5103.';
         }
       } finally {
+        resetTurnstile();
         submitting = false;
         if (submitBtn) {
           submitBtn.disabled = false;

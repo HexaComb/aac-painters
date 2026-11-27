@@ -4,6 +4,8 @@ import { POST } from '../src/pages/api/quote.ts';
 import { getQuoteService, isValidPhone, quoteServices } from '../src/data/quoteOptions.ts';
 
 const apiKey = 'test-only-resend-key';
+const turnstileSecret = 'test-only-turnstile-secret';
+const turnstileToken = 'test-only-turnstile-token';
 const valid = {
   name: 'Sample Contact',
   phone: '(209) 555-0100',
@@ -13,37 +15,66 @@ const valid = {
   propertyType: 'Residential — Home Interior',
   selectedFinish: 'Custom Architectural Paint Color Match',
   projectDetails: 'TEST ONLY: discuss an interior repaint.',
+  'cf-turnstile-response': turnstileToken,
 };
 
 type RouteContext = Parameters<typeof POST>[0];
 type Delivery = (url: string | URL | Request, init?: RequestInit) => Promise<Response>;
 
-function mockDelivery(t: TestContext, implementation: Delivery = async () => Response.json({ id: 'test-email-id' })) {
-  // Every fetch is intercepted; the test key is not a real credential.
-  return t.mock.method(globalThis, 'fetch', implementation as typeof fetch);
+const TURNSTILE_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+const RESEND_URL = 'https://api.resend.com/emails';
+
+function mockDelivery(
+  t: TestContext,
+  implementation: Delivery = async () => Response.json({ id: 'test-email-id' }),
+  turnstileImplementation: Delivery = async () => Response.json({
+    success: true,
+    action: 'quote_estimate',
+    hostname: 'www.aacpaintersinc.com',
+  }),
+) {
+  // Every fetch is intercepted; the test keys are not real credentials.
+  return t.mock.method(globalThis, 'fetch', (async (url: string | URL | Request, init?: RequestInit) => {
+    if (String(url) === TURNSTILE_URL) return turnstileImplementation(url, init);
+    return implementation(url, init);
+  }) as typeof fetch);
 }
 
-function jsonRequest(data: unknown) {
+function callsFor(mock: ReturnType<typeof mockDelivery>, targetUrl: string) {
+  return mock.mock.calls.filter((call) => String(call.arguments[0]) === targetUrl);
+}
+
+function jsonRequest(data: unknown, headers: Record<string, string> = {}) {
   return new Request('https://website.example.invalid/api/quote', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data),
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...headers },
+    body: JSON.stringify(data),
   });
 }
 
-async function invoke(request: Request, configured = true) {
+async function invoke(
+  request: Request,
+  env: Record<string, string> | boolean = true,
+) {
+  const resolvedEnv = env === true
+    ? { RESEND_API_KEY: apiKey, TURNSTILE_SECRET_KEY: turnstileSecret }
+    : env === false
+      ? {}
+      : env;
   const response = await POST({
     request,
-    locals: configured ? { runtime: { env: { RESEND_API_KEY: apiKey } } } : {},
+    locals: Object.keys(resolvedEnv).length ? { runtime: { env: resolvedEnv } } : {},
   } as RouteContext);
   assert.equal(response.headers.get('content-type'), 'application/json');
   assert.equal(response.headers.get('cache-control'), 'no-store');
   return { response, body: await response.json() };
 }
 
-test('canonical JSON fields are forwarded intact after confirmed delivery', async (t) => {
+test('canonical JSON fields are forwarded intact after Turnstile verification and confirmed delivery', async (t) => {
   const delivery = mockDelivery(t);
   const { response, body } = await invoke(jsonRequest({
     ...valid, name: '  Sample Contact  ', city: ' Modesto ', squareFootage: '450', timeline: 'Discuss availability',
-  }));
+  }, { 'CF-Connecting-IP': '203.0.113.42' }));
   assert.equal(response.status, 200);
   assert.equal(body.ok, true);
   assert.match(body.quoteId, /^AAC-[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
@@ -51,9 +82,23 @@ test('canonical JSON fields are forwarded intact after confirmed delivery', asyn
   assert.match(body.message, /sent to the AAC Painters team/);
   assert.equal(body.referenceId, undefined);
   assert.equal(body.quote, undefined, 'Do not reflect contact PII in the success response.');
-  assert.equal(delivery.mock.callCount(), 1);
-  const [url, init] = delivery.mock.calls[0].arguments;
-  assert.equal(url, 'https://api.resend.com/emails');
+  assert.equal(delivery.mock.callCount(), 2);
+
+  const [verifyUrl, verifyInit] = delivery.mock.calls[0].arguments;
+  assert.equal(verifyUrl, TURNSTILE_URL);
+  assert.equal(verifyInit?.method, 'POST');
+  assert.deepEqual(verifyInit?.headers, { 'Content-Type': 'application/x-www-form-urlencoded' });
+  assert.ok(verifyInit?.signal instanceof AbortSignal);
+  const verifyPayload = verifyInit?.body instanceof URLSearchParams
+    ? verifyInit.body
+    : new URLSearchParams(String(verifyInit?.body));
+  assert.equal(verifyPayload.get('secret'), turnstileSecret);
+  assert.equal(verifyPayload.get('response'), turnstileToken);
+  assert.equal(verifyPayload.get('remoteip'), '203.0.113.42');
+  assert.ok(verifyPayload.get('idempotency_key'));
+
+  const [url, init] = delivery.mock.calls[1].arguments;
+  assert.equal(url, RESEND_URL);
   assert.equal(init?.method, 'POST');
   assert.deepEqual(init?.headers, { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` });
   assert.ok(init?.signal instanceof AbortSignal);
@@ -73,6 +118,7 @@ test('canonical JSON fields are forwarded intact after confirmed delivery', asyn
     'Project details:', valid.projectDetails,
   ].join('\n'));
   assert.ok(!JSON.stringify(body).includes(apiKey));
+  assert.ok(!JSON.stringify(body).includes(turnstileSecret));
 });
 
 test('legacy JSON form names still map into the canonical record', async (t) => {
@@ -80,10 +126,10 @@ test('legacy JSON form names still map into the canonical record', async (t) => 
   const { response } = await invoke(jsonRequest({
     fullName: valid.name, phone: valid.phone, email: valid.email, city: valid.city,
     serviceType: valid.services, propertyScope: valid.propertyType, preferredFinish: valid.selectedFinish,
-    projectDetails: valid.projectDetails,
+    projectDetails: valid.projectDetails, 'cf-turnstile-response': turnstileToken,
   }));
   assert.equal(response.status, 200);
-  const record = JSON.parse(String(delivery.mock.calls[0].arguments[1]?.body));
+  const record = JSON.parse(String(callsFor(delivery, RESEND_URL)[0].arguments[1]?.body));
   for (const field of ['name', 'phone', 'email', 'city', 'propertyType', 'selectedFinish', 'projectDetails'] as const) {
     assert.ok(record.text.includes(valid[field]));
   }
@@ -98,7 +144,7 @@ test('canonical names take precedence over legacy aliases', async (t) => {
     ...valid, fullName: 'Old name', serviceType: 'Pressure Washing', propertyScope: 'Old property', preferredFinish: 'Old finish',
   }));
   assert.equal(response.status, 200);
-  const record = JSON.parse(String(delivery.mock.calls[0].arguments[1]?.body));
+  const record = JSON.parse(String(callsFor(delivery, RESEND_URL)[0].arguments[1]?.body));
   assert.ok(record.text.includes(`Name: ${valid.name}`));
   assert.ok(record.text.includes(`Services: ${valid.services}`));
   assert.ok(record.text.includes(`Property: ${valid.propertyType}`));
@@ -112,7 +158,7 @@ test('multipart form fields preserve multiple canonical services', async (t) => 
   form.append('services', 'Fence & Deck Staining');
   const { response } = await invoke(new Request('https://website.example.invalid/api/quote', { method: 'POST', body: form }));
   assert.equal(response.status, 200);
-  const record = JSON.parse(String(delivery.mock.calls[0].arguments[1]?.body));
+  const record = JSON.parse(String(callsFor(delivery, RESEND_URL)[0].arguments[1]?.body));
   assert.ok(record.text.includes(`Services: ${valid.services}, Fence & Deck Staining`));
   assert.ok(record.text.includes(`Name: ${valid.name}`));
   assert.ok(record.text.includes(`Property: ${valid.propertyType}`));
@@ -123,10 +169,11 @@ test('URL-encoded legacy form fields remain compatible', async (t) => {
   const form = new URLSearchParams({
     fullName: valid.name, phone: valid.phone, city: valid.city, serviceType: valid.services,
     propertyScope: valid.propertyType, preferredFinish: valid.selectedFinish,
+    'cf-turnstile-response': turnstileToken,
   });
   const { response } = await invoke(new Request('https://website.example.invalid/api/quote', { method: 'POST', body: form }));
   assert.equal(response.status, 200);
-  const record = JSON.parse(String(delivery.mock.calls[0].arguments[1]?.body));
+  const record = JSON.parse(String(callsFor(delivery, RESEND_URL)[0].arguments[1]?.body));
   assert.ok(record.text.includes(`Name: ${valid.name}`));
   assert.ok(record.text.includes(`Services: ${valid.services}`));
   assert.ok(record.text.includes(`Finish: ${valid.selectedFinish}`));
@@ -137,7 +184,7 @@ for (const service of ['Pressure Washing', 'Popcorn Ceiling Removal & Re-Texturi
     const delivery = mockDelivery(t);
     const { response } = await invoke(jsonRequest({ ...valid, services: service }));
     assert.equal(response.status, 200);
-    const record = JSON.parse(String(delivery.mock.calls[0].arguments[1]?.body));
+    const record = JSON.parse(String(callsFor(delivery, RESEND_URL)[0].arguments[1]?.body));
     assert.ok(record.text.includes(`Services: ${service}`));
     assert.ok(record.text.includes('Finish: Not applicable'));
   });
@@ -145,9 +192,12 @@ for (const service of ['Pressure Washing', 'Popcorn Ceiling Removal & Re-Texturi
 
 test('optional details have neutral defaults, not a forced coating or property', async (t) => {
   const delivery = mockDelivery(t);
-  const { response } = await invoke(jsonRequest({ name: valid.name, phone: valid.phone, city: valid.city, services: valid.services }));
+  const { response } = await invoke(jsonRequest({
+    name: valid.name, phone: valid.phone, city: valid.city, services: valid.services,
+    'cf-turnstile-response': turnstileToken,
+  }));
   assert.equal(response.status, 200);
-  const record = JSON.parse(String(delivery.mock.calls[0].arguments[1]?.body));
+  const record = JSON.parse(String(callsFor(delivery, RESEND_URL)[0].arguments[1]?.body));
   assert.equal(record.reply_to, undefined);
   assert.ok(record.text.includes('Email: Not provided'));
   assert.ok(record.text.includes('Property: Not specified'));
@@ -211,6 +261,88 @@ test('missing Resend key never claims successful receipt and includes a usable t
   assert.equal(delivery.mock.callCount(), 0);
 });
 
+test('missing Turnstile secret returns 503 with text fallback and calls no upstream', async (t) => {
+  const delivery = mockDelivery(t);
+  const { response, body } = await invoke(jsonRequest(valid), { RESEND_API_KEY: apiKey });
+  assert.equal(response.status, 503);
+  assert.equal(body.ok, false);
+  assert.match(body.error, /has not been sent/);
+  assert.match(body.smsLink, /^sms:\+12094855103\?&body=/);
+  assert.equal(delivery.mock.callCount(), 0);
+});
+
+for (const [label, tokenValue] of [
+  ['missing token', undefined],
+  ['empty token', '   '],
+  ['oversized token', 'x'.repeat(2049)],
+] as const) {
+  test(`Turnstile ${label} returns 400 before contacting Cloudflare or Resend`, async (t) => {
+    const delivery = mockDelivery(t);
+    const payload: Record<string, unknown> = { ...valid };
+    if (tokenValue === undefined) delete payload['cf-turnstile-response'];
+    else payload['cf-turnstile-response'] = tokenValue;
+    const { response, body } = await invoke(jsonRequest(payload));
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.match(body.error, /security verification/i);
+    assert.match(body.smsLink, /^sms:\+12094855103\?&body=/);
+    assert.equal(delivery.mock.callCount(), 0);
+  });
+}
+
+test('failed Turnstile verification returns 403 and never calls Resend', async (t) => {
+  const delivery = mockDelivery(
+    t,
+    async () => Response.json({ id: 'should-not-be-called' }),
+    async () => Response.json({ success: false, 'error-codes': ['timeout-or-duplicate'] }),
+  );
+  const { response, body } = await invoke(jsonRequest(valid));
+  assert.equal(response.status, 403);
+  assert.equal(body.ok, false);
+  assert.match(body.error, /verification failed or expired/i);
+  assert.match(body.smsLink, /^sms:\+12094855103\?&body=/);
+  assert.equal(callsFor(delivery, TURNSTILE_URL).length, 1);
+  assert.equal(callsFor(delivery, RESEND_URL).length, 0);
+});
+
+for (const [label, verifyBody] of [
+  ['wrong action', { success: true, action: 'other_form', hostname: 'www.aacpaintersinc.com' }],
+  ['missing action', { success: true, hostname: 'www.aacpaintersinc.com' }],
+  ['disallowed hostname', { success: true, action: 'quote_estimate', hostname: 'evil.example' }],
+  ['localhost hostname in production', { success: true, action: 'quote_estimate', hostname: 'localhost' }],
+] as const) {
+  test(`Turnstile ${label} returns 403 and never calls Resend`, async (t) => {
+    const delivery = mockDelivery(
+      t,
+      async () => Response.json({ id: 'should-not-be-called' }),
+      async () => Response.json(verifyBody),
+    );
+    const { response, body } = await invoke(jsonRequest(valid));
+    assert.equal(response.status, 403);
+    assert.equal(body.ok, false);
+    assert.equal(callsFor(delivery, TURNSTILE_URL).length, 1);
+    assert.equal(callsFor(delivery, RESEND_URL).length, 0);
+  });
+}
+
+for (const [label, turnstileStub] of [
+  ['HTTP 500', async () => new Response('Server error', { status: 500 })],
+  ['malformed JSON', async () => new Response('not-json')],
+  ['missing success boolean', async () => Response.json({ ok: true })],
+  ['network error', async () => { throw new Error('Network failure'); }],
+] as [string, Delivery][]) {
+  test(`Turnstile ${label} returns 502 with SMS fallback and never calls Resend`, async (t) => {
+    const delivery = mockDelivery(t, async () => Response.json({ id: 'should-not-be-called' }), turnstileStub);
+    const { response, body } = await invoke(jsonRequest(valid));
+    assert.equal(response.status, 502);
+    assert.equal(body.ok, false);
+    assert.match(body.error, /could not verify your request/i);
+    assert.match(body.smsLink, /^sms:\+12094855103\?&body=/);
+    assert.equal(callsFor(delivery, TURNSTILE_URL).length, 1);
+    assert.equal(callsFor(delivery, RESEND_URL).length, 0);
+  });
+}
+
 for (const status of [400, 401, 403, 429, 500]) {
   test(`Resend HTTP ${status} is not reported as success`, async (t) => {
     const delivery = mockDelivery(t, async () => new Response('Not accepted', { status }));
@@ -219,7 +351,7 @@ for (const status of [400, 401, 403, 429, 500]) {
     assert.equal(body.ok, false);
     assert.match(body.error, /could not confirm delivery/);
     assert.match(body.smsLink, /^sms:\+12094855103/);
-    assert.equal(delivery.mock.callCount(), 1);
+    assert.equal(callsFor(delivery, RESEND_URL).length, 1);
   });
 }
 
@@ -231,7 +363,7 @@ for (const error of [new Error('Simulated connection reset'), new DOMException('
     assert.equal(body.ok, false);
     assert.match(body.error, /could not confirm delivery/);
     assert.equal(body.quoteId, undefined);
-    assert.equal(delivery.mock.callCount(), 1, 'No silent retry that could duplicate a delivered request.');
+    assert.equal(callsFor(delivery, RESEND_URL).length, 1, 'No silent retry that could duplicate a delivered request.');
   });
 }
 
@@ -259,7 +391,7 @@ test('visitor fields cannot override email routing and project markup stays plai
     reply_to: 'attacker@example.invalid', subject: 'Injected subject',
   }));
   assert.equal(response.status, 200);
-  const message = JSON.parse(String(delivery.mock.calls[0].arguments[1]?.body));
+  const message = JSON.parse(String(callsFor(delivery, RESEND_URL)[0].arguments[1]?.body));
   assert.equal(message.from, 'AAC Painters Website <submission@aacpaintersinc.com>');
   assert.deepEqual(message.to, ['aacpaintersinc@gmail.com']);
   assert.equal(message.reply_to, valid.email);
